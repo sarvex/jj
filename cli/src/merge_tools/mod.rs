@@ -297,7 +297,7 @@ impl MergeToolFile {
             Ok(Some(_)) => return Err(ConflictResolveError::NotAConflict(repo_path.to_owned())),
             Ok(None) => return Err(ConflictResolveError::PathNotFound(repo_path.to_owned())),
         };
-        let file_merge = conflict.to_file_merge().ok_or_else(|| {
+        let (file_merge, _copy_id) = conflict.to_file_merge().ok_or_else(|| {
             let summary = conflict.describe();
             ConflictResolveError::NotNormalFiles(repo_path.to_owned(), summary)
         })?;

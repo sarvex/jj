@@ -210,7 +210,12 @@ pub(crate) fn cmd_fix(
                 for term in after.into_iter().flatten() {
                     // We currently only support fixing the content of normal files, so we skip
                     // directories and symlinks, and we ignore the executable bit.
-                    if let TreeValue::File { id, executable: _ } = term {
+                    if let TreeValue::File {
+                        id,
+                        executable: _,
+                        copy_id: _,
+                    } = term
+                    {
                         // TODO: Skip the file if its content is larger than some configured size,
                         // preferably without actually reading it yet.
                         let tool_input = ToolInput {
@@ -254,7 +259,12 @@ pub(crate) fn cmd_fix(
             for repo_path in repo_paths {
                 let old_value = old_tree.path_value(repo_path)?;
                 let new_value = old_value.map(|old_term| {
-                    if let Some(TreeValue::File { id, executable }) = old_term {
+                    if let Some(TreeValue::File {
+                        id,
+                        executable,
+                        copy_id,
+                    }) = old_term
+                    {
                         let tool_input = ToolInput {
                             file_id: id.clone(),
                             repo_path: repo_path.clone(),
@@ -263,6 +273,7 @@ pub(crate) fn cmd_fix(
                             return Some(TreeValue::File {
                                 id: new_id.clone(),
                                 executable: *executable,
+                                copy_id: copy_id.clone(),
                             });
                         }
                     }
