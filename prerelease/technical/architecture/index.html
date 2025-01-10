@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/technical/architecture/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/technical/architecture/">
       
       
         <link rel="prev" href="../../related-work/">
@@ -1838,30 +1838,13 @@ the <code>.jj/repo/store/type</code> file. There are similar files for the other
 (<code>.jj/repo/index/type</code>, <code>.jj/repo/op_store/type</code>, <code>.jj/repo/op_heads/type</code>).</p>
 <h2 id="design-of-the-library-crate">Design of the library crate<a class="headerlink" href="#design-of-the-library-crate" title="Permanent link">&para;</a></h2>
 <h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
-<p>Here's a diagram showing some important types in the library crate. The
-following sections describe each component.</p>
-<pre class="mermaid"><code>graph TD;
-    ReadonlyRepo--&gt;Store;
-    ReadonlyRepo--&gt;OpStore;
-    ReadonlyRepo--&gt;OpHeadsStore;
-    ReadonlyRepo--&gt;ReadonlyIndex
-    MutableIndex--&gt;ReadonlyIndex;
-    Store--&gt;Backend;
-    GitBackend--&gt;Backend;
-    LocalBackend--&gt;Backend;
-    LocalBackend--&gt;StackedTable;
-    MutableRepo--&gt;ReadonlyRepo;
-    MutableRepo--&gt;MutableIndex;
-    Transaction--&gt;MutableRepo;
-    WorkingCopy--&gt;TreeState;
-    Workspace--&gt;WorkingCopy;
-    Workspace--&gt;RepoLoader;
-    RepoLoader--&gt;Store;
-    RepoLoader--&gt;OpStore;
-    RepoLoader--&gt;OpHeadsStore;
-    RepoLoader--&gt;ReadonlyRepo;
-    Git--&gt;GitBackend;
-    GitBackend--&gt;StackedTable;</code></pre>
+<p>Here's a diagram showing some important types in the library crate, and how they
+relate. For example, given a <code>Workspace</code>, you can use it to get a <code>WorkingCopy</code>
+or a <code>RepoLoader</code>. A <code>Transaction</code> is required to acquire a <code>MutableRepo</code>, etc.
+The following sections describe each component.</p>
+<p><img alt="Type diagram" src="../types.svg" /></p>
+<p><em>This diagram was created with <a href="https://excalidraw.com/">Excalidraw</a>. You can get a copy of it <a href="https://excalidraw.com/#json=wuOSusqzm6MjoXatFk1kn,aCySj27AVmQMf7aJdMzMCw">at this
+location</a>, and Right Click &gt; "Copy to Clipboard as SVG".</em></p>
 <h3 id="backend">Backend<a class="headerlink" href="#backend" title="Permanent link">&para;</a></h3>
 <p>The <code>Backend</code> trait defines the interface each
 commit backend needs to implement. The current in-tree commit backends

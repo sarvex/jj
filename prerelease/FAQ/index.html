@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/FAQ/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/FAQ/">
       
       
         <link rel="prev" href="../windows/">
@@ -1760,7 +1760,7 @@ For example:</p>
 The <code>--ignore-working-copy</code> option avoids conflicts with manual operations during the creation of snapshots.
 Martin used watch in a <a href="https://github.com/tmux/tmux/wiki">tmux</a> pane during his presentation <a href="https://www.youtube.com/watch?v=LV0JzI8IcCY">Jujutsu - A Git-compatible VCS</a>.</p>
 <p>Alternatively, you can use <a href="https://github.com/tim-janik/jj-fzf">jj-fzf</a>, where the central piece is the <code>jj log</code> view and common operations can be carried out via key bindings while the log view updates.</p>
-<p>The wiki lists additional TUIs and GUIs beyond the terminal: <a href="https://github.com/martinvonz/jj/wiki/GUI-and-TUI">GUI-and-TUI</a></p>
+<p>The wiki lists additional TUIs and GUIs beyond the terminal: <a href="https://github.com/jj-vcs/jj/wiki/GUI-and-TUI">GUI-and-TUI</a></p>
 <h3 id="should-i-co-locate-my-repository">Should I co-locate my repository?<a class="headerlink" href="#should-i-co-locate-my-repository" title="Permanent link">&para;</a></h3>
 <p>Co-locating a Jujutsu repository allows you to use both Jujutsu and Git in the
 same working copy. The benefits of doing so are:</p>
@@ -1789,7 +1789,7 @@ important ones are:</p>
   and ignore the confusing information such tools present for conflicted commits
   (unless you are curious about <a href="../technical/conflicts/">the details of how <code>jj</code> stores
   conflicts</a>). See
-  <a href="https://github.com/martinvonz/jj/issues/3979">#3979</a> for plans to improve
+  <a href="https://github.com/jj-vcs/jj/issues/3979">#3979</a> for plans to improve
   this situation.</p>
 </li>
 <li>
@@ -1841,7 +1841,7 @@ working-copy commit with <code>jj split -i</code> (or the practically identical
 <code>jj commit -i</code>).</p>
 <p>For the equivalent of <code>git commit --amend -p</code>/<code>hg amend -i</code>, use <code>jj squash -i</code>.</p>
 <h3 id="is-there-something-like-git-rebase-interactive-or-hg-histedit">Is there something like <code>git rebase --interactive</code> or <code>hg histedit</code>?<a class="headerlink" href="#is-there-something-like-git-rebase-interactive-or-hg-histedit" title="Permanent link">&para;</a></h3>
-<p>Not yet, you can check <a href="https://github.com/martinvonz/jj/issues/1531">this issue</a> for updates.</p>
+<p>Not yet, you can check <a href="https://github.com/jj-vcs/jj/issues/1531">this issue</a> for updates.</p>
 <p>To reorder commits, it is for now recommended to rebase commits individually,
 which may require multiple invocations of <code>jj rebase -r</code> or <code>jj rebase -s</code>.</p>
 <p>To squash or split commits, use <code>jj squash</code> and <code>jj split</code>.</p>

@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/contributing/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/contributing/">
       
       
         <link rel="prev" href="../technical/conflicts/">
@@ -1906,9 +1906,9 @@ existing component, we require an architecture review from  multiple
 stakeholders, which we do with <a href="../design_docs/">Design Docs</a>, see the
 <a href="../design_docs/#process">process here</a>.</p>
 <h2 id="contributing-to-the-documentation">Contributing to the documentation<a class="headerlink" href="#contributing-to-the-documentation" title="Permanent link">&para;</a></h2>
-<p>We appreciate <a href="https://github.com/martinvonz/jj/issues/new?template=bug_report.md">bug
+<p>We appreciate <a href="https://github.com/jj-vcs/jj/issues/new?template=bug_report.md">bug
 reports</a>
-about any problems, however small, lurking in <a href="https://martinvonz.github.io/jj/prerelease">our documentation
+about any problems, however small, lurking in <a href="https://jj-vcs.github.io/jj/prerelease">our documentation
 website</a> or in the <code>jj help
 &lt;command&gt;</code> docs. If a part of the bug report template does not apply, you can
 just delete it.</p>
@@ -1917,13 +1917,13 @@ you could check that the problem still exists in the "prerelease" version of the
 documentation (as opposed to the docs for one of the released versions of <code>jj</code>).
 You can use the version switcher in the top-left of the website to do so.</p>
 <p>If you are willing to make a PR fixing a documentation problem, even better!</p>
-<p>The documentation website sources are Markdown files located in the <a href="https://github.com/martinvonz/jj/tree/main/docs"><code>docs/</code>
+<p>The documentation website sources are Markdown files located in the <a href="https://github.com/jj-vcs/jj/tree/main/docs"><code>docs/</code>
 directory</a>. You do not need to
 know Rust to work with them. See below for <a href="#previewing-the-html-documentation">instructions on how to preview the
 HTML docs</a> as you edit the Markdown files.
 Doing so is optional, but recommended.</p>
 <p>The <code>jj help</code> docs are sourced from the "docstring" comments inside the Rust
-sources, currently from the <a href="https://github.com/martinvonz/jj/tree/main/cli/src/commands"><code>cli/src/commands</code>
+sources, currently from the <a href="https://github.com/jj-vcs/jj/tree/main/cli/src/commands"><code>cli/src/commands</code>
 directory</a>. Working
 on them requires setting up a Rust development environment, as described
 below, and may occasionally require adjusting a test.</p>
@@ -1944,15 +1944,13 @@ recommended steps.</p>
 <p>One-time setup:</p>
 <div class="codehilite"><pre><span></span><code>rustup toolchain add nightly  # wanted for &#39;rustfmt&#39;
 rustup toolchain add 1.76     # also specified in Cargo.toml
-cargo install cargo-insta
-cargo install cargo-watch
-cargo install cargo-nextest
+cargo install --locked bacon
+cargo install --locked cargo-insta
+cargo install --locked cargo-nextest
 </code></pre></div>
 
 <p>During development (adapt according to your preference):</p>
-<div class="codehilite"><pre><span></span><code>cargo watch --ignore &#39;.jj/**&#39; -s \
-  &#39;cargo clippy --workspace --all-targets \
-   &amp;&amp; cargo +1.76 check --workspace --all-targets&#39;
+<div class="codehilite"><pre><span></span><code>bacon clippy-all
 cargo +nightly fmt # Occasionally
 cargo nextest run --workspace # Occasionally
 cargo insta test --workspace --test-runner nextest # Occasionally
@@ -1993,9 +1991,8 @@ Cargo will happily use up your entire hard drive. If this happens, run
    use <code>cargo +nightly clippy</code> if you wish to see more warnings.</p>
 </li>
 <li>
-<p>You may also want to install and use <code>cargo-watch</code>. In this case, you should
-   exclude <code>.jj</code>. directory from the filesystem watcher, as it gets updated on
-   every <code>jj log</code>.</p>
+<p>You may also want to install and use <a href="https://dystroy.org/bacon/"><code>bacon</code></a>,
+   to automatically build, check, and / or run tests.</p>
 </li>
 <li>
 <p>To run tests more quickly, use <code>cargo nextest run --workspace</code>. To
@@ -2070,7 +2067,7 @@ multi-threaded. It should use all the CPU cores without any configuration.</p>
 </code></pre></div>
 <h2 id="previewing-the-html-documentation">Previewing the HTML documentation<a class="headerlink" href="#previewing-the-html-documentation" title="Permanent link">&para;</a></h2>
 <p>The documentation for <code>jj</code> is automatically published online at
-<a href="https://martinvonz.github.io/jj/">https://martinvonz.github.io/jj/</a>.</p>
+<a href="https://jj-vcs.github.io/jj/">https://jj-vcs.github.io/jj/</a>.</p>
 <p>When editing documentation, you should check your changes locally — especially
 if you are adding a new page, or doing a major rewrite.</p>
 <h3 id="install-uv">Install <code>uv</code><a class="headerlink" href="#install-uv" title="Permanent link">&para;</a></h3>
@@ -2134,8 +2131,8 @@ documentation that we currently do with <code>mike</code>.</p>
 </div>
 <p>The full <code>jj</code> website includes the documentation for several <code>jj</code> versions
 (<code>prerelease</code>, latest release, and the older releases). The top-level
-URL <a href="https://martinvonz.github.io/jj">https://martinvonz.github.io/jj</a> redirects to
-<a href="https://martinvonz.github.io/jj/latest">https://martinvonz.github.io/jj/latest</a>, which in turn redirects to
+URL <a href="https://jj-vcs.github.io/jj">https://jj-vcs.github.io/jj</a> redirects to
+<a href="https://jj-vcs.github.io/jj/latest">https://jj-vcs.github.io/jj/latest</a>, which in turn redirects to
 the docs for the last stable version.</p>
 <p>The different versions of documentation are managed and deployed with
 <a href="https://github.com/jimporter/mike"><code>mike</code></a>, which can be run with

@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/git-compatibility/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/git-compatibility/">
       
       
         <link rel="prev" href="../git-comparison/">
@@ -1557,7 +1557,7 @@ a comparison with Git, including how workflows are different, see the
   you miss any particular configuration options.<ul>
 <li>The configuration of remotes (<code>[remote "&lt;name&gt;"]</code>). Only the names and URLs
   are respected (refspecs are not respected, and
-  <a href="https://github.com/martinvonz/jj/issues/4889">only the last pushurl</a> is
+  <a href="https://github.com/jj-vcs/jj/issues/4889">only the last pushurl</a> is
   respected).</li>
 <li><code>core.excludesFile</code></li>
 </ul>
@@ -1577,9 +1577,9 @@ a comparison with Git, including how workflows are different, see the
   working-copy commit. It's recommended to set up the ignore patterns earlier.
   The <code>.gitignore</code> support uses a native implementation, so please report a bug
   if you notice any difference compared to <code>git</code>.</li>
-<li><strong>.gitattributes: No.</strong> There's <a href="https://github.com/martinvonz/jj/issues/53">#53</a>
+<li><strong>.gitattributes: No.</strong> There's <a href="https://github.com/jj-vcs/jj/issues/53">#53</a>
   about adding support for at least the <code>eol</code> attribute.</li>
-<li><strong>Hooks: No.</strong> There's <a href="https://github.com/martinvonz/jj/issues/405">#405</a>
+<li><strong>Hooks: No.</strong> There's <a href="https://github.com/jj-vcs/jj/issues/405">#405</a>
   specifically for providing the checks from https://pre-commit.com.</li>
 <li><strong>Merge commits: Yes.</strong> Octopus merges (i.e. with more than 2 parents) are
   also supported.</li>
@@ -1589,11 +1589,11 @@ a comparison with Git, including how workflows are different, see the
   parent of all commits Git would call "root commits".</li>
 <li><strong>Staging area: Kind of.</strong> The staging area will be ignored. For example,
   <code>jj diff</code> will show a diff from the Git HEAD to the working copy. There are
-  <a href="https://github.com/martinvonz/jj/blob/main/docs/git-comparison.md#the-index">ways of fulfilling your use cases without a staging
+  <a href="https://github.com/jj-vcs/jj/blob/main/docs/git-comparison.md#the-index">ways of fulfilling your use cases without a staging
   area</a>.</li>
 <li><strong>Garbage collection: Yes.</strong> It should be safe to run <code>git gc</code> in the Git
   repo, but it's not tested, so it's probably a good idea to make a backup of
-  the whole workspace first. There's <a href="https://github.com/martinvonz/jj/issues/12">no garbage collection and repacking of
+  the whole workspace first. There's <a href="https://github.com/jj-vcs/jj/issues/12">no garbage collection and repacking of
   Jujutsu's own data structures yet</a>,
   however.</li>
 <li><strong>Bare repositories: Yes.</strong> You can use <code>jj git init --git-repo=&lt;path&gt;</code> to
@@ -1610,9 +1610,9 @@ a comparison with Git, including how workflows are different, see the
 <li><strong>Sparse checkouts: No.</strong> However, there's native support for sparse
   checkouts. See the <code>jj sparse</code> command.</li>
 <li><strong>Signed commits: Partial.</strong>
-  So far only <a href="https://github.com/martinvonz/jj/blob/main/docs/config.md#commit-signing">by configuration</a>,
-  later perhaps <a href="https://github.com/martinvonz/jj/pull/3142">a command</a>.</li>
-<li><strong>Git LFS: No.</strong> (<a href="https://github.com/martinvonz/jj/issues/80">#80</a>)</li>
+  So far only <a href="https://github.com/jj-vcs/jj/blob/main/docs/config.md#commit-signing">by configuration</a>,
+  later perhaps <a href="https://github.com/jj-vcs/jj/pull/3142">a command</a>.</li>
+<li><strong>Git LFS: No.</strong> (<a href="https://github.com/jj-vcs/jj/issues/80">#80</a>)</li>
 </ul>
 <h2 id="creating-an-empty-repo">Creating an empty repo<a class="headerlink" href="#creating-an-empty-repo" title="Permanent link">&para;</a></h2>
 <p>To create an empty repo using the Git backend, use <code>jj init --git &lt;name&gt;</code>. Since

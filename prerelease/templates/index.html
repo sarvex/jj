@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/templates/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/templates/">
       
       
         <link rel="prev" href="../revsets/">
@@ -844,6 +844,15 @@
   <a href="#commitid-changeid-type" class="md-nav__link">
     <span class="md-ellipsis">
       CommitId / ChangeId type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryptographicsignature-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      CryptographicSignature type
     </span>
   </a>
   
@@ -1728,6 +1737,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cryptographicsignature-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      CryptographicSignature type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#email-type" class="md-nav__link">
     <span class="md-ellipsis">
       Email type
@@ -2003,6 +2021,7 @@ type</a> are available as keywords. For example,
 <li><code>parents() -&gt; List&lt;Commit&gt;</code></li>
 <li><code>author() -&gt; Signature</code></li>
 <li><code>committer() -&gt; Signature</code></li>
+<li><code>signature() -&gt; Option&lt;CryptographicSignature&gt;</code></li>
 <li><code>mine() -&gt; Boolean</code>: Commits where the author's email matches the email of the current
   user.</li>
 <li><code>working_copies() -&gt; String</code>: For multi-workspace repository, indicate
@@ -2038,6 +2057,27 @@ type</a> are available as keywords. For example,
 <li><code>.short([len: Integer]) -&gt; String</code></li>
 <li><code>.shortest([min_len: Integer]) -&gt; ShortestIdPrefix</code>: Shortest unique prefix.</li>
 </ul>
+<h3 id="cryptographicsignature-type">CryptographicSignature type<a class="headerlink" href="#cryptographicsignature-type" title="Permanent link">&para;</a></h3>
+<p>The following methods are defined.</p>
+<ul>
+<li><code>.status() -&gt; String</code>: The signature's status (<code>"good"</code>, <code>"bad"</code>, <code>"unknown"</code>, <code>"invalid"</code>).</li>
+<li><code>.key() -&gt; String</code>: The signature's key id representation (for GPG, this is the key fingerprint).</li>
+<li><code>.display() -&gt; String</code>: The signature's display string (for GPG this is the formatted primary user ID).</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Calling any of <code>.status()</code>, <code>.key()</code>, or <code>.display()</code> is slow, as it incurs
+the performance cost of verifying the signature (for example shelling out
+to <code>gpg</code> or <code>ssh-keygen</code>). Though consecutive calls will be faster, because
+the backend caches the verification result.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>As opposed to calling any of <code>.status()</code>, <code>.key()</code>, or <code>.display()</code>,
+checking for signature presence through boolean coercion is fast:
+<div class="highlight"><pre><span></span><code>if(commit.signature(), &quot;commit has a signature&quot;, &quot;commit is unsigned&quot;)
+</code></pre></div></p>
+</div>
 <h3 id="email-type">Email type<a class="headerlink" href="#email-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined.</p>
 <ul>

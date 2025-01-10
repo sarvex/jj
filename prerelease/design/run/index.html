@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/design/run/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/design/run/">
       
       
         <link rel="prev" href="../git-submodule-storage/">
@@ -1769,7 +1769,7 @@ working directory.</li>
 </ul>
 <h2 id="context-and-scope">Context and Scope<a class="headerlink" href="#context-and-scope" title="Permanent link">&para;</a></h2>
 <p>The initial need for some kind of command runner integrated in the VCS, surfaced
-in a <a href="https://github.com/martinvonz/jj/issues/405">github discussion</a>. In a <a href="https://discord.com/channels/968932220549103686/969829516539228222/1047958933161119795">discussion on discord</a> about
+in a <a href="https://github.com/jj-vcs/jj/issues/405">github discussion</a>. In a <a href="https://discord.com/channels/968932220549103686/969829516539228222/1047958933161119795">discussion on discord</a> about
 the git-hook model, there was consensus about not repeating their mistakes.</p>
 <p>For <code>jj run</code> there is prior art in Mercurial, git branchless and Google's
 internal Mercurial. Currently git-branchless <code>git test</code> and <code>hg fix</code> implement
@@ -1847,11 +1847,11 @@ they take up space. That is especially problematic in the case of cargo (the
 <code>target/</code> directory often takes up tens of GBs). The same flag for cleaning up
 ignored files can be used to address that. We may want to also have a flag for
 cleaning up temporary working copies <em>after</em> running the command.</p>
-<p>An early version of the command will directly use <a href="https://github.com/martinvonz/jj/blob/af85f552b676d66ed0e9ae0d401cd0c4ffbbeb21/lib/src/working_copy.rs#L117">Treestate</a> to
+<p>An early version of the command will directly use <a href="https://github.com/jj-vcs/jj/blob/af85f552b676d66ed0e9ae0d401cd0c4ffbbeb21/lib/src/working_copy.rs#L117">Treestate</a> to
 to manage the temporary working copies. That means that running <code>jj</code> inside the
 temporary working copies will not work . We can later extend that to use a full
-<a href="https://github.com/martinvonz/jj/blob/af85f552b676d66ed0e9ae0d401cd0c4ffbbeb21/lib/src/workspace.rs#L54">Workspace</a>. To prevent operations in the working copies from
-impacting the repo, we can use a separate <a href="https://github.com/martinvonz/jj/blob/main/lib/src/op_heads_store.rs">OpHeadsStore</a> for it.</p>
+<a href="https://github.com/jj-vcs/jj/blob/af85f552b676d66ed0e9ae0d401cd0c4ffbbeb21/lib/src/workspace.rs#L54">Workspace</a>. To prevent operations in the working copies from
+impacting the repo, we can use a separate <a href="https://github.com/jj-vcs/jj/blob/main/lib/src/op_heads_store.rs">OpHeadsStore</a> for it.</p>
 <h3 id="modifying-the-working-copy">Modifying the Working Copy<a class="headerlink" href="#modifying-the-working-copy" title="Permanent link">&para;</a></h3>
 <p>Since the subprocesses will run in temporary working copies, they
 won't interfere with the user's working copy. The user can therefore continue
@@ -1867,7 +1867,7 @@ want to have an option to ignore any changes made in the subprocess's working
 copy.</p>
 <h3 id="modifying-the-repo">Modifying the Repo<a class="headerlink" href="#modifying-the-repo" title="Permanent link">&para;</a></h3>
 <p>Once we give the subprocess access to a fork of the repo via separate
-<a href="https://github.com/martinvonz/jj/blob/main/lib/src/op_heads_store.rs">OpHeadsStore</a>, it will be able to create new operations in its fork.
+<a href="https://github.com/jj-vcs/jj/blob/main/lib/src/op_heads_store.rs">OpHeadsStore</a>, it will be able to create new operations in its fork.
 If the user runs <code>jj run -r foo</code> and the subprocess checks out another commit,
 it's not clear what that should do. We should probably just verify that the
 working-copy commit's parents are unchanged after the subprocess returns. Any
@@ -1946,7 +1946,7 @@ command)</li>
 <code>jj diff</code>: No special handling needed
 <code>jj st</code>: For now reprint the final output of <code>jj run</code>
 <code>jj op log</code>: No special handling needed, but awaits further discussion in
-<a href="https://github.com/martinvonz/jj/issues/963">#963</a>
+<a href="https://github.com/jj-vcs/jj/issues/963">#963</a>
 <code>jj undo/jj op undo</code>: No special handling needed</p>
 <h2 id="open-points">Open Points<a class="headerlink" href="#open-points" title="Permanent link">&para;</a></h2>
 <p>Should the command be working copy backend specific?

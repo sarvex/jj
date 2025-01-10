@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/config/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/config/">
       
       
         <link rel="prev" href="../glossary/">
@@ -709,9 +709,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#dotted-style-headings-and-inline-tables" class="md-nav__link">
+  <a href="#dotted-style-and-headings" class="md-nav__link">
     <span class="md-ellipsis">
-      Dotted style, headings, and inline tables
+      Dotted style and headings
     </span>
   </a>
   
@@ -940,6 +940,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#commit-timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit timestamp
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#allow-large-revsets-by-default" class="md-nav__link">
     <span class="md-ellipsis">
       Allow "large" revsets by default
@@ -1146,6 +1155,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#commit-signature-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit Signature Verification
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#git-settings" class="md-nav__link">
     <span class="md-ellipsis">
       Git settings
@@ -1285,6 +1303,15 @@
   <a href="#specifying-config-on-the-command-line" class="md-nav__link">
     <span class="md-ellipsis">
       Specifying config on the command-line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditional-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditional variables
     </span>
   </a>
   
@@ -1977,9 +2004,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#dotted-style-headings-and-inline-tables" class="md-nav__link">
+  <a href="#dotted-style-and-headings" class="md-nav__link">
     <span class="md-ellipsis">
-      Dotted style, headings, and inline tables
+      Dotted style and headings
     </span>
   </a>
   
@@ -2208,6 +2235,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#commit-timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit timestamp
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#allow-large-revsets-by-default" class="md-nav__link">
     <span class="md-ellipsis">
       Allow "large" revsets by default
@@ -2414,6 +2450,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#commit-signature-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Commit Signature Verification
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#git-settings" class="md-nav__link">
     <span class="md-ellipsis">
       Git settings
@@ -2558,6 +2603,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#conditional-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conditional variables
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2607,7 +2661,7 @@ Every type of config except for the built-in settings is optional.</p>
 syntax. We cover some of the basics below.</p>
 <p>The first thing to remember is that the value of a setting (the part to the
 right of the <code>=</code> sign) should be surrounded in quotes if it's a string.</p>
-<h3 id="dotted-style-headings-and-inline-tables">Dotted style, headings, and inline tables<a class="headerlink" href="#dotted-style-headings-and-inline-tables" title="Permanent link">&para;</a></h3>
+<h3 id="dotted-style-and-headings">Dotted style and headings<a class="headerlink" href="#dotted-style-and-headings" title="Permanent link">&para;</a></h3>
 <p>In TOML, anything under a heading can be dotted instead. For example,
 <code>user.name = "YOUR NAME"</code> is equivalent to:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[user]</span>
@@ -2616,7 +2670,7 @@ right of the <code>=</code> sign) should be surrounded in quotes if it's a strin
 <p>For future reference, here are a couple of more complicated examples,</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Dotted style</span>
 <span class="n">template-aliases</span><span class="p">.</span><span class="s2">&quot;format_short_id(id)&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;id.shortest(12)&quot;</span>
-<span class="n">colors</span><span class="p">.</span><span class="s2">&quot;commit_id prefix&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">bold</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
+<span class="n">colors</span><span class="p">.</span><span class="s2">&quot;commit_id prefix&quot;</span><span class="p">.</span><span class="n">bold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 
 <span class="c1"># is equivalent to:</span>
 <span class="k">[template-aliases]</span>
@@ -2625,13 +2679,6 @@ right of the <code>=</code> sign) should be surrounded in quotes if it's a strin
 <span class="k">[colors]</span>
 <span class="s2">&quot;commit_id prefix&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">bold</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<p>Dotted and non-inline table items are merged one by one if the same keys exist
-in multiple files. In the example above, <code>template-aliases</code> and <code>colors</code> are
-the tables to be merged. <code>template-aliases."format_short_id(id)"</code> and
-<code>colors."commit_id prefix"</code> in the default settings are overridden. On the other
-hand, inner items of an inline table are <em>not</em> merged. For example, <code>{ bold =
-true }</code> wouldn't be merged as <code>{ fg = "blue", bold = true }</code> even if the default
-settings had <code>colors."commit_id prefix" = { fg = "blue" }</code>.</p>
 <p>The docs below refer to keys in text using dotted notation, but example
 blocks will use heading notation to be unambiguous. If you are confident with TOML
 then use whichever suits you in your config. If you mix dotted keys and headings,
@@ -2695,7 +2742,7 @@ this:</p>
 <p>Parts of the style that are not overridden - such as the foreground color in the
 example above - are inherited from the style of the parent label.</p>
 <p>Which elements can be colored is not yet documented, but see
-the <a href="https://github.com/martinvonz/jj/blob/main/cli/src/config/colors.toml">default color configuration</a>
+the <a href="https://github.com/jj-vcs/jj/blob/main/cli/src/config/colors.toml">default color configuration</a>
 for some examples of what's possible.</p>
 <h3 id="default-command">Default command<a class="headerlink" href="#default-command" title="Permanent link">&para;</a></h3>
 <p>When <code>jj</code> is run with no explicit subcommand, the value of the
@@ -2715,6 +2762,8 @@ subcommand name, subcommand alias, or user-defined alias (defaults to <code>"log
 <span class="s1">    &quot;\nJJ: This commit contains the following changes:\n&quot;, &quot;&quot;,</span>
 <span class="s1">    indent(&quot;JJ:     &quot;, diff.stat(72)),</span>
 <span class="s1">  ),</span>
+<span class="s1">  &quot;\nJJ: ignore-rest\n&quot;,</span>
+<span class="s1">  diff.git(),</span>
 <span class="s1">)</span>
 <span class="s1">&#39;&#39;&#39;</span>
 </code></pre></div>
@@ -2800,6 +2849,12 @@ invocations as follows:</p>
 <span class="k">[merge-tools.vimdiff]</span>
 <span class="n">diff-invocation-mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;file-by-file&quot;</span>
 </code></pre></div>
+<p>By default <code>jj</code> will display a warning when the command exits with a non-success
+error code. The <code>diff-expected-exit-codes</code> config can suppress this warning
+message for specific exit codes:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[merge-tools.delta]</span>
+<span class="n">diff-expected-exit-codes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div>
 <h3 id="conflict-marker-style">Conflict marker style<a class="headerlink" href="#conflict-marker-style" title="Permanent link">&para;</a></h3>
 <p>You can configure which style of conflict markers to use when materializing
 conflicts:</p>
@@ -2850,7 +2905,7 @@ immutable even if the set is empty.</p>
 <span class="c1"># Use builtin log template</span>
 <span class="n">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_log_compact&quot;</span>
 <span class="c1"># Use builtin op log template</span>
-<span class="n">op_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_log_compact&quot;</span>
+<span class="n">op_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_op_log_compact&quot;</span>
 <span class="c1"># Use builtin show template</span>
 <span class="n">show</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_log_detailed&quot;</span>
 </code></pre></div>
@@ -2934,6 +2989,15 @@ will need to modify the <code>format_time_range()</code> template alias.</p>
 <span class="s1">&#39;format_short_signature(signature)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;signature&#39;</span>
 <span class="c1"># Username part of the email address</span>
 <span class="s1">&#39;format_short_signature(signature)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;signature.username()&#39;</span>
+</code></pre></div>
+<h3 id="commit-timestamp">Commit timestamp<a class="headerlink" href="#commit-timestamp" title="Permanent link">&para;</a></h3>
+<p>Commits have both an "author timestamp" and "committer timestamp". By default,
+jj displays the committer timestamp, but can be changed to show the author
+timestamp instead.</p>
+<p>The function must return a timestamp because the return value will likely be
+formatted with <code>format_timestamp()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[template-aliases]</span>
+<span class="s1">&#39;commit_timestamp(commit)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;commit.author().timestamp()&#39;</span>
 </code></pre></div>
 <h3 id="allow-large-revsets-by-default">Allow "large" revsets by default<a class="headerlink" href="#allow-large-revsets-by-default" title="Permanent link">&para;</a></h3>
 <p>Certain commands (such as <code>jj rebase</code>) can take multiple revset arguments, but
@@ -3165,7 +3229,7 @@ this file will be ignored. To suppress the creation of this file, set
 <code>ui.diff-instructions = false</code>.</p>
 <h3 id="using-vim-as-a-diff-editor">Using Vim as a diff editor<a class="headerlink" href="#using-vim-as-a-diff-editor" title="Permanent link">&para;</a></h3>
 <p>Using <code>ui.diff-editor = "vimdiff"</code> is possible but not recommended. For a better
-experience, you can follow <a href="https://github.com/martinvonz/jj/wiki/Vim#using-vim-as-a-diff-tool">instructions from the Wiki</a> to configure the
+experience, you can follow <a href="https://github.com/jj-vcs/jj/wiki/Vim#using-vim-as-a-diff-tool">instructions from the Wiki</a> to configure the
 <a href="https://github.com/will133/vim-dirdiff">DirDiff Vim plugin</a> and/or the <a href="https://github.com/balki/vimtabdiff">vimtabdiff Python script</a>.</p>
 <h2 id="3-way-merge-tools-for-conflict-resolution">3-way merge tools for conflict resolution<a class="headerlink" href="#3-way-merge-tools-for-conflict-resolution" title="Permanent link">&para;</a></h2>
 <p>The <code>ui.merge-editor</code> key specifies the tool used for three-way merge tools
@@ -3214,6 +3278,12 @@ to copy it to your config file verbatim, but you are welcome to customize it.)</
 <li>
 <p><code>$base</code> is replaced with the path to a file containing the contents of the
   conflicted file in the last common ancestor of the two sides of the conflict.</p>
+</li>
+<li>
+<p><code>$marker_length</code> is replaced with the length of the conflict markers which
+  should be used for the file. This can be useful if the merge tool parses
+  and/or generates conflict markers. Usually, <code>jj</code> uses conflict markers of
+  length 7, but they can be longer if necessary to make parsing unambiguous.</p>
 </li>
 </ul>
 <h3 id="editing-conflict-markers-with-a-tool-or-a-text-editor">Editing conflict markers with a tool or a text editor<a class="headerlink" href="#editing-conflict-markers-with-a-tool-or-a-text-editor" title="Permanent link">&para;</a></h3>
@@ -3331,6 +3401,14 @@ as follows:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
 <span class="n">backends</span><span class="p">.</span><span class="n">ssh</span><span class="p">.</span><span class="n">allowed-signers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/path/to/allowed-signers&quot;</span>
 </code></pre></div>
+<h2 id="commit-signature-verification">Commit Signature Verification<a class="headerlink" href="#commit-signature-verification" title="Permanent link">&para;</a></h2>
+<p>By default signature verification and display is <strong>disabled</strong> as it incurs a
+performance cost when rendering medium to large change logs.</p>
+<p>If you want to display commit signatures in your templates, you can use
+<code>commit.signature()</code> (see <a href="../templates/#commit-type">Commit type</a>). The
+returned <a href="../templates/#cryptographicsignature-type">CryptographicSignature
+Type</a> provides methods to retrieve
+signature details.</p>
 <h2 id="git-settings">Git settings<a class="headerlink" href="#git-settings" title="Permanent link">&para;</a></h2>
 <h3 id="default-remotes-for-jj-git-fetch-and-jj-git-push">Default remotes for <code>jj git fetch</code> and <code>jj git push</code><a class="headerlink" href="#default-remotes-for-jj-git-fetch-and-jj-git-push" title="Permanent link">&para;</a></h3>
 <p>By default, if a single remote exists it is used for <code>jj git fetch</code> and <code>jj git
@@ -3496,6 +3574,32 @@ contain any TOML constructs (such as array notation), quotes can be omitted.</p>
 <p>To load an entire TOML document, use <code>--config-file</code>:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>--config-file<span class="o">=</span>extra-config.toml<span class="w"> </span>log
 </code></pre></div>
+<h3 id="conditional-variables">Conditional variables<a class="headerlink" href="#conditional-variables" title="Permanent link">&para;</a></h3>
+<p>You can conditionally enable config variables by using <code>--when</code> and
+<code>[[--scope]]</code> tables. Variables defined in <code>[[--scope]]</code> tables are expanded to
+the root table. <code>--when</code> specifies the condition to enable the scope table.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[user]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR NAME&quot;</span>
+<span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_DEFAULT_EMAIL@example.com&quot;</span>
+
+<span class="c1"># override user.email if the repository is located under ~/oss</span>
+<span class="k">[[--scope]]</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">repositories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;~/oss&quot;</span><span class="p">]</span>
+<span class="k">[--scope.user]</span>
+<span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_OSS_EMAIL@example.org&quot;</span>
+</code></pre></div>
+<p>Condition keys:</p>
+<ul>
+<li><code>--when.repositories</code>: List of paths to match the repository path prefix.</li>
+</ul>
+<p>Paths should be absolute. Each path component (directory or file name, drive
+letter, etc.) is compared case-sensitively on all platforms. A path starting
+with <code>~</code> is expanded to the home directory. On Windows, directory separator may
+be either <code>\</code> or <code>/</code>. (Beware that <code>\</code> needs escape in double-quoted strings.)</p>
+<p>Use <code>jj root</code> to see the workspace root directory. Note that the repository path
+is in the main workspace if you're using multiple workspaces with <code>jj
+workspace</code>.</p>
+<p>If no conditions are specified, table is always enabled.</p>
 
 
 

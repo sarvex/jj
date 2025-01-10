@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/revsets/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/revsets/">
       
       
         <link rel="prev" href="../filesets/">
@@ -2028,7 +2028,7 @@ function will be shadowed by name, and can't co-exist with aliases.</p>
 <h3 id="built-in-aliases">Built-in Aliases<a class="headerlink" href="#built-in-aliases" title="Permanent link">&para;</a></h3>
 <p>The following aliases are built-in and used for certain operations. These functions
 are defined as aliases in order to allow you to overwrite them as needed.
-See <a href="https://github.com/martinvonz/jj/blob/main/cli/src/config/revsets.toml">revsets.toml</a>
+See <a href="https://github.com/jj-vcs/jj/blob/main/cli/src/config/revsets.toml">revsets.toml</a>
 for a comprehensive list.</p>
 <ul>
 <li>
@@ -2048,8 +2048,8 @@ always resolves to exactly one commit. For example:</p>
 <li>
 <p><code>builtin_immutable_heads()</code>: Resolves to
   <code>present(trunk()) | tags() | untracked_remote_bookmarks()</code>. It is used as the
-   default definition for <code>immutable_heads()</code> below. it is not recommended to
-   redefined this alias. Prefer to redefine <code>immutable_heads()</code> instead.</p>
+   default definition for <code>immutable_heads()</code> below. It is not recommended to
+   redefine this alias. Prefer to redefine <code>immutable_heads()</code> instead.</p>
 </li>
 <li>
 <p><code>immutable_heads()</code>: Resolves to

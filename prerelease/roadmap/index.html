@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/roadmap/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/roadmap/">
       
       
         <link rel="prev" href="../design/copy-tracking/">
@@ -1543,7 +1543,7 @@ popular forges, we might include that support by default in the standard <code>j
 binary.</p>
 <h2 id="submodule-support">Submodule support<a class="headerlink" href="#submodule-support" title="Permanent link">&para;</a></h2>
 <p>Git submodules are used frequently enough in large Git repos that we will
-probably need to <a href="https://github.com/martinvonz/jj/issues/494">support them</a>. There are still big open
+probably need to <a href="https://github.com/jj-vcs/jj/issues/494">support them</a>. There are still big open
 questions around UX.</p>
 <h2 id="better-rust-api-for-uis">Better Rust API for UIs<a class="headerlink" href="#better-rust-api-for-uis" title="Permanent link">&para;</a></h2>
 <p>UIs like <a href="https://github.com/gulbanana/gg">gg</a> currently have to duplicate quite a bit of logic from <code>jj-cli</code>. We
@@ -1580,7 +1580,7 @@ other commit as base, without needing to download any large files in the target
 commit until the user asks for them via the file system. A VFS can also make it
 cheap to snapshot the working copy by keeping track of all changes compared to
 the base commit.</p>
-<p>Having a VFS can also be very benefial for <a href="https://github.com/martinvonz/jj/issues/1869"><code>jj run</code></a>, since we can then
+<p>Having a VFS can also be very benefial for <a href="https://github.com/jj-vcs/jj/issues/1869"><code>jj run</code></a>, since we can then
 cheaply create temporary working copies for the commands to run in.</p>
 <h2 id="better-support-for-large-files">Better support for large files<a class="headerlink" href="#better-support-for-large-files" title="Permanent link">&para;</a></h2>
 <p>We have talked about somehow using content-defined chunking (CDC) to reduce

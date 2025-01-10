@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/bookmarks/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/bookmarks/">
       
       
         <link rel="prev" href="../working-copy/">
@@ -1670,7 +1670,7 @@ some remote.</p>
   actual state only when it's actively communicating with the remote. However,
   <code>jj</code> does store the last-seen position of the remote bookmark; this is the
   commit <code>jj show &lt;bookmark name&gt;@&lt;remote name&gt;</code> would show. This notion is
-  completely analogous to Git's "remote-tracking bookmarks".</li>
+  completely analogous to Git's "remote-tracking branches".</li>
 <li>A <strong>tracked (remote) bookmark</strong> is defined above. You can make a remote bookmark
   tracked with the <a href="#manually-tracking-a-bookmark"><code>jj bookmark track</code> command</a>, for
   example.</li>
@@ -1730,8 +1730,8 @@ well for repositories where multiple people work on a large number of bookmarks.
 <p>The default can be changed by setting the config <code>git.auto-local-bookmark = true</code>.
 Then, <code>jj git fetch</code> tracks every <em>newly fetched</em> bookmark with a local bookmark.
 Branches that already existed before the <code>jj git fetch</code> are not affected. This
-is similar to Mercurial, which fetches all its bookmarks (equivalent to Git
-bookmarks) by default.</p>
+is similar to Mercurial, which fetches all its bookmarks (equivalent to Git's
+branches) by default.</p>
 <h2 id="bookmark-movement">Bookmark movement<a class="headerlink" href="#bookmark-movement" title="Permanent link">&para;</a></h2>
 <p>Currently Jujutsu automatically moves local bookmarks when these conditions are
 met:</p>

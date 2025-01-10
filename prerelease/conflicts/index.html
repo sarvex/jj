@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://martinvonz.github.io/jj/latest/conflicts/">
+        <link rel="canonical" href="https://jj-vcs.github.io/jj/latest/conflicts/">
       
       
         <link rel="prev" href="../bookmarks/">
@@ -624,6 +624,15 @@
   <a href="#alternative-conflict-marker-styles" class="md-nav__link">
     <span class="md-ellipsis">
       Alternative conflict marker styles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#long-conflict-markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Long conflict markers
     </span>
   </a>
   
@@ -1441,6 +1450,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#long-conflict-markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Long conflict markers
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1593,6 +1611,22 @@ ORANGE
 <p>This conflict marker style only supports 2-sided conflicts though, so it falls
 back to the similar "snapshot" conflict markers if there are more than 2 sides
 to the conflict.</p>
+<h2 id="long-conflict-markers">Long conflict markers<a class="headerlink" href="#long-conflict-markers" title="Permanent link">&para;</a></h2>
+<p>Some files may contain lines which could be confused for conflict markers. For
+instance, a line could start with <code>=======</code>, which looks like a Git-style
+conflict marker. To ensure that it's always unambiguous which lines are conflict
+markers and which are just part of the file contents, <code>jj</code> sometimes uses
+conflict markers which are longer than normal:</p>
+<div class="highlight"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Conflict 1 of 1
+%%%%%%%%%%%%%%% Changes from base to side #1
+-Heading
++HEADING
+ =======
++++++++++++++++ Contents of side #2
+New Heading
+===========
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Conflict 1 of 1 ends
+</code></pre></div>
 
 
 
