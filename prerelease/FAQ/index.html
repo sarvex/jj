@@ -462,6 +462,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#what-are-elided-revisions-in-the-output-of-jj-log-how-can-i-display-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      What are elided revisions in the output of jj log? How can I display them?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#how-can-i-get-jj-log-to-show-me-what-git-log-would-show-me" class="md-nav__link">
     <span class="md-ellipsis">
       How can I get jj log to show me what git log would show me?
@@ -1566,6 +1575,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#what-are-elided-revisions-in-the-output-of-jj-log-how-can-i-display-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      What are elided revisions in the output of jj log? How can I display them?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#how-can-i-get-jj-log-to-show-me-what-git-log-would-show-me" class="md-nav__link">
     <span class="md-ellipsis">
       How can I get jj log to show me what git log would show me?
@@ -1749,6 +1767,33 @@ with <code>jj rebase</code>, <code>jj describe</code>, etc). In that case, <code
 should show the revision as "hidden". <code>jj new commit_id</code> should make the
 revision visible again.</p>
 <p>See <a href="../revsets/">revsets</a> and <a href="../templates/">templates</a> for further guidance.</p>
+<h3 id="what-are-elided-revisions-in-the-output-of-jj-log-how-can-i-display-them">What are elided revisions in the output of <code>jj log</code>? How can I display them?<a class="headerlink" href="#what-are-elided-revisions-in-the-output-of-jj-log-how-can-i-display-them" title="Permanent link">&para;</a></h3>
+<p>"Elided revisions" appears in the log when one revision descends from another,
+both are in the revset, but the revisions connecting them are <em>not</em> in the
+revset.</p>
+<p>For example, suppose you log the revset <code>tyl|mus</code> which contains exactly two
+revisions:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w">  </span>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;tyl|mus&#39;</span>
+○<span class="w">  </span>musnqzvt<span class="w"> </span>me@example.com<span class="w"> </span><span class="m">1</span><span class="w"> </span>minute<span class="w"> </span>ago<span class="w"> </span>9a09f8a5
+│<span class="w">  </span>Revision<span class="w"> </span>C
+~<span class="w">  </span><span class="o">(</span>elided<span class="w"> </span>revisions<span class="o">)</span>
+○<span class="w">  </span>tylynnzk<span class="w"> </span>me@example.com<span class="w"> </span><span class="m">1</span><span class="w"> </span>minute<span class="w"> </span>ago<span class="w"> </span>f26967c8
+│<span class="w">  </span>Revision<span class="w"> </span>A
+</code></pre></div>
+<p>Only the two revisions in the revset are displayed. The text "(elided
+revisions)" is shown to indicate that <code>musnqzvt</code> descends from <code>tylynnzk</code>, but
+the nodes connecting them are not in the revset.</p>
+<p>To view the elided revisions, change the <a href="../revsets/">revset expression</a> so it
+includes the connecting revisions.  The <code>connected()</code> revset function does
+exactly this:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;connected(tyl|mus)&#39;</span>
+○<span class="w">  </span>musnqzvt<span class="w"> </span>me@example.com<span class="w"> </span><span class="m">43</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w"> </span>9a09f8a5
+│<span class="w">  </span>Revision<span class="w"> </span>C
+○<span class="w">  </span>rsvnrznr<span class="w"> </span>me@example.com<span class="w"> </span><span class="m">43</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w"> </span>5b490f30
+│<span class="w">  </span>Revision<span class="w"> </span>B
+○<span class="w">  </span>tylynnzk<span class="w"> </span>me@example.com<span class="w"> </span><span class="m">43</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w"> </span>f26967c8
+│<span class="w">  </span>Revision<span class="w"> </span>A
+</code></pre></div>
 <h3 id="how-can-i-get-jj-log-to-show-me-what-git-log-would-show-me">How can I get <code>jj log</code> to show me what <code>git log</code> would show me?<a class="headerlink" href="#how-can-i-get-jj-log-to-show-me-what-git-log-would-show-me" title="Permanent link">&para;</a></h3>
 <p>Use <code>jj log -r ..</code>. The <code>..</code> <a href="../revsets/#operators">operator</a> lists all visible commits in the repo, excluding the root (which is never interesting and is shared by all repos).</p>
 <h3 id="can-i-monitor-how-jj-log-evolves">Can I monitor how <code>jj log</code> evolves?<a class="headerlink" href="#can-i-monitor-how-jj-log-evolves" title="Permanent link">&para;</a></h3>
