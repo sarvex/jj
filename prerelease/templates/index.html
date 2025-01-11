@@ -850,6 +850,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configvalue-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      ConfigValue type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cryptographicsignature-type" class="md-nav__link">
     <span class="md-ellipsis">
       CryptographicSignature type
@@ -1737,6 +1746,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#configvalue-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      ConfigValue type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cryptographicsignature-type" class="md-nav__link">
     <span class="md-ellipsis">
       CryptographicSignature type
@@ -2008,6 +2026,7 @@ type</a> are available as keywords. For example,
   Insert separator between <strong>non-empty</strong> contents.</li>
 <li><code>surround(prefix: Template, suffix: Template, content: Template) -&gt; Template</code>:
   Surround <strong>non-empty</strong> content with texts such as parentheses.</li>
+<li><code>config(name: String) -&gt; ConfigValue</code>: Look up configuration value by <code>name</code>.</li>
 </ul>
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
 <h3 id="boolean-type">Boolean type<a class="headerlink" href="#boolean-type" title="Permanent link">&para;</a></h3>
@@ -2056,6 +2075,15 @@ type</a> are available as keywords. For example,
   ChangeId, whose canonical hex representation is "reversed" (z-k).</li>
 <li><code>.short([len: Integer]) -&gt; String</code></li>
 <li><code>.shortest([min_len: Integer]) -&gt; ShortestIdPrefix</code>: Shortest unique prefix.</li>
+</ul>
+<h3 id="configvalue-type">ConfigValue type<a class="headerlink" href="#configvalue-type" title="Permanent link">&para;</a></h3>
+<p>This type can be printed in TOML syntax. The following methods are defined.</p>
+<ul>
+<li><code>.as_boolean() -&gt; Boolean</code>: Extract boolean.</li>
+<li><code>.as_integer() -&gt; Integer</code>: Extract integer.</li>
+<li><code>.as_string() -&gt; String</code>: Extract string. This does not convert non-string
+  value (e.g. integer) to string.</li>
+<li><code>.as_string_list() -&gt; List&lt;String&gt;</code>: Extract list of strings.</li>
 </ul>
 <h3 id="cryptographicsignature-type">CryptographicSignature type<a class="headerlink" href="#cryptographicsignature-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined.</p>
