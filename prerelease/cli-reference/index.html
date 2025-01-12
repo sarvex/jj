@@ -7156,8 +7156,13 @@ output of the first tool.</p>
 <p><strong>Usage:</strong> <code>jj git clone [OPTIONS] &lt;SOURCE&gt; [DESTINATION]</code></p>
 <h6 id="arguments_27"><strong>Arguments:</strong><a class="headerlink" href="#arguments_27" title="Permanent link">&para;</a></h6>
 <ul>
-<li><code>&lt;SOURCE&gt;</code> — URL or path of the Git repo to clone</li>
-<li><code>&lt;DESTINATION&gt;</code> — Specifies the target directory for the Jujutsu repository clone. If not provided, defaults to a directory named after the last component of the source URL. The full directory path will be created if it doesn't exist</li>
+<li>
+<p><code>&lt;SOURCE&gt;</code> — URL or path of the Git repo to clone</p>
+<p>Local path will be resolved to absolute form.</p>
+</li>
+<li>
+<p><code>&lt;DESTINATION&gt;</code> — Specifies the target directory for the Jujutsu repository clone. If not provided, defaults to a directory named after the last component of the source URL. The full directory path will be created if it doesn't exist</p>
+</li>
 </ul>
 <h6 id="options_24"><strong>Options:</strong><a class="headerlink" href="#options_24" title="Permanent link">&para;</a></h6>
 <ul>
@@ -7282,7 +7287,10 @@ output of the first tool.</p>
 <h6 id="arguments_29"><strong>Arguments:</strong><a class="headerlink" href="#arguments_29" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;REMOTE&gt;</code> — The remote's name</li>
-<li><code>&lt;URL&gt;</code> — The remote's URL</li>
+<li>
+<p><code>&lt;URL&gt;</code> — The remote's URL or path</p>
+<p>Local path will be resolved to absolute form.</p>
+</li>
 </ul>
 <h2 id="jj-git-remote-list"><code>jj git remote list</code><a class="headerlink" href="#jj-git-remote-list" title="Permanent link">&para;</a></h2>
 <p>List Git remotes</p>
@@ -7308,7 +7316,10 @@ output of the first tool.</p>
 <h6 id="arguments_32"><strong>Arguments:</strong><a class="headerlink" href="#arguments_32" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;REMOTE&gt;</code> — The remote's name</li>
-<li><code>&lt;URL&gt;</code> — The desired url for <code>remote</code></li>
+<li>
+<p><code>&lt;URL&gt;</code> — The desired URL or path for <code>remote</code></p>
+<p>Local path will be resolved to absolute form.</p>
+</li>
 </ul>
 <h2 id="jj-help"><code>jj help</code><a class="headerlink" href="#jj-help" title="Permanent link">&para;</a></h2>
 <p>Print this message or the help of the given subcommand(s)</p>
