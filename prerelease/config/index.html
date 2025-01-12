@@ -1149,6 +1149,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sign-commits-only-on-jj-git-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sign commits only on jj git push
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2444,6 +2453,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sign-commits-only-on-jj-git-push" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sign commits only on jj git push
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3400,6 +3418,21 @@ file containing the public keys of authors whose signatures you want to be able 
 as follows:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
 <span class="n">backends</span><span class="p">.</span><span class="n">ssh</span><span class="p">.</span><span class="n">allowed-signers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/path/to/allowed-signers&quot;</span>
+</code></pre></div>
+<h3 id="sign-commits-only-on-jj-git-push">Sign commits only on <code>jj git push</code><a class="headerlink" href="#sign-commits-only-on-jj-git-push" title="Permanent link">&para;</a></h3>
+<p>Instead of signing all commits during creation when <code>signing.sign-all</code> is
+set to <code>true</code>, the <code>git.sign-on-push</code> configuration can be used to sign
+commits only upon running <code>jj git push</code>. All mutable unsigned commits
+being pushed will be signed prior to pushing. This might be preferred if the
+signing backend requires user interaction or is slow, so that signing is
+performed in a single batch operation.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Configure signing backend as before, without setting `signing.sign-all`</span>
+<span class="k">[signing]</span>
+<span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh&quot;</span>
+<span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGj+J6N6SO+4P8dOZqfR1oiay2yxhhHnagH52avUqw5h&quot;</span>
+
+<span class="k">[git]</span>
+<span class="n">sign-on-push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
 <h2 id="commit-signature-verification">Commit Signature Verification<a class="headerlink" href="#commit-signature-verification" title="Permanent link">&para;</a></h2>
 <p>By default signature verification and display is <strong>disabled</strong> as it incurs a
