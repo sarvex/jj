@@ -1116,6 +1116,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#disabling-and-enabling-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disabling and enabling tools
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2420,6 +2429,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#disabling-and-enabling-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disabling and enabling tools
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3374,6 +3392,19 @@ contains one number on each line. This can be accomplished with <code>sort</code
 <span class="k">[fix.tools.2-truncate-numbers-file]</span>
 <span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-n&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;10&quot;</span><span class="p">]</span>
 <span class="n">patterns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;numbers.txt&quot;</span><span class="p">]</span>
+</code></pre></div>
+<h3 id="disabling-and-enabling-tools">Disabling and enabling tools<a class="headerlink" href="#disabling-and-enabling-tools" title="Permanent link">&para;</a></h3>
+<p>Tools can be disabled and enabled with the optional <code>enabled</code> config. This
+allows you to define tools globally but enable them only for specific
+repositories.</p>
+<p>In the user configuration, define a disabled tool for running rustfmt:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[fix.tools.rustfmt]</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;rustfmt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;--emit&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;stdout&quot;</span><span class="p">]</span>
+<span class="n">patterns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;glob:&#39;**/*.rs&#39;&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>Then to use the tool in a specific repository, set the <code>enabled</code> config:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>fix.tools.rustfmt.enabled<span class="w"> </span><span class="nb">true</span>
 </code></pre></div>
 <h2 id="commit-signing">Commit Signing<a class="headerlink" href="#commit-signing" title="Permanent link">&para;</a></h2>
 <p><code>jj</code> can be configured to sign and verify the commits it creates using either
