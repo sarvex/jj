@@ -1318,6 +1318,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#json-schema-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Schema Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specifying-config-on-the-command-line" class="md-nav__link">
     <span class="md-ellipsis">
       Specifying config on the command-line
@@ -2631,6 +2640,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#json-schema-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      JSON Schema Support
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#specifying-config-on-the-command-line" class="md-nav__link">
     <span class="md-ellipsis">
       Specifying config on the command-line
@@ -2693,6 +2711,9 @@ located in <code>.jj/repo/config.toml</code>.</p>
 <p>These are listed in the order they are loaded; the settings from earlier items
 in the list are overridden by the settings from later items if they disagree.
 Every type of config except for the built-in settings is optional.</p>
+<p>You can enable JSON Schema validation in your editor by adding a <code>$schema</code>
+reference at the top of your TOML config files. See <a href="#json-schema-support">JSON Schema
+Support</a> for details.</p>
 <p>See the <a href="https://toml.io/en/">TOML site</a> and the <a href="https://toml.io/en/v1.0.0">syntax guide</a> for a detailed description of the
 syntax. We cover some of the basics below.</p>
 <p>The first thing to remember is that the value of a setting (the part to the
@@ -3625,6 +3646,53 @@ to a TOML file that will be used instead of any configuration file in the
 default locations. For example,</p>
 <div class="highlight"><pre><span></span><code>env<span class="w"> </span><span class="nv">JJ_CONFIG</span><span class="o">=</span>/dev/null<span class="w"> </span>jj<span class="w"> </span>log<span class="w">       </span><span class="c1"># Ignores any settings specified in the config file.</span>
 </code></pre></div>
+<h3 id="json-schema-support">JSON Schema Support<a class="headerlink" href="#json-schema-support" title="Permanent link">&para;</a></h3>
+<p>Many popular editors support TOML file syntax highlighting and validation. To
+enable schema validation in your editor, add this line at the top of your TOML
+config files:</p>
+<div class="highlight"><pre><span></span><code><span class="s2">&quot;$schema&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://jj-vcs.github.io/jj/latest/config-schema.json&quot;</span>
+</code></pre></div>
+<p>This enables features like:</p>
+<ul>
+<li>Autocomplete for config keys</li>
+<li>Type checking of values</li>
+<li>Documentation on hover</li>
+<li>Validation of settings</li>
+</ul>
+<p>Here are some popular editors with TOML schema validation support:</p>
+<ul>
+<li>
+<p>VS Code</p>
+<ul>
+<li>Install <a href="https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml">Even Better TOML</a></li>
+</ul>
+</li>
+<li>
+<p>Neovim/Vim</p>
+<ul>
+<li>Use with <a href="https://github.com/neovim/nvim-lspconfig">nvim-lspconfig</a> and <a href="https://github.com/tamasfe/taplo">taplo</a></li>
+</ul>
+</li>
+<li>
+<p>JetBrains IDEs (IntelliJ, PyCharm, etc)</p>
+<ul>
+<li>Install <a href="https://plugins.jetbrains.com/plugin/8195-toml">TOML</a> plugin</li>
+</ul>
+</li>
+<li>
+<p>Sublime Text</p>
+<ul>
+<li>Install <a href="https://packagecontrol.io/packages/LSP">LSP</a> and <a href="https://packagecontrol.io/packages/LSP-taplo">LSP-taplo</a></li>
+</ul>
+</li>
+<li>
+<p>Emacs</p>
+<ul>
+<li>Install <a href="https://github.com/emacs-lsp/lsp-mode">lsp-mode</a> and <a href="https://github.com/dryman/toml-mode.el">toml-mode</a></li>
+<li>Configure <a href="https://github.com/tamasfe/taplo">taplo</a> as the LSP server</li>
+</ul>
+</li>
+</ul>
 <h3 id="specifying-config-on-the-command-line">Specifying config on the command-line<a class="headerlink" href="#specifying-config-on-the-command-line" title="Permanent link">&para;</a></h3>
 <p>You can use one or more <code>--config</code>/<code>--config-file</code> options on the command line
 to specify additional configuration settings. This overrides settings defined in
