@@ -2107,10 +2107,15 @@ checking for signature presence through boolean coercion is fast:
 </code></pre></div></p>
 </div>
 <h3 id="email-type">Email type<a class="headerlink" href="#email-type" title="Permanent link">&para;</a></h3>
+<p>The email field of a signature may or may not look like an email address. It may
+be empty, may not contain the symbol <code>@</code>, and could in principle contain
+multiple <code>@</code>s.</p>
 <p>The following methods are defined.</p>
 <ul>
-<li><code>.local() -&gt; String</code></li>
-<li><code>.domain() -&gt; String</code></li>
+<li><code>.local() -&gt; String</code>: the part of the email before the first <code>@</code>, usually the
+  username.</li>
+<li><code>.domain() -&gt; String</code>: the part of the email after the first <code>@</code> or the empty
+  string.</li>
 </ul>
 <h3 id="integer-type">Integer type<a class="headerlink" href="#integer-type" title="Permanent link">&para;</a></h3>
 <p>No methods are defined.</p>
