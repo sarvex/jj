@@ -7262,8 +7262,13 @@ output of the first tool.</p>
 <li>
 <p><code>--allow-empty-description</code> — Allow pushing commits with empty descriptions</p>
 </li>
-<li><code>--allow-private</code> — Allow pushing commits that are private</li>
-<li><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — Push bookmarks pointing to these commits (can be repeated)</li>
+<li>
+<p><code>--allow-private</code> — Allow pushing commits that are private</p>
+<p>The set of private commits can be configured by the <code>git.private-commits</code> setting. The default is <code>none()</code>, meaning all commits are eligible to be pushed.</p>
+</li>
+<li>
+<p><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — Push bookmarks pointing to these commits (can be repeated)</p>
+</li>
 <li>
 <p><code>-c</code>, <code>--change &lt;REVSETS&gt;</code> — Push this commit by creating a bookmark based on its change ID (can be repeated)</p>
 <p>The created bookmark will be tracked automatically. Use the <code>git.push-bookmark-prefix</code> setting to change the prefix for generated names.</p>
