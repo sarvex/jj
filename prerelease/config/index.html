@@ -949,9 +949,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#allow-large-revsets-by-default" class="md-nav__link">
+  <a href="#signature-format" class="md-nav__link">
     <span class="md-ellipsis">
-      Allow "large" revsets by default
+      Signature format
     </span>
   </a>
   
@@ -959,6 +959,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allow-large-revsets-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow "large" revsets by default
+    </span>
+  </a>
   
 </li>
       
@@ -2271,9 +2280,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#allow-large-revsets-by-default" class="md-nav__link">
+  <a href="#signature-format" class="md-nav__link">
     <span class="md-ellipsis">
-      Allow "large" revsets by default
+      Signature format
     </span>
   </a>
   
@@ -2281,6 +2290,15 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#allow-large-revsets-by-default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow "large" revsets by default
+    </span>
+  </a>
   
 </li>
       
@@ -3056,7 +3074,27 @@ formatted with <code>format_timestamp()</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[template-aliases]</span>
 <span class="s1">&#39;commit_timestamp(commit)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;commit.author().timestamp()&#39;</span>
 </code></pre></div>
-<h3 id="allow-large-revsets-by-default">Allow "large" revsets by default<a class="headerlink" href="#allow-large-revsets-by-default" title="Permanent link">&para;</a></h3>
+<h3 id="signature-format">Signature format<a class="headerlink" href="#signature-format" title="Permanent link">&para;</a></h3>
+<p>Can be enabled with <code>ui.show-cryptographic-signatures</code>, and
+customized with <code>format_short_cryptographic_signature(sig)</code> and
+<code>format_detailed_cryptographic_signature(sig)</code>.</p>
+<p>Note that the formatting functions take an <code>Option&lt;CryptographicSignature&gt;</code>.
+This allows you to emit a custom message if a signature is not present, but
+will raise an error if you try to access methods on a signature that is not
+available.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[ui]</span>
+<span class="c1"># default is false</span>
+<span class="n">show-cryptographic-signatures</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[template-aliases]</span>
+<span class="s1">&#39;format_short_cryptographic_signature(sig)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">  if(sig,</span>
+<span class="s1">    sig.status(),</span>
+<span class="s1">    &quot;(no sig)&quot;,</span>
+<span class="s1">  )</span>
+<span class="s1">&#39;&#39;&#39;</span>
+</code></pre></div>
+<h2 id="allow-large-revsets-by-default">Allow "large" revsets by default<a class="headerlink" href="#allow-large-revsets-by-default" title="Permanent link">&para;</a></h2>
 <p>Certain commands (such as <code>jj rebase</code>) can take multiple revset arguments, but
 default to requiring each of those revsets to expand to a <em>single</em> revision.
 This restriction can be overridden by prefixing a revset that the user wants to
