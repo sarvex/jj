@@ -1862,19 +1862,37 @@ aren't included in <code>remote_bookmarks()</code>.</p>
 </li>
 <li>
 <p><code>author(pattern)</code>: Commits with the author's name or email matching the given
+  <a href="#string-patterns">string pattern</a>. Equivalent to <code>author_name(pattern) |
+  author_email(pattern)</code>.</p>
+</li>
+<li>
+<p><code>author_name(pattern)</code>: Commits with the author's name matching the given
   <a href="#string-patterns">string pattern</a>.</p>
 </li>
 <li>
-<p><code>mine()</code>: Commits where the author's email matches the email of the current
-  user.</p>
-</li>
-<li>
-<p><code>committer(pattern)</code>: Commits with the committer's  name or email matching the
-given <a href="#string-patterns">string pattern</a>.</p>
+<p><code>author_email(pattern)</code>: Commits with the author's email matching the given
+  <a href="#string-patterns">string pattern</a>.</p>
 </li>
 <li>
 <p><code>author_date(pattern)</code>: Commits with author dates matching the specified <a href="#date-patterns">date
   pattern</a>.</p>
+</li>
+<li>
+<p><code>mine()</code>: Commits where the author's email matches the email of the current
+  user. Equivalent to <code>author_email(exact-i:&lt;user-email&gt;)</code></p>
+</li>
+<li>
+<p><code>committer(pattern)</code>: Commits with the committer's name or email matching the
+  given <a href="#string-patterns">string pattern</a>. Equivalent to
+  <code>committer_name(pattern) | committer_email(pattern)</code>.</p>
+</li>
+<li>
+<p><code>committer_name(pattern)</code>: Commits with the committer's name matching the
+  given <a href="#string-patterns">string pattern</a>.</p>
+</li>
+<li>
+<p><code>committer_email(pattern)</code>: Commits with the committer's email matching the
+  given <a href="#string-patterns">string pattern</a>.</p>
 </li>
 <li>
 <p><code>committer_date(pattern)</code>: Commits with committer dates matching the specified
