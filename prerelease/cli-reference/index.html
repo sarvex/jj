@@ -6502,7 +6502,13 @@ does not match the <code>jj help</code> output exactly.</p>
 <h6 id="options_1"><strong>Options:</strong><a class="headerlink" href="#options_1" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>-s</code>, <code>--summary</code> — Do not print every abandoned commit on a separate line</li>
-<li><code>--restore-descendants</code> — Do not modify the content of the children of the abandoned commits</li>
+<li>
+<p><code>--retain-bookmarks</code> — Do not delete bookmarks pointing to the revisions to abandon</p>
+<p>Bookmarks will be moved to the parent revisions instead.</p>
+</li>
+<li>
+<p><code>--restore-descendants</code> — Do not modify the content of the children of the abandoned commits</p>
+</li>
 </ul>
 <h2 id="jj-absorb"><code>jj absorb</code><a class="headerlink" href="#jj-absorb" title="Permanent link">&para;</a></h2>
 <p>Move changes from a revision into the stack of mutable revisions</p>
@@ -6569,6 +6575,7 @@ does not match the <code>jj help</code> output exactly.</p>
 </ul>
 <h2 id="jj-bookmark-delete"><code>jj bookmark delete</code><a class="headerlink" href="#jj-bookmark-delete" title="Permanent link">&para;</a></h2>
 <p>Delete an existing bookmark and propagate the deletion to remotes on the next push</p>
+<p>Revisions referred to by the deleted bookmarks are not abandoned. To delete revisions as well as bookmarks, use <code>jj abandon</code>. For example, <code>jj abandon main..&lt;bookmark&gt;</code> will abandon revisions belonging to the <code>&lt;bookmark&gt;</code> branch (relative to the <code>main</code> branch.)</p>
 <p><strong>Usage:</strong> <code>jj bookmark delete &lt;NAMES&gt;...</code></p>
 <h6 id="arguments_3"><strong>Arguments:</strong><a class="headerlink" href="#arguments_3" title="Permanent link">&para;</a></h6>
 <ul>
