@@ -1859,6 +1859,14 @@ aren't included in <code>remote_bookmarks()</code>.</p>
 <li>
 <p><code>description(pattern)</code>: Commits that have a description matching the given
   <a href="#string-patterns">string pattern</a>.</p>
+<p>A non-empty description is usually terminated with newline character. For
+example, <code>description(exact:"")</code> matches commits without description, and
+<code>description(exact:"foo\n")</code> matches commits with description <code>"foo\n"</code>.</p>
+</li>
+<li>
+<p><code>subject(pattern)</code>: Commits that have a subject matching the given <a href="#string-patterns">string
+  pattern</a>. A subject is the first line of the description
+  (without newline character.)</p>
 </li>
 <li>
 <p><code>author(pattern)</code>: Commits with the author's name or email matching the given
