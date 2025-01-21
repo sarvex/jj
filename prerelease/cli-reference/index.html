@@ -7794,10 +7794,15 @@ A        A
 </ul>
 <h2 id="jj-rebase"><code>jj rebase</code><a class="headerlink" href="#jj-rebase" title="Permanent link">&para;</a></h2>
 <p>Move revisions to different parent(s)</p>
-<p>There are three different ways of specifying which revisions to rebase:
-<code>-b</code> to rebase a whole branch, <code>-s</code> to rebase a revision and its
-descendants, and <code>-r</code> to rebase a single commit. If none of them is
-specified, it defaults to <code>-b @</code>.</p>
+<p>This command moves revisions to different parent(s) while preserving the
+changes (diff) in the revisions.</p>
+<p>There are three different ways of specifying which revisions to rebase:</p>
+<ul>
+<li><code>-b</code> to rebase a whole branch</li>
+<li><code>-s</code> to rebase a revision and its descendants</li>
+<li><code>-r</code> to rebase the specified revisions without their descendants</li>
+</ul>
+<p>If no option is specified, it defaults to <code>-b @</code>.</p>
 <p>With <code>-s</code>, the command rebases the specified revision and its descendants
 onto the destination. For example, <code>jj rebase -s M -d O</code> would transform
 your history like this (letters followed by an apostrophe are post-rebase
@@ -7814,14 +7819,18 @@ versions):</p>
 |/          |/
 J           J
 </code></pre></div>
+<p>Each revision passed to <code>-s</code> will become a direct child of the destination,
+so if you instead run <code>jj rebase -s M -s N -d O</code> (or
+<code>jj rebase -s 'all:M|N' -d O</code>) in the example above, then N' would instead
+be a direct child of O.</p>
 <p>With <code>-b</code>, the command rebases the whole "branch" containing the specified
-revision. A "branch" is the set of commits that includes:</p>
+revision. A "branch" is the set of revisions that includes:</p>
 <ul>
 <li>the specified revision and ancestors that are not also ancestors of the
   destination</li>
-<li>all descendants of those commits</li>
+<li>all descendants of those revisions</li>
 </ul>
-<p>In other words, <code>jj rebase -b X -d Y</code> rebases commits in the revset
+<p>In other words, <code>jj rebase -b X -d Y</code> rebases revisions in the revset
 <code>(Y..X)::</code> (which is equivalent to <code>jj rebase -s 'roots(Y..X)' -d Y</code> for a
 single root). For example, either <code>jj rebase -b L -d O</code> or <code>jj rebase -b M
 -d O</code> would transform your history like this (because <code>L</code> and <code>M</code> are on the
@@ -7840,7 +7849,7 @@ J           J
 </code></pre></div>
 <p>With <code>-r</code>, the command rebases only the specified revisions onto the
 destination. Any "hole" left behind will be filled by rebasing descendants
-onto the specified revision's parent(s). For example, <code>jj rebase -r K -d M</code>
+onto the specified revisions' parent(s). For example, <code>jj rebase -r K -d M</code>
 would transform your history like this:</p>
 <div class="highlight"><pre><span></span><code>M          K&#39;
 |          |
@@ -7850,10 +7859,30 @@ would transform your history like this:</p>
 |/         |/
 J          J
 </code></pre></div>
-<p>Note that you can create a merge commit by repeating the <code>-d</code> argument.
-For example, if you realize that commit L actually depends on commit M in
-order to work (in addition to its current parent K), you can run <code>jj rebase
--s L -d K -d M</code>:</p>
+<p>Multiple revisions can be specified, and any dependencies (graph edges)
+within the set will be preserved. For example, <code>jj rebase -r 'K|N' -d O</code>
+would transform your history like this:</p>
+<div class="highlight"><pre><span></span><code>O           N&#39;
+|           |
+| N         K&#39;
+| |         |
+| M         O
+| |    =&gt;   |
+| | L       | M&#39;
+| |/        |/
+| K         | L&#39;
+|/          |/
+J           J
+</code></pre></div>
+<p><code>jj rebase -s X</code> is similar to <code>jj rebase -r X::</code> and will behave the same
+if X is a single revision. However, if X is a set of multiple revisions,
+or if you passed multiple <code>-s</code> arguments, then <code>jj rebase -s</code> will make each
+of the specified revisions an immediate child of the destination, while
+<code>jj rebase -r</code> will preserve dependencies within the set.</p>
+<p>Note that you can create a merge revision by repeating the <code>-d</code> argument.
+For example, if you realize that revision L actually depends on revision M
+in order to work (in addition to its current parent K), you can run <code>jj
+rebase -s L -d K -d M</code>:</p>
 <div class="highlight"><pre><span></span><code>M          L&#39;
 |          |\
 | L        M |
@@ -7862,8 +7891,8 @@ order to work (in addition to its current parent K), you can run <code>jj rebase
 |/         |/
 J          J
 </code></pre></div>
-<p>If a working-copy commit gets abandoned, it will be given a new, empty
-commit. This is true in general; it is not specific to this command.</p>
+<p>If a working-copy revision gets abandoned, it will be given a new, empty
+revision. This is true in general; it is not specific to this command.</p>
 <p><strong>Usage:</strong> <code>jj rebase [OPTIONS] &lt;--destination &lt;REVSETS&gt;|--insert-after &lt;REVSETS&gt;|--insert-before &lt;REVSETS&gt;&gt;</code></p>
 <h6 id="options_39"><strong>Options:</strong><a class="headerlink" href="#options_39" title="Permanent link">&para;</a></h6>
 <ul>
