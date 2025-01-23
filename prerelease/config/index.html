@@ -1245,6 +1245,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#git-subprocessing-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Git subprocessing behaviour
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2576,6 +2585,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#git-subprocessing-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Git subprocessing behaviour
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3600,6 +3618,20 @@ not considered a private commit. Commits that are immutable are also excluded
 from the private set.</p>
 <p>Private commits prevent their descendants from being pushed, since doing so
 would require pushing the private commit as well.</p>
+<h3 id="git-subprocessing-behaviour">Git subprocessing behaviour<a class="headerlink" href="#git-subprocessing-behaviour" title="Permanent link">&para;</a></h3>
+<p>By default, Git remote interactions are handled by <a href="https://github.com/libgit2/libgit2"><code>libgit2</code></a>.
+This sometimes causes <a href="https://github.com/jj-vcs/jj/issues/4979">SSH problems</a> that
+cannot be solved by <code>jj</code> directly.</p>
+<p>To sidestep this, there is an option to spawn a <code>git</code> subprocess to handle those
+remote interactions:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[git]</span>
+<span class="n">subprocess</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<p>Additionally, if <code>git</code> is not on your OS path, or you want to specify a
+particular binary, you can:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[git]</span>
+<span class="n">executable-path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/path/to/git&quot;</span>
+</code></pre></div>
 <h2 id="filesystem-monitor">Filesystem monitor<a class="headerlink" href="#filesystem-monitor" title="Permanent link">&para;</a></h2>
 <p>In large repositories, it may be beneficial to use a "filesystem monitor" to
 track changes to the working copy. This allows <code>jj</code> to take working copy
