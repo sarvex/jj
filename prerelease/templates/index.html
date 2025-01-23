@@ -940,6 +940,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#repopath-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      RepoPath type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#shortestidprefix-type" class="md-nav__link">
     <span class="md-ellipsis">
       ShortestIdPrefix type
@@ -1021,6 +1030,15 @@
   <a href="#treediff-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeDiff type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treeentry-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeEntry type
     </span>
   </a>
   
@@ -1836,6 +1854,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#repopath-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      RepoPath type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#shortestidprefix-type" class="md-nav__link">
     <span class="md-ellipsis">
       ShortestIdPrefix type
@@ -1917,6 +1944,15 @@
   <a href="#treediff-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeDiff type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#treeentry-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeEntry type
     </span>
   </a>
   
@@ -2177,6 +2213,14 @@ invoked. If not set, an error will be reported inline on method call.</p>
 <li><code>.tracking_behind_count() -&gt; SizeHint</code>: Number of commits behind of the
   tracking local ref.</li>
 </ul>
+<h3 id="repopath-type">RepoPath type<a class="headerlink" href="#repopath-type" title="Permanent link">&para;</a></h3>
+<p>A slash-separated path relative to the repository root. The following methods
+are defined.</p>
+<ul>
+<li><code>.display() -&gt; String</code>: Format path for display. The formatted path uses
+  platform-native separator, and is relative to the current working directory.</li>
+<li><code>.parent() -&gt; Option&lt;RepoPath&gt;</code>: Parent directory path.</li>
+</ul>
 <h3 id="shortestidprefix-type">ShortestIdPrefix type<a class="headerlink" href="#shortestidprefix-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined.</p>
 <ul>
@@ -2265,6 +2309,15 @@ inside a single-quoted string literal.</p>
 <li><code>.git([context: Integer]) -&gt; Template</code>: Format as a Git diff.</li>
 <li><code>.stat(width: Integer) -&gt; Template</code>: Format as a histogram of the changes.</li>
 <li><code>.summary() -&gt; Template</code>: Format as a list of status code and path pairs.</li>
+</ul>
+<h3 id="treeentry-type">TreeEntry type<a class="headerlink" href="#treeentry-type" title="Permanent link">&para;</a></h3>
+<p>This type cannot be printed. The following methods are defined.</p>
+<ul>
+<li><code>.path() -&gt; RepoPath</code>: Path to the entry.</li>
+<li><code>.conflict() -&gt; Boolean</code>: True if the entry is a merge conflict.</li>
+<li><code>.file_type() -&gt; String</code>: One of <code>"file"</code>, <code>"symlink"</code>, <code>"tree"</code>,
+  <code>"git-submodule"</code>, or <code>"conflict"</code>.</li>
+<li><code>.executable() -&gt; Boolean</code>: True if the entry is an executable file.</li>
 </ul>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>The default templates and aliases() are defined in the <code>[templates]</code> and
