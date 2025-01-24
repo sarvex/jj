@@ -2162,6 +2162,8 @@ defined.</p>
 <li><code>.len() -&gt; Integer</code>: Number of elements in the list.</li>
 <li><code>.join(separator: Template) -&gt; Template</code>: Concatenate elements with
   the given <code>separator</code>.</li>
+<li><code>.filter(|item| expression) -&gt; List</code>: Filter list elements by predicate
+  <code>expression</code>. Example: <code>description.lines().filter(|s| s.contains("#"))</code></li>
 <li><code>.map(|item| expression) -&gt; ListTemplate</code>: Apply template <code>expression</code>
   to each element. Example: <code>parents.map(|c| c.commit_id().short())</code></li>
 </ul>
