@@ -3829,6 +3829,8 @@ jj<span class="w"> </span>log<span class="w"> </span>--config<span class="w"> </
 <p>You can conditionally enable config variables by using <code>--when</code> and
 <code>[[--scope]]</code> tables. Variables defined in <code>[[--scope]]</code> tables are expanded to
 the root table. <code>--when</code> specifies the condition to enable the scope table.</p>
+<p>If no conditions are specified, table is always enabled. If multiple conditions
+are specified, the intersection is used.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[user]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR NAME&quot;</span>
 <span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_DEFAULT_EMAIL@example.com&quot;</span>
@@ -3838,11 +3840,21 @@ the root table. <code>--when</code> specifies the condition to enable the scope 
 <span class="n">--when</span><span class="p">.</span><span class="n">repositories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;~/oss&quot;</span><span class="p">]</span>
 <span class="k">[--scope.user]</span>
 <span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_OSS_EMAIL@example.org&quot;</span>
+
+<span class="c1"># disable pagination for `jj status`, use `delta` for `jj diff` and `jj show`</span>
+<span class="k">[[--scope]]</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
+<span class="k">[--scope.ui]</span>
+<span class="n">paginate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;never&quot;</span>
+<span class="k">[[--scope]]</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;diff&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">]</span>
+<span class="k">[--scope.ui]</span>
+<span class="n">pager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;delta&quot;</span>
 </code></pre></div>
 <p>Condition keys:</p>
 <ul>
-<li><code>--when.repositories</code>: List of paths to match the repository path prefix.</li>
-</ul>
+<li>
+<p><code>--when.repositories</code>: List of paths to match the repository path prefix.</p>
 <p>Paths should be absolute. Each path component (directory or file name, drive
 letter, etc.) is compared case-sensitively on all platforms. A path starting
 with <code>~</code> is expanded to the home directory. On Windows, directory separator may
@@ -3850,7 +3862,16 @@ be either <code>\</code> or <code>/</code>. (Beware that <code>\</code> needs es
 <p>Use <code>jj root</code> to see the workspace root directory. Note that the repository path
 is in the main workspace if you're using multiple workspaces with <code>jj
 workspace</code>.</p>
-<p>If no conditions are specified, table is always enabled.</p>
+</li>
+<li>
+<p><code>--when.command</code>: List of subcommands to match.</p>
+<p>Subcommands are space-separated and matched by prefix.</p>
+<div class="highlight"><pre><span></span><code><span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span><span class="w">        </span><span class="c1"># matches `jj file show`, `jj file list`, etc</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file show&quot;</span><span class="p">]</span><span class="w">   </span><span class="c1"># matches `jj file show` but *NOT* `jj file list`</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># matches `jj file` *OR* `jj log` (or subcommand of either)</span>
+</code></pre></div>
+</li>
+</ul>
 
 
 
