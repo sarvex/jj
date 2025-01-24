@@ -1042,6 +1042,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#using-meld-as-a-diff-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Meld as a diff editor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#using-vim-as-a-diff-editor" class="md-nav__link">
     <span class="md-ellipsis">
       Using Vim as a diff editor
@@ -2382,6 +2391,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#using-meld-as-a-diff-editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Meld as a diff editor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#using-vim-as-a-diff-editor" class="md-nav__link">
     <span class="md-ellipsis">
       Using Vim as a diff editor
@@ -3234,16 +3252,16 @@ setting, but you could set it explicitly too.</p>
 to edit the diff in your terminal.</p>
 <p>You can try a different tool temporarily by doing e.g. <code>jj split --tool meld</code> or
 you can set the option to change the default. This requires that you have an
-appropriate tool installed, e.g. <a href="https://meldmerge.org/">Meld</a> to use the
-<code>meld</code> diff editor.</p>
+appropriate tool installed, see for example <a href="#using-meld-as-a-diff-editor">the instructions for using
+Meld</a>.</p>
 <p><strong>Suggestion:</strong> If possible, it is recommended to try an external diff tool like
-<code>meld</code> (see below for some other possibilities) for splitting commits and other
-diff editing, in addition to the built-in diff editor. It is good to know the
-capabilities of both. The built-in diff editor does not require external tools
-to be available, is faster for tasks like picking hunks, and does not require
-leaving the terminal. External tools give you the flexibility of picking out
-portions of lines from the diff or even arbitrarily editing the text of the
-files.</p>
+<a href="#using-meld-as-a-diff-editor">Meld</a> (see below for some other possibilities)
+for splitting commits and other diff editing, in addition to the built-in diff
+editor. It is good to know the capabilities of both. The built-in diff editor
+does not require external tools to be available, is faster for tasks like
+picking hunks, and does not require leaving the terminal. External tools give
+you the flexibility of picking out portions of lines from the diff or even
+arbitrarily editing the text of the files.</p>
 <p>If <code>ui.diff-editor</code> is a string, e.g. <code>"meld"</code>, the arguments will be read from
 the following config keys.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[merge-tools.meld]</span>
@@ -3338,6 +3356,32 @@ same as the contents of <code>$right</code>.</p>
 in the diff with instructions on how to edit the diff. Any changes you make to
 this file will be ignored. To suppress the creation of this file, set
 <code>ui.diff-instructions = false</code>.</p>
+<h3 id="using-meld-as-a-diff-editor">Using Meld as a diff editor<a class="headerlink" href="#using-meld-as-a-diff-editor" title="Permanent link">&para;</a></h3>
+<p><a href="https://meldmerge.org">Meld</a> is a nice and polished free diff editor. It can be
+obtained as follows:</p>
+<ul>
+<li>
+<p><strong>Linux:</strong> use your favorite package manager, e.g. <code>sudo apt install meld</code>.</p>
+</li>
+<li>
+<p><strong>Windows:</strong> Meld can be downloaded from <a href="https://meldmerge.org/">https://meldmerge.org/</a>.</p>
+</li>
+<li>
+<p><strong>Mac OS:</strong> Install Homebrew and run <code>brew install --cask deheselle-meld</code>.
+  This will install both an app in <code>/Applications/Meld.app</code> and the command-line
+  <code>meld</code> command that <code>jj</code> uses. You can read about <a href="https://gist.github.com/ilyagr/1b40f6061d8ad320cee4c12843df1a23">more details and other
+  options</a> but,
+  as of this writing, this is by far the easiest.</p>
+<p><em>Warning:</em> Do <em>not</em> use the Homebrew <code>meld</code> package.
+It does not work on ARM Macs and may have problems on recent versions of Mac
+OS.</p>
+</li>
+</ul>
+<p><code>jj</code> has two diff editing configurations that use Meld: <code>meld</code> for a 2-pane view
+and <code>meld-3</code> for a <a href="#experimental-3-pane-diff-editing">three-pane view</a>.</p>
+<p>There is also a <code>meld</code> <a href="#3-way-merge-tools-for-conflict-resolution">merge tool</a>
+that can be useful, but does not support displaying the merge base while
+merging.</p>
 <h3 id="using-vim-as-a-diff-editor">Using Vim as a diff editor<a class="headerlink" href="#using-vim-as-a-diff-editor" title="Permanent link">&para;</a></h3>
 <p>Using <code>ui.diff-editor = "vimdiff"</code> is possible but not recommended. For a better
 experience, you can follow <a href="https://github.com/jj-vcs/jj/wiki/Vim#using-vim-as-a-diff-tool">instructions from the Wiki</a> to configure the
@@ -3768,7 +3812,7 @@ config files:</p>
 to specify additional configuration settings. This overrides settings defined in
 config files or environment variables. For example,</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Must not have spaces around the `=`</span>
-jj<span class="w"> </span>--config<span class="w"> </span>ui.color<span class="o">=</span>always<span class="w"> </span>--config<span class="w"> </span>ui.diff-editor<span class="o">=</span>kdiff3<span class="w"> </span>split
+jj<span class="w"> </span>--config<span class="w"> </span>ui.color<span class="o">=</span>always<span class="w"> </span>--config<span class="w"> </span>ui.diff-editor<span class="o">=</span>meld<span class="w"> </span>split
 </code></pre></div>
 <p>Config value should be specified as a TOML expression. If string value doesn't
 contain any TOML constructs (such as array notation), quotes can be omitted.
