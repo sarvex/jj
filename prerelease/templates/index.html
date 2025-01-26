@@ -1036,6 +1036,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#treediffentry-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeDiffEntry type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#treeentry-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeEntry type
@@ -1950,6 +1959,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#treediffentry-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeDiffEntry type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#treeentry-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeEntry type
@@ -2306,11 +2324,22 @@ inside a single-quoted string literal.</p>
 <h3 id="treediff-type">TreeDiff type<a class="headerlink" href="#treediff-type" title="Permanent link">&para;</a></h3>
 <p>This type cannot be printed. The following methods are defined.</p>
 <ul>
+<li><code>.files() -&gt; List&lt;TreeDiffEntry&gt;</code>: Changed files.</li>
 <li><code>.color_words([context: Integer]) -&gt; Template</code>: Format as a word-level diff
   with changes indicated only by color.</li>
 <li><code>.git([context: Integer]) -&gt; Template</code>: Format as a Git diff.</li>
 <li><code>.stat(width: Integer) -&gt; Template</code>: Format as a histogram of the changes.</li>
 <li><code>.summary() -&gt; Template</code>: Format as a list of status code and path pairs.</li>
+</ul>
+<h3 id="treediffentry-type">TreeDiffEntry type<a class="headerlink" href="#treediffentry-type" title="Permanent link">&para;</a></h3>
+<p>This type cannot be printed. The following methods are defined.</p>
+<ul>
+<li><code>.path() -&gt; RepoPath</code>: Path to the entry. If the entry is a copy/rename, this
+  points to the target (or right) entry.</li>
+<li><code>.status() -&gt; String</code>: One of <code>"modified"</code>, <code>"added"</code>, <code>"removed"</code>,
+  <code>"copied"</code>, or <code>"renamed"</code>.</li>
+<li><code>.source() -&gt; TreeEntry</code>: The source (or left) entry.</li>
+<li><code>.target() -&gt; TreeEntry</code>: The target (or right) entry.</li>
 </ul>
 <h3 id="treeentry-type">TreeEntry type<a class="headerlink" href="#treeentry-type" title="Permanent link">&para;</a></h3>
 <p>This type cannot be printed. The following methods are defined.</p>
