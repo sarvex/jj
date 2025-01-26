@@ -2132,10 +2132,9 @@ them. Please let us know if you encounter any issues, so we can ensure a smooth
 transition once we default to these new completions.</p>
 <div class="admonition info">
 <p class="admonition-title">Why are the improved completions not the default?</p>
-<p>To get the improved completions it is required to set the <code>COMPLETION</code> env
-variable to your current shell before using the completion command, as
-they're not the default yet. See the upstream clap issue <a href="https://github.com/clap-rs/clap/issues/3166">#3166</a>
-for the explanation.</p>
+<p>To generate the dynamic completion script, execute <code>jj</code> with <code>$COMPLETE</code> set
+to the name of your shell (see examples below). See the upstream clap issue
+<a href="https://github.com/clap-rs/clap/issues/3166">#3166</a> for the explanation.</p>
 </div>
 <h3 id="bash">Bash<a class="headerlink" href="#bash" title="Permanent link">&para;</a></h3>
 <h4 id="standard">Standard<a class="headerlink" href="#standard" title="Permanent link">&para;</a></h4>
