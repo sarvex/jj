@@ -6960,8 +6960,11 @@ Martin von Zweigbergk</p>
 </li>
 <li>
 <p><code>-n</code>, <code>--limit &lt;LIMIT&gt;</code> — Limit number of revisions to show</p>
+<p>Applied after revisions are reordered topologically, but before being reversed.</p>
 </li>
-<li><code>--reversed</code> — Show revisions in the opposite order (older revisions first)</li>
+<li>
+<p><code>--reversed</code> — Show revisions in the opposite order (older revisions first)</p>
+</li>
 <li><code>--no-graph</code> — Don't show the graph, show a flat list of revisions</li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each revision using the given template</p>
@@ -7435,15 +7438,13 @@ output of the first tool.</p>
 <p>If no paths nor revisions are specified, this defaults to the <code>revsets.log</code> setting.</p>
 </li>
 <li>
+<p><code>-n</code>, <code>--limit &lt;LIMIT&gt;</code> — Limit number of revisions to show</p>
+<p>Applied after revisions are filtered and reordered topologically, but before being reversed.</p>
+</li>
+<li>
 <p><code>--reversed</code> — Show revisions in the opposite order (older revisions first)</p>
 </li>
-<li>
-<p><code>-n</code>, <code>--limit &lt;LIMIT&gt;</code> — Limit number of revisions to show</p>
-<p>Applied after revisions are filtered and reordered.</p>
-</li>
-<li>
-<p><code>--no-graph</code> — Don't show the graph, show a flat list of revisions</p>
-</li>
+<li><code>--no-graph</code> — Don't show the graph, show a flat list of revisions</li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each revision using the given template</p>
 <p>Run <code>jj log -T</code> to list the built-in templates.</p>
@@ -7601,7 +7602,7 @@ B   =&gt;   @
 <ul>
 <li>
 <p><code>-n</code>, <code>--limit &lt;LIMIT&gt;</code> — Limit number of operations to show</p>
-<p>Applied after operations are reordered.</p>
+<p>Applied after operations are reordered topologically, but before being reversed.</p>
 </li>
 <li>
 <p><code>--reversed</code> — Show operations in the opposite order (older operations first)</p>
