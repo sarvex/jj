@@ -3864,11 +3864,11 @@ is in the main workspace if you're using multiple workspaces with <code>jj
 workspace</code>.</p>
 </li>
 <li>
-<p><code>--when.command</code>: List of subcommands to match.</p>
+<p><code>--when.commands</code>: List of subcommands to match.</p>
 <p>Subcommands are space-separated and matched by prefix.</p>
-<div class="highlight"><pre><span></span><code><span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span><span class="w">        </span><span class="c1"># matches `jj file show`, `jj file list`, etc</span>
-<span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file show&quot;</span><span class="p">]</span><span class="w">   </span><span class="c1"># matches `jj file show` but *NOT* `jj file list`</span>
-<span class="n">--when</span><span class="p">.</span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># matches `jj file` *OR* `jj log` (or subcommand of either)</span>
+<div class="highlight"><pre><span></span><code><span class="n">--when</span><span class="p">.</span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span><span class="w">        </span><span class="c1"># matches `jj file show`, `jj file list`, etc</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file show&quot;</span><span class="p">]</span><span class="w">   </span><span class="c1"># matches `jj file show` but *NOT* `jj file list`</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">commands</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;log&quot;</span><span class="p">]</span><span class="w"> </span><span class="c1"># matches `jj file` *OR* `jj log` (or subcommand of either)</span>
 </code></pre></div>
 </li>
 </ul>
