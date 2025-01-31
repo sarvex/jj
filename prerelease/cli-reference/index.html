@@ -2226,11 +2226,35 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#specifying-which-revisions-to-rebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifying which revisions to rebase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specifying-where-to-rebase-the-revisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifying where to rebase the revisions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specifying where to rebase the revisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#options_39" class="md-nav__link">
     <span class="md-ellipsis">
       Options:
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -5590,11 +5614,35 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#specifying-which-revisions-to-rebase" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifying which revisions to rebase
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specifying-where-to-rebase-the-revisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Specifying where to rebase the revisions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Specifying where to rebase the revisions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#options_39" class="md-nav__link">
     <span class="md-ellipsis">
       Options:
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -7809,15 +7857,31 @@ A        A
 changes (diff) in the revisions.</p>
 <p>There are three different ways of specifying which revisions to rebase:</p>
 <ul>
-<li><code>-b</code> to rebase a whole branch</li>
-<li><code>-s</code> to rebase a revision and its descendants</li>
-<li><code>-r</code> to rebase the specified revisions without their descendants</li>
+<li><code>--source/-s</code> to rebase a revision and its descendants</li>
+<li><code>--branch/-b</code> to rebase a whole branch, relative to the destination</li>
+<li><code>--revisions/-r</code> to rebase the specified revisions without their
+  descendants</li>
 </ul>
 <p>If no option is specified, it defaults to <code>-b @</code>.</p>
-<p>With <code>-s</code>, the command rebases the specified revision and its descendants
-onto the destination. For example, <code>jj rebase -s M -d O</code> would transform
-your history like this (letters followed by an apostrophe are post-rebase
-versions):</p>
+<p>There are three different way of specifying where the revisions should be
+rebased to:</p>
+<ul>
+<li><code>--destination/-d</code> to rebase the revisions onto of the specified targets</li>
+<li><code>--insert-after/-A</code> to rebase the revisions onto of the specified targets
+  and to rebase the targets' descendants onto of the rebased revisions</li>
+<li><code>--insert-before/-B</code> to rebase the revisions onto of the specified
+  targets' parents and to rebase the targets and their descendants onto of
+  the rebased revisions</li>
+</ul>
+<p>See the sections below for details about the different ways of specifying
+which revisions to rebase where.</p>
+<p>If a working-copy revision gets abandoned, it will be given a new, empty
+revision. This is true in general; it is not specific to this command.</p>
+<h3 id="specifying-which-revisions-to-rebase">Specifying which revisions to rebase<a class="headerlink" href="#specifying-which-revisions-to-rebase" title="Permanent link">&para;</a></h3>
+<p>With <code>--source/-s</code>, the command rebases the specified revision and its
+descendants onto the destination. For example, <code>jj rebase -s M -d O</code> would
+transform your history like this (letters followed by an apostrophe are
+post-rebase versions):</p>
 <div class="highlight"><pre><span></span><code>O           N&#39;
 |           |
 | N         M&#39;
@@ -7834,8 +7898,8 @@ J           J
 so if you instead run <code>jj rebase -s M -s N -d O</code> (or
 <code>jj rebase -s 'all:M|N' -d O</code>) in the example above, then N' would instead
 be a direct child of O.</p>
-<p>With <code>-b</code>, the command rebases the whole "branch" containing the specified
-revision. A "branch" is the set of revisions that includes:</p>
+<p>With <code>--branch/-b</code>, the command rebases the whole "branch" containing the
+specified revision. A "branch" is the set of revisions that includes:</p>
 <ul>
 <li>the specified revision and ancestors that are not also ancestors of the
   destination</li>
@@ -7858,10 +7922,10 @@ same "branch", relative to the destination):</p>
 |/          |
 J           J
 </code></pre></div>
-<p>With <code>-r</code>, the command rebases only the specified revisions onto the
-destination. Any "hole" left behind will be filled by rebasing descendants
-onto the specified revisions' parent(s). For example, <code>jj rebase -r K -d M</code>
-would transform your history like this:</p>
+<p>With <code>--revisions/-r</code>, the command rebases only the specified revisions onto
+the destination. Any "hole" left behind will be filled by rebasing
+descendants onto the specified revisions' parent(s). For example,
+<code>jj rebase -r K -d M</code> would transform your history like this:</p>
 <div class="highlight"><pre><span></span><code>M          K&#39;
 |          |
 | L        M
@@ -7902,8 +7966,74 @@ rebase -s L -d K -d M</code>:</p>
 |/         |/
 J          J
 </code></pre></div>
-<p>If a working-copy revision gets abandoned, it will be given a new, empty
-revision. This is true in general; it is not specific to this command.</p>
+<h3 id="specifying-where-to-rebase-the-revisions">Specifying where to rebase the revisions<a class="headerlink" href="#specifying-where-to-rebase-the-revisions" title="Permanent link">&para;</a></h3>
+<p>With <code>--destination/-d</code>, the command rebases the selected revisions onto
+the targets. Existing descendants of the targets will not be affected. See
+the section above for examples.</p>
+<p>With <code>--insert-after/-A</code>, the selected revisions will be inserted after the
+targets. This is similar to <code>-d</code>, but if the targets have any existing
+descendants, then those will be rebased onto the rebased selected revisions.</p>
+<p>For example, <code>jj rebase -r K -A L</code> will rewrite history like this:
+<div class="highlight"><pre><span></span><code>N           N&#39;
+|           |
+| M         | M&#39;
+|/          |/
+L      =&gt;   K&#39;
+|           |
+| K         L
+|/          |
+J           J
+</code></pre></div></p>
+<p>The <code>-A</code> (and <code>-B</code>) argument can also be used for reordering revisions. For
+example, <code>jj rebase -r M -A J</code> will rewrite history like this:
+<div class="highlight"><pre><span></span><code>M          L&#39;
+|          |
+L          K&#39;
+|     =&gt;   |
+K          M&#39;
+|          |
+J          J
+</code></pre></div></p>
+<p>With <code>--insert-before/-B</code>, the selected revisions will be inserted before
+the targets. This is achieved by rebasing the selected revisions onto the
+target revisions' parents, and then rebasing the target revisions and their
+descendants onto the rebased revisions.</p>
+<p>For example, <code>jj rebase -r K -B L</code> will rewrite history like this:
+<div class="highlight"><pre><span></span><code>N           N&#39;
+|           |
+| M         | M&#39;
+|/          |/
+L     =&gt;    L&#39;
+|           |
+| K         K&#39;
+|/          |
+J           J
+</code></pre></div></p>
+<p>The <code>-A</code> and <code>-B</code> arguments can also be combined, which can be useful around
+merges. For example, you can use <code>jj rebase -r K -A J -B M</code> to create a new
+merge (but <code>jj rebase -r M -d L -d K</code> might be simpler in this particular
+case):
+<div class="highlight"><pre><span></span><code>M           M&#39;
+|           |\
+L           L |
+|     =&gt;    | |
+| K         | K&#39;
+|/          |/
+J           J
+</code></pre></div></p>
+<p>To insert a commit inside an existing merge with <code>jj rebase -r O -A K -B M</code>:
+<div class="highlight"><pre><span></span><code>O           N&#39;
+|           |\
+N           | M&#39;
+|\          | |\
+| M         | O&#39;|
+| |    =&gt;   |/ /
+| L         | L
+| |         | |
+K |         K |
+|/          |/
+J           J
+</code></pre></div></p>
 <p><strong>Usage:</strong> <code>jj rebase [OPTIONS] &lt;--destination &lt;REVSETS&gt;|--insert-after &lt;REVSETS&gt;|--insert-before &lt;REVSETS&gt;&gt;</code></p>
 <h6 id="options_39"><strong>Options:</strong><a class="headerlink" href="#options_39" title="Permanent link">&para;</a></h6>
 <ul>
