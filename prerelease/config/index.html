@@ -846,6 +846,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#behavior-of-prev-and-next-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Behavior of prev and next commands
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2195,6 +2204,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#behavior-of-prev-and-next-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Behavior of prev and next commands
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2996,6 +3014,17 @@ also consider the <code>release@origin</code> bookmark immutable:</p>
 </code></pre></div>
 <p>Ancestors of the configured set are also immutable. The root commit is always
 immutable even if the set is empty.</p>
+<h3 id="behavior-of-prev-and-next-commands">Behavior of prev and next commands<a class="headerlink" href="#behavior-of-prev-and-next-commands" title="Permanent link">&para;</a></h3>
+<p>If you prefer using an "edit-based" workflow, rather than squashing
+modifications into parent changes, you may find yourself using the <code>prev</code> and
+<code>next</code> commands with their <code>--edit</code> flag often to move between your changes. You
+can avoid having to type the <code>--edit</code> flag every time you need it by actually
+making it the default:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[ui.movement]</span>
+<span class="n">edit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<p>You can pass the <code>--no-edit</code> flag to <code>prev</code> and <code>next</code> if you find yourself
+needing the original behavior.</p>
 <h2 id="log">Log<a class="headerlink" href="#log" title="Permanent link">&para;</a></h2>
 <h3 id="default-revisions">Default revisions<a class="headerlink" href="#default-revisions" title="Permanent link">&para;</a></h3>
 <p>You can configure the revisions <code>jj log</code> would show when neither <code>-r</code> nor any paths are specified.</p>
