@@ -2122,30 +2122,30 @@ user expected <code>xyz</code> to have more than one child.</p>
 xyz</code> will add <code>xyz</code> to the list of <code>w</code>'s parents.</p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>Show the parent(s) of the working-copy commit (like <code>git log -1 HEAD</code>):</p>
-<div class="highlight"><pre><span></span><code>jj log -r @-
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span>@-
 </code></pre></div>
 <p>Show all ancestors of the working copy (like plain <code>git log</code>)</p>
-<div class="highlight"><pre><span></span><code>jj log -r ::@
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span>::@
 </code></pre></div>
 <p>Show commits not on any remote bookmark:</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;remote_bookmarks()..&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;remote_bookmarks()..&#39;</span>
 </code></pre></div>
 <p>Show commits not on <code>origin</code> (if you have other remotes like <code>fork</code>):</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;remote_bookmarks(remote=origin)..&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;remote_bookmarks(remote=origin)..&#39;</span>
 </code></pre></div>
 <p>Show the initial commits in the repo (the ones Git calls "root commits"):</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;root()+&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;root()+&#39;</span>
 </code></pre></div>
 <p>Show some important commits (like <code>git --simplify-by-decoration</code>):</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;tags() | bookmarks()&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;tags() | bookmarks()&#39;</span>
 </code></pre></div>
 <p>Show local commits leading up to the working copy, as well as descendants of
 those commits:</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;(remote_bookmarks()..@)::&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;(remote_bookmarks()..@)::&#39;</span>
 </code></pre></div>
 <p>Show commits authored by "martinvonz" and containing the word "reset" in the
 description:</p>
-<div class="highlight"><pre><span></span><code>jj log -r &#39;author(martinvonz) &amp; description(reset)&#39;
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;author(martinvonz) &amp; description(reset)&#39;</span>
 </code></pre></div>
 
 
