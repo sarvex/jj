@@ -2059,6 +2059,10 @@ type</a> are available as keywords. For example,
 <li><code>pad_end(width: Integer, content: Template[, fill_char: Template])</code>: Pad (or
   left-justify) content by adding trailing fill characters. The <code>content</code>
   shouldn't have newline character.</li>
+<li><code>pad_centered(width: Integer, content: Template[, fill_char: Template])</code>: Pad
+  content by adding both leading and trailing fill characters. If an odd number
+  of fill characters are needed, the trailing fill will be one longer than the
+  leading fill. The <code>content</code> shouldn't have newline characters.</li>
 <li><code>truncate_start(width: Integer, content: Template)</code>: Truncate <code>content</code> by
   removing leading characters. The <code>content</code> shouldn't have newline character.</li>
 <li><code>truncate_end(width: Integer, content: Template)</code>: Truncate <code>content</code> by
