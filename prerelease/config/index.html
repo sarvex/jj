@@ -991,6 +991,48 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#builtin-pager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Builtin pager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Builtin pager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key bindings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrapping config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-exit-clearing-the-screen-on-startup-or-exit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto-exit, clearing the screen on startup or exit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#processing-contents-to-be-paged" class="md-nav__link">
     <span class="md-ellipsis">
       Processing contents to be paged
@@ -2349,6 +2391,48 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#builtin-pager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Builtin pager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Builtin pager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-bindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key bindings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrapping config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-exit-clearing-the-screen-on-startup-or-exit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Auto-exit, clearing the screen on startup or exit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#processing-contents-to-be-paged" class="md-nav__link">
     <span class="md-ellipsis">
       Processing contents to be paged
@@ -3179,8 +3263,8 @@ a <code>$</code>):</p>
 <p><code>ui.pager</code> &gt; <code>$PAGER</code></p>
 <p><code>less -FRX</code> is the default pager in the absence of any other setting, except
 on Windows where it is <code>:builtin</code>.</p>
-<p>The special value <code>:builtin</code> enables usage of the <a href="https://github.com/markbt/streampager/">integrated pager called
-<code>streampager</code></a>.</p>
+<p>The special value <code>:builtin</code> enables usage of the <a href="#builtin-pager">integrated
+pager</a>.</p>
 <p>If you are using a standard Linux distro, your system likely already has
 <code>$PAGER</code> set and that will be preferred over the built-in. To use the built-in:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--user<span class="w"> </span>ui.pager<span class="w"> </span>:builtin
@@ -3193,6 +3277,72 @@ future.</p>
 <span class="n">paginate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;auto&quot;</span>
 <span class="c1"># Disable all pagination, equivalent to using --no-pager</span>
 <span class="n">paginate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;never&quot;</span>
+</code></pre></div>
+<h3 id="builtin-pager">Builtin pager<a class="headerlink" href="#builtin-pager" title="Permanent link">&para;</a></h3>
+<p>Our builtin pager is based on
+<a href="https://github.com/markbt/streampager/"><code>streampager</code></a> but is configured within
+<code>jj</code>'s config. It is configured via the <code>ui.streampager</code> table.</p>
+<h4 id="key-bindings">Key bindings<a class="headerlink" href="#key-bindings" title="Permanent link">&para;</a></h4>
+<p>The built-in pager supports both navigation via arrows and Vim-style navigation.
+Beyond that, here are some useful keybindings for the pager:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>Ctrl-c</code> or <code>q</code></td>
+<td style="text-align: left;">Quit</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>h</code> or <code>F1</code></td>
+<td style="text-align: left;">Show all key bindings</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Esc</code></td>
+<td style="text-align: left;">Close help or prompt</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>\</code></td>
+<td style="text-align: left;">Toggle line wrapping</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>#</code></td>
+<td style="text-align: left;">Toggle line numbers</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>Ctrl-r</code></td>
+<td style="text-align: left;">Toggle the ruler</td>
+</tr>
+</tbody>
+</table>
+<p>The built-in pager does not support mouse input.</p>
+<h4 id="wrapping-config">Wrapping config<a class="headerlink" href="#wrapping-config" title="Permanent link">&para;</a></h4>
+<p>Wrapping performed by the pager happens <em>in addition to</em> any
+wrapping that <code>jj</code> itself does.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[ui.streampager]</span>
+<span class="n">wrapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;anywhere&quot;</span><span class="w">  </span><span class="c1"># wrap at screen edge (default)</span>
+<span class="n">wrapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;word&quot;</span><span class="w">      </span><span class="c1"># wrap on word boundaries</span>
+<span class="n">wrapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;none&quot;</span><span class="w">      </span><span class="c1"># strip long lines, allow scrolling</span>
+<span class="w">                       </span><span class="c1"># left and right like `less -S`</span>
+</code></pre></div>
+<h4 id="auto-exit-clearing-the-screen-on-startup-or-exit">Auto-exit, clearing the screen on startup or exit<a class="headerlink" href="#auto-exit-clearing-the-screen-on-startup-or-exit" title="Permanent link">&para;</a></h4>
+<p>You can configure whether the pager clears the screen on startup or exit, and
+whether it quits automatically on short inputs. When the pager auto-quits,
+features like word-wrapping are disabled.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[ui.streampager]</span>
+<span class="c1"># Do not clear screen on exit. Use a full-screen interface for long</span>
+<span class="c1"># output only. Like `less -FX`.</span>
+<span class="n">interface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;quit-if-one-page&quot;</span><span class="w">  </span><span class="c1"># (default).</span>
+<span class="c1"># Always use a full-screen interface, ask the terminal to clear the</span>
+<span class="c1"># screen on exit. Like `less -+FX`.</span>
+<span class="n">interface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;full-screen-clear-output&quot;</span>
+<span class="c1"># Use the alternate screen if the input is either long or takes more</span>
+<span class="c1"># than 2 seconds to finish. Similar but not identical to `less -F -+X`.</span>
+<span class="n">interface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;quit-quickly-or-clear-output&quot;</span>
 </code></pre></div>
 <h3 id="processing-contents-to-be-paged">Processing contents to be paged<a class="headerlink" href="#processing-contents-to-be-paged" title="Permanent link">&para;</a></h3>
 <p>If you'd like to pass the output through a formatter e.g.
