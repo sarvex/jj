@@ -868,6 +868,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#diffstats-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      DiffStats type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#email-type" class="md-nav__link">
     <span class="md-ellipsis">
       Email type
@@ -1791,6 +1800,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#diffstats-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      DiffStats type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#email-type" class="md-nav__link">
     <span class="md-ellipsis">
       Email type
@@ -2164,6 +2182,13 @@ checking for signature presence through boolean coercion is fast:
 <div class="highlight"><pre><span></span><code>if(commit.signature(), &quot;commit has a signature&quot;, &quot;commit is unsigned&quot;)
 </code></pre></div></p>
 </div>
+<h3 id="diffstats-type">DiffStats type<a class="headerlink" href="#diffstats-type" title="Permanent link">&para;</a></h3>
+<p>This type can be printed as a histogram of the changes. The following methods
+are defined.</p>
+<ul>
+<li><code>.total_added() -&gt; Integer</code>: Total number of insertions.</li>
+<li><code>.total_removed() -&gt; Integer</code>: Total number of deletions.</li>
+</ul>
 <h3 id="email-type">Email type<a class="headerlink" href="#email-type" title="Permanent link">&para;</a></h3>
 <p>The email field of a signature may or may not look like an email address. It may
 be empty, may not contain the symbol <code>@</code>, and could in principle contain
@@ -2332,7 +2357,7 @@ inside a single-quoted string literal.</p>
 <li><code>.color_words([context: Integer]) -&gt; Template</code>: Format as a word-level diff
   with changes indicated only by color.</li>
 <li><code>.git([context: Integer]) -&gt; Template</code>: Format as a Git diff.</li>
-<li><code>.stat(width: Integer) -&gt; Template</code>: Format as a histogram of the changes.</li>
+<li><code>.stat([width: Integer]) -&gt; DiffStats</code>: Calculate stats of changed lines.</li>
 <li><code>.summary() -&gt; Template</code>: Format as a list of status code and path pairs.</li>
 </ul>
 <h3 id="treediffentry-type">TreeDiffEntry type<a class="headerlink" href="#treediffentry-type" title="Permanent link">&para;</a></h3>
