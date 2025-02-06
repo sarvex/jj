@@ -1470,7 +1470,14 @@ copy-edit the changelog in order to:</p>
 </ul>
 <p>Producing the list of contributors is a bit annoying. The current suggestion is
 to run something like this:</p>
-<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>--no-graph<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;heads(tags())..main&#39;</span><span class="w"> </span>-T<span class="w"> </span><span class="s1">&#39;author ++ &quot;\n&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c
+<div class="highlight"><pre><span></span><code><span class="nv">root</span><span class="o">=</span>v0.25.0
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">5</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>gh<span class="w"> </span>api<span class="w"> </span><span class="s2">&quot;/repos/jj-vcs/jj/compare/</span><span class="nv">$root</span><span class="s2">...main?per_page=100;page=</span><span class="nv">$i</span><span class="s2">&quot;</span>
+<span class="k">done</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.commits[] | &quot;* &quot; + .commit.author.name + &quot; (@&quot; + .author.login + &quot;)&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-fu
+</code></pre></div>
+<p>https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#compare-two-commits</p>
+<p>Alternatively, the list can be produced locally:</p>
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>log<span class="w"> </span>--no-graph<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;heads(tags())..main&#39;</span><span class="w"> </span>-T<span class="w"> </span><span class="s1">&#39;&quot;* &quot; ++ author ++ &quot;\n&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-fu
 </code></pre></div>
 <p>Then try to find the right GitHub username for each person and copy their name
 and username from the GitHub page for the person
