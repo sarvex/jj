@@ -2,7 +2,6 @@ use std::collections::HashSet;
 
 use clap_complete::ArgValueCandidates;
 use itertools::Itertools;
-use jj_lib::backend::BackendError;
 use jj_lib::revset::RevsetExpression;
 
 use crate::cli_util::CommandHelper;
@@ -88,11 +87,7 @@ pub(crate) fn cmd_simplify_parents(
         .transform_descendants(commit_ids, |mut rewriter| {
             let num_old_heads = rewriter.new_parents().len();
             if commit_ids_set.contains(rewriter.old_commit().id()) && num_old_heads > 1 {
-                // TODO: BackendError is not the right error here because
-                // the error does not come from `Backend`, but `Index`.
-                rewriter
-                    .simplify_ancestor_merge()
-                    .map_err(|err| BackendError::Other(err.into()))?;
+                rewriter.simplify_ancestor_merge()?;
             }
             let num_new_heads = rewriter.new_parents().len();
 

@@ -50,6 +50,7 @@ use crate::file_util::IoResultExt as _;
 use crate::file_util::PathError;
 use crate::index::ChangeIdIndex;
 use crate::index::Index;
+use crate::index::IndexError;
 use crate::index::IndexReadError;
 use crate::index::IndexStore;
 use crate::index::MutableIndex;
@@ -154,6 +155,51 @@ pub enum RepoInitError {
     #[error(transparent)]
     Path(#[from] PathError),
 }
+
+#[derive(Error, Debug)]
+#[error(transparent)]
+pub enum RepoError {
+    BackendObjectNotFound(BackendError),
+    ReadAccessDenied(BackendError),
+    UnsupportedBackendOperation(BackendError),
+    OpStoreObjectNotFound(OpStoreError),
+    Other(Box<dyn std::error::Error + Send + Sync>),
+}
+
+impl From<BackendError> for RepoError {
+    fn from(err: BackendError) -> Self {
+        match err {
+            BackendError::Unsupported(_) => RepoError::UnsupportedBackendOperation(err),
+            BackendError::ReadAccessDenied { .. } => RepoError::ReadAccessDenied(err),
+            BackendError::ObjectNotFound { .. } => RepoError::BackendObjectNotFound(err),
+            BackendError::InvalidHashLength { .. }
+            | BackendError::InvalidUtf8 { .. }
+            | BackendError::ReadObject { .. }
+            | BackendError::ReadFile { .. }
+            | BackendError::WriteObject { .. }
+            | BackendError::Other(_) => RepoError::Other(err.into()),
+        }
+    }
+}
+
+impl From<IndexError> for RepoError {
+    fn from(err: IndexError) -> Self {
+        Self::Other(err.into())
+    }
+}
+
+impl From<OpStoreError> for RepoError {
+    fn from(err: OpStoreError) -> Self {
+        match err {
+            OpStoreError::ObjectNotFound { .. } => RepoError::OpStoreObjectNotFound(err),
+            OpStoreError::ReadObject { .. }
+            | OpStoreError::WriteObject { .. }
+            | OpStoreError::Other(_) => RepoError::Other(err.into()),
+        }
+    }
+}
+
+pub type RepoResult<T> = Result<T, RepoError>;
 
 impl ReadonlyRepo {
     pub fn default_op_store_initializer() -> &'static OpStoreInitializer<'static> {
@@ -633,6 +679,12 @@ impl From<OpHeadResolutionError> for RepoLoaderError {
 
 impl From<OpHeadsStoreError> for RepoLoaderError {
     fn from(err: OpHeadsStoreError) -> Self {
+        Self(err.into())
+    }
+}
+
+impl From<RepoError> for RepoLoaderError {
+    fn from(err: RepoError) -> Self {
         Self(err.into())
     }
 }
@@ -1253,8 +1305,8 @@ impl MutableRepo {
     pub fn transform_descendants(
         &mut self,
         roots: Vec<CommitId>,
-        callback: impl FnMut(CommitRewriter) -> BackendResult<()>,
-    ) -> BackendResult<()> {
+        callback: impl FnMut(CommitRewriter) -> RepoResult<()>,
+    ) -> RepoResult<()> {
         let options = RewriteRefsOptions::default();
         self.transform_descendants_with_options(roots, &options, callback)
     }
@@ -1266,8 +1318,8 @@ impl MutableRepo {
         &mut self,
         roots: Vec<CommitId>,
         options: &RewriteRefsOptions,
-        mut callback: impl FnMut(CommitRewriter) -> BackendResult<()>,
-    ) -> BackendResult<()> {
+        mut callback: impl FnMut(CommitRewriter) -> RepoResult<()>,
+    ) -> RepoResult<()> {
         let mut to_visit = self.find_descendants_to_rebase(roots)?;
         while let Some(old_commit) = to_visit.pop() {
             let new_parent_ids = self.new_parents(old_commit.parent_ids());
@@ -1306,7 +1358,7 @@ impl MutableRepo {
         &mut self,
         options: &RebaseOptions,
         mut progress: impl FnMut(Commit, RebasedCommit),
-    ) -> BackendResult<()> {
+    ) -> RepoResult<()> {
         let roots = self.parent_mapping.keys().cloned().collect();
         self.transform_descendants_with_options(roots, &options.rewrite_refs, |rewriter| {
             if rewriter.parents_changed() {
@@ -1329,7 +1381,7 @@ impl MutableRepo {
     /// All rebased descendant commits will be preserved even if they were
     /// emptied following the rebase operation. To customize the rebase
     /// behavior, use [`MutableRepo::rebase_descendants_with_options`].
-    pub fn rebase_descendants(&mut self) -> BackendResult<usize> {
+    pub fn rebase_descendants(&mut self) -> RepoResult<usize> {
         let options = RebaseOptions::default();
         let mut num_rebased = 0;
         self.rebase_descendants_with_options(&options, |_old_commit, _rebased_commit| {
@@ -1344,7 +1396,7 @@ impl MutableRepo {
     /// be recursively reparented onto the new version of their parents.
     /// The content of those descendants will remain untouched.
     /// Returns the number of reparented descendants.
-    pub fn reparent_descendants(&mut self) -> BackendResult<usize> {
+    pub fn reparent_descendants(&mut self) -> RepoResult<usize> {
         let roots = self.parent_mapping.keys().cloned().collect_vec();
         let mut num_reparented = 0;
         self.transform_descendants(roots, |rewriter| {

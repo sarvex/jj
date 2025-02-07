@@ -42,6 +42,7 @@ use crate::merged_tree::MergedTreeBuilder;
 use crate::merged_tree::TreeDiffEntry;
 use crate::repo::MutableRepo;
 use crate::repo::Repo;
+use crate::repo::RepoResult;
 use crate::repo_path::RepoPath;
 use crate::revset::RevsetExpression;
 use crate::revset::RevsetIteratorExt;
@@ -303,14 +304,10 @@ pub enum RebasedCommit {
 pub fn rebase_commit_with_options(
     mut rewriter: CommitRewriter<'_>,
     options: &RebaseOptions,
-) -> BackendResult<RebasedCommit> {
+) -> RepoResult<RebasedCommit> {
     // If specified, don't create commit where one parent is an ancestor of another.
     if options.simplify_ancestor_merge {
-        // TODO: BackendError is not the right error here because
-        // the error does not come from `Backend`, but `Index`.
-        rewriter
-            .simplify_ancestor_merge()
-            .map_err(|err| BackendError::Other(err.into()))?;
+        rewriter.simplify_ancestor_merge()?;
     }
 
     let single_parent = match &rewriter.new_parents[..] {
@@ -425,7 +422,7 @@ pub fn move_commits(
     new_children: &[Commit],
     target: &MoveCommitsTarget,
     options: &RebaseOptions,
-) -> BackendResult<MoveCommitsStats> {
+) -> RepoResult<MoveCommitsStats> {
     let target_commits: Vec<Commit>;
     let target_commit_ids: HashSet<_>;
     let connected_target_commits: Vec<Commit>;
@@ -813,7 +810,7 @@ pub fn duplicate_commits(
     target_commits: &[CommitId],
     parent_commit_ids: &[CommitId],
     children_commit_ids: &[CommitId],
-) -> BackendResult<DuplicateCommitsStats> {
+) -> RepoResult<DuplicateCommitsStats> {
     if target_commits.is_empty() {
         return Ok(DuplicateCommitsStats::default());
     }
@@ -1068,7 +1065,7 @@ pub fn squash_commits<'repo>(
     sources: &[CommitToSquash],
     destination: &Commit,
     keep_emptied: bool,
-) -> BackendResult<Option<SquashedCommit<'repo>>> {
+) -> RepoResult<Option<SquashedCommit<'repo>>> {
     struct SourceCommit<'a> {
         commit: &'a CommitToSquash,
         abandon: bool,

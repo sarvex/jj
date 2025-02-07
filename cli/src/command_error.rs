@@ -39,6 +39,7 @@ use jj_lib::op_walk::OpsetEvaluationError;
 use jj_lib::op_walk::OpsetResolutionError;
 use jj_lib::repo::CheckOutCommitError;
 use jj_lib::repo::EditCommitError;
+use jj_lib::repo::RepoError;
 use jj_lib::repo::RepoLoaderError;
 use jj_lib::repo::RewriteRootCommit;
 use jj_lib::repo_path::RepoPathBuf;
@@ -322,6 +323,15 @@ impl From<BackendError> for CommandError {
 impl From<OpHeadsStoreError> for CommandError {
     fn from(err: OpHeadsStoreError) -> Self {
         internal_error_with_message("Unexpected error from operation heads store", err)
+    }
+}
+
+impl From<RepoError> for CommandError {
+    fn from(err: RepoError) -> Self {
+        match err {
+            RepoError::UnsupportedBackendOperation(err) => user_error(err),
+            _ => internal_error_with_message("Unexpected repo error", err),
+        }
     }
 }
 

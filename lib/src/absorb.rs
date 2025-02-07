@@ -44,6 +44,7 @@ use crate::merged_tree::MergedTree;
 use crate::merged_tree::MergedTreeBuilder;
 use crate::repo::MutableRepo;
 use crate::repo::Repo;
+use crate::repo::RepoResult;
 use crate::repo_path::RepoPath;
 use crate::repo_path::RepoPathBuf;
 use crate::revset::ResolvedRevsetExpression;
@@ -288,7 +289,7 @@ pub fn absorb_hunks(
     repo: &mut MutableRepo,
     source: &AbsorbSource,
     mut selected_trees: HashMap<CommitId, MergedTreeBuilder>,
-) -> BackendResult<AbsorbStats> {
+) -> RepoResult<AbsorbStats> {
     let store = repo.store().clone();
     let mut rewritten_source = None;
     let mut rewritten_destinations = Vec::new();
