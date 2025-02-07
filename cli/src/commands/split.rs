@@ -24,8 +24,7 @@ use crate::cli_util::RevisionArg;
 use crate::command_error::user_error_with_hint;
 use crate::command_error::CommandError;
 use crate::complete;
-use crate::description_util::description_template;
-use crate::description_util::edit_description;
+use crate::description_util::edit_multiple_descriptions;
 use crate::ui::Ui;
 
 /// Split a revision in two
@@ -137,27 +136,18 @@ The remainder will be in the second commit.
 
     // Create the first commit, which includes the changes selected by the user.
     let selected_tree = tx.repo().store().get_root_tree(&selected_tree_id)?;
-    let first_commit = {
+    let (first_commit, mut first_builder) = {
         let mut commit_builder = tx.repo_mut().rewrite_commit(&commit).detach();
         commit_builder.set_tree_id(selected_tree_id);
         if commit_builder.description().is_empty() {
             commit_builder.set_description(tx.settings().get_string("ui.default-description")?);
         }
-        let temp_commit = commit_builder.write_hidden()?;
-        let template = description_template(
-            ui,
-            &tx,
-            "Enter a description for the first commit.",
-            &temp_commit,
-        )?;
-        let description = edit_description(&text_editor, &template)?;
-        commit_builder.set_description(description);
-        commit_builder.write(tx.repo_mut())?
+        (commit_builder.write_hidden()?, commit_builder)
     };
 
     // Create the second commit, which includes everything the user didn't
     // select.
-    let second_commit = {
+    let (second_commit, mut second_builder) = {
         let new_tree = if args.parallel {
             // Merge the original commit tree with its parent using the tree
             // containing the user selected changes as the base for the merge.
@@ -178,22 +168,33 @@ The remainder will be in the second commit.
             // Generate a new change id so that the commit being split doesn't
             // become divergent.
             .generate_new_change_id();
-        let description = if commit.description().is_empty() {
-            // If there was no description before, don't ask for one for the
-            // second commit.
-            "".to_string()
-        } else {
-            let temp_commit = commit_builder.write_hidden()?;
-            let template = description_template(
-                ui,
-                &tx,
-                "Enter a description for the second commit.",
-                &temp_commit,
-            )?;
-            edit_description(&text_editor, &template)?
+        (commit_builder.write_hidden()?, commit_builder)
+    };
+
+    let commits = [
+        (
+            first_commit.id(),
+            &first_commit,
+            "Enter a description for the first commit.",
+        ),
+        (
+            second_commit.id(),
+            &second_commit,
+            "Enter a description for the second commit.",
+        ),
+    ];
+    let descriptions =
+        edit_multiple_descriptions(ui, &text_editor, &tx, commits)?.assert_complete()?;
+
+    first_builder.set_description(&descriptions[first_commit.id()]);
+    let first_commit = first_builder.write(tx.repo_mut())?;
+
+    let second_commit = {
+        if !args.parallel {
+            second_builder.set_parents(vec![first_commit.id().clone()]);
         };
-        commit_builder.set_description(description);
-        commit_builder.write(tx.repo_mut())?
+        second_builder.set_description(&descriptions[second_commit.id()]);
+        second_builder.write(tx.repo_mut())?
     };
 
     // Mark the commit being split as rewritten to the second commit. As a

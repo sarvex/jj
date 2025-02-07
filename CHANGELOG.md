@@ -23,6 +23,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `ellipsis` parameter; passing this prepends or appends the ellipsis to the
   content if it is truncated to fit the maximum width.
 
+* `jj split` now edits both commit descriptions at the same time.
+
 ### Fixed bugs
 
 * `jj status` now shows untracked files under untracked directories.
