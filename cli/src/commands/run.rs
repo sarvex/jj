@@ -408,7 +408,7 @@ pub struct RunArgs {
     shell_command: String,
     /// The revisions to change.
     #[arg(long, short, default_value = "@", value_name = "REVSETS")]
-    revisions: RevisionArg,
+    revisions: Vec<RevisionArg>,
     /// A no-op option to match the interface of `git rebase -x`.
     #[arg(short = 'x', hide = true)]
     exec: bool,
@@ -421,9 +421,11 @@ pub fn cmd_run(ui: &mut Ui, command: &CommandHelper, args: &RunArgs) -> Result<(
     let mut workspace_command = command.workspace_helper(ui)?;
     // The commits are already returned in reverse topological order.
     let resolved_commits: Vec<_> = workspace_command
-        .parse_revset(ui, &args.revisions)?
+        .parse_union_revsets(ui, &args.revisions)?
         .evaluate_to_commits()?
         .try_collect()?;
+
+    // TODO: Check if got an empty set
 
     workspace_command.check_rewritable(resolved_commits.iter().ids())?;
     // Jobs are resolved in this order:
