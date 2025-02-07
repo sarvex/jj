@@ -713,3 +713,67 @@ fn test_split_interactive_with_paths() {
     ◆  zzzzzzzz root() 00000000
     ");
 }
+
+#[test]
+fn test_split_no_edit() {
+    let mut test_env = TestEnvironment::default();
+    test_env.jj_cmd_ok(test_env.env_root(), &["git", "init", "repo"]);
+    let workspace_path = test_env.env_root().join("repo");
+
+    std::fs::write(workspace_path.join("file1"), "foo\n").unwrap();
+    std::fs::write(workspace_path.join("file2"), "bar\n").unwrap();
+    test_env.jj_cmd_ok(&workspace_path, &["describe", "-m", "Add file1 & file2"]);
+
+    let edit_script = test_env.set_up_fake_editor();
+    std::fs::write(edit_script, "dump editor0\0fail").unwrap();
+
+    let (stdout, stderr) = test_env.jj_cmd_ok(&workspace_path, &["split", "--no-edit", "file1"]);
+    assert!(!test_env.env_root().join("editor0").exists());
+    insta::assert_snapshot!(stdout, @"");
+    insta::assert_snapshot!(stderr, @r#"
+    First part: qpvuntsm 7367eaa4 Add file1 & file2
+    Second part: kkmpptxz 0fd8ae1c Add file1 & file2
+    Working copy now at: kkmpptxz 0fd8ae1c Add file1 & file2
+    Parent commit      : qpvuntsm 7367eaa4 Add file1 & file2
+    "#);
+    insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r#"
+    @  kkmpptxzrspx false Add file1 & file2
+    ○  qpvuntsmwlqt false Add file1 & file2
+    ◆  zzzzzzzzzzzz true
+    "#);
+}
+
+#[test]
+fn test_split_only_first() {
+    let mut test_env = TestEnvironment::default();
+    test_env.jj_cmd_ok(test_env.env_root(), &["git", "init", "repo"]);
+    let workspace_path = test_env.env_root().join("repo");
+
+    std::fs::write(workspace_path.join("file1"), "foo\n").unwrap();
+    std::fs::write(workspace_path.join("file2"), "bar\n").unwrap();
+
+    let edit_script = test_env.set_up_fake_editor();
+    std::fs::write(edit_script, "dump editor0\0write\nThe first commit").unwrap();
+
+    let (stdout, stderr) = test_env.jj_cmd_ok(&workspace_path, &["split", "--only-first", "file1"]);
+    insta::assert_snapshot!(std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
+    JJ: Enter a description for the first commit.
+
+    JJ: This commit contains the following changes:
+    JJ:     A file1
+
+    JJ: Lines starting with "JJ:" (like this one) will be removed.
+    "#);
+    insta::assert_snapshot!(stdout, @"");
+    insta::assert_snapshot!(stderr, @r#"
+    First part: qpvuntsm cc365055 The first commit
+    Second part: rlvkpnrz e0baca87 (no description set)
+    Working copy now at: rlvkpnrz e0baca87 (no description set)
+    Parent commit      : qpvuntsm cc365055 The first commit
+    "#);
+    insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r#"
+    @  rlvkpnrzqnoo false
+    ○  qpvuntsmwlqt false The first commit
+    ◆  zzzzzzzzzzzz true
+    "#);
+}

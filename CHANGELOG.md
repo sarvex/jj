@@ -25,6 +25,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 * `jj split` now edits both commit descriptions at the same time.
 
+* Added `--no-edit` and `--only-first` flags to `jj split`. `--no-edit` prevents
+  an editor from opening, using the message from the source for both new
+  commits. `--only-first` only opens an editor for the first commit, leaving the
+  second with the description from the source.
+
 ### Fixed bugs
 
 * `jj status` now shows untracked files under untracked directories.
