@@ -1710,6 +1710,20 @@ fn git2_fetch(
     callbacks: RemoteCallbacks<'_>,
     depth: Option<NonZeroU32>,
 ) -> Result<(), GitFetchError> {
+    // At this point, we are only updating Git's remote tracking branches, not the
+    // local branches.
+    let refspecs = expand_fetch_refspecs(remote_name, branch_names)?;
+    git2_fetch_refspecs(git_repo, remote_name, &refspecs, callbacks, depth)?;
+    Ok(())
+}
+
+fn git2_fetch_refspecs(
+    git_repo: &git2::Repository,
+    remote_name: &str,
+    refspecs: &[RefSpec],
+    callbacks: RemoteCallbacks<'_>,
+    depth: Option<NonZeroU32>,
+) -> Result<(), GitFetchError> {
     let mut remote = git_repo.find_remote(remote_name).map_err(|err| {
         if is_remote_not_found_err(&err) {
             GitFetchError::NoSuchRemote(remote_name.to_string())
@@ -1717,9 +1731,7 @@ fn git2_fetch(
             GitFetchError::InternalGitError(err)
         }
     })?;
-    // At this point, we are only updating Git's remote tracking branches, not the
-    // local branches.
-    let refspecs: Vec<String> = expand_fetch_refspecs(remote_name, branch_names)?
+    let refspecs: Vec<String> = refspecs
         .iter()
         .map(|refspec| refspec.to_git_format())
         .collect();
@@ -1788,16 +1800,38 @@ fn subprocess_fetch(
     git_ctx: &GitSubprocessContext,
     remote_name: &str,
     branch_names: &[StringPattern],
+    callbacks: RemoteCallbacks<'_>,
+    depth: Option<NonZeroU32>,
+) -> Result<(), GitFetchError> {
+    // At this point, we are only updating Git's remote tracking branches, not the
+    // local branches.
+    let refspecs: Vec<_> = expand_fetch_refspecs(remote_name, branch_names)?;
+    subprocess_fetch_refspecs(
+        git_repo,
+        git_ctx,
+        remote_name,
+        refspecs,
+        callbacks,
+        true,
+        depth,
+    )?;
+    Ok(())
+}
+
+fn subprocess_fetch_refspecs(
+    git_repo: &gix::Repository,
+    git_ctx: &GitSubprocessContext,
+    remote_name: &str,
+    refspecs: Vec<RefSpec>,
     mut callbacks: RemoteCallbacks<'_>,
+    prune_branches: bool,
     depth: Option<NonZeroU32>,
 ) -> Result<(), GitFetchError> {
     // check the remote exists
     if git_repo.try_find_remote(remote_name).is_none() {
         return Err(GitFetchError::NoSuchRemote(remote_name.to_owned()));
     }
-    // At this point, we are only updating Git's remote tracking branches, not the
-    // local branches.
-    let mut remaining_refspecs: Vec<_> = expand_fetch_refspecs(remote_name, branch_names)?;
+    let mut remaining_refspecs: Vec<_> = refspecs;
     if remaining_refspecs.is_empty() {
         // Don't fall back to the base refspecs.
         return Ok(());
@@ -1821,9 +1855,11 @@ fn subprocess_fetch(
         }
     }
 
-    // Even if git fetch has --prune, if a branch is not found it will not be
-    // pruned on fetch
-    git_ctx.spawn_branch_prune(&branches_to_prune)?;
+    if prune_branches {
+        // Even if git fetch has --prune, if a branch is not found it will not be
+        // pruned on fetch
+        git_ctx.spawn_branch_prune(&branches_to_prune)?;
+    }
     Ok(())
 }
 
