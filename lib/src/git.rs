@@ -1568,6 +1568,19 @@ impl<'a> GitFetch<'a> {
         Ok(())
     }
 
+    /// Fetches a single ref and imports its commit.
+    #[tracing::instrument(skip(self, callbacks))]
+    pub fn fetch_and_resolve_ref(
+        &mut self,
+        remote_name: &str,
+        ref_name: &str,
+        callbacks: RemoteCallbacks<'_>,
+        depth: Option<NonZeroU32>,
+    ) -> Result<CommitId, GitFetchError> {
+        self.fetch_impl
+            .fetch_and_resolve_ref(remote_name, ref_name, callbacks, depth)
+    }
+
     /// Queries remote for the default branch name.
     #[tracing::instrument(skip(self, callbacks))]
     pub fn get_default_branch(
@@ -1685,6 +1698,56 @@ impl<'a> GitFetchImpl<'a> {
                 depth,
             ),
         }
+    }
+
+    fn fetch_and_resolve_ref(
+        &self,
+        remote_name: &str,
+        ref_name: &str,
+        callbacks: RemoteCallbacks<'_>,
+        depth: Option<NonZeroU32>,
+    ) -> Result<CommitId, GitFetchError> {
+        let destination_ref_name = format!("refs/jj/fetch/{remote_name}/{ref_name}");
+        let refspec = RefSpec::forced(ref_name, destination_ref_name.clone());
+        // TODO: correctly handle when ref doesn't exist.
+        let commit_id = match self {
+            GitFetchImpl::Git2 { git_repo } => {
+                git2_fetch_refspecs(git_repo, remote_name, &[refspec], callbacks, depth)?;
+                let mut reference = git_repo
+                    .find_reference(&destination_ref_name)
+                    .map_err(GitFetchError::InternalGitError)?;
+                let commit_id_bytes = reference
+                    .peel_to_commit()
+                    .map_err(GitFetchError::InternalGitError)?
+                    .id()
+                    .as_bytes()
+                    .to_vec();
+                reference
+                    .delete()
+                    .map_err(GitFetchError::InternalGitError)?;
+                CommitId::new(commit_id_bytes)
+            }
+            GitFetchImpl::Subprocess { git_repo, git_ctx } => {
+                subprocess_fetch_refspecs(
+                    git_repo,
+                    git_ctx,
+                    remote_name,
+                    vec![refspec],
+                    callbacks,
+                    false,
+                    depth,
+                )?;
+                let mut reference = git_repo.find_reference(&destination_ref_name).unwrap();
+                let commit_id_bytes = reference.peel_to_commit().unwrap().id().as_bytes().to_vec();
+                git_repo
+                    .find_reference(&destination_ref_name)
+                    .unwrap()
+                    .delete()
+                    .unwrap();
+                CommitId::new(commit_id_bytes)
+            }
+        };
+        Ok(commit_id)
     }
 
     fn get_default_branch(
