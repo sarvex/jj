@@ -48,7 +48,6 @@ use crate::op_store::WorkspaceId;
 use crate::op_walk;
 use crate::repo::ReadonlyRepo;
 use crate::repo::Repo;
-use crate::repo::RepoLoaderError;
 use crate::repo_path::RepoPathUiConverter;
 use crate::revset_parser;
 pub use crate::revset_parser::expect_literal;
@@ -82,8 +81,6 @@ pub enum RevsetResolutionError {
     AmbiguousCommitIdPrefix(String),
     #[error("Change ID prefix `{0}` is ambiguous")]
     AmbiguousChangeIdPrefix(String),
-    #[error("Unexpected error from store")]
-    StoreError(#[source] BackendError),
     #[error(transparent)]
     Other(#[from] Box<dyn std::error::Error + Send + Sync>),
 }
@@ -1869,13 +1866,9 @@ fn reload_repo_at_operation(
     let base_repo = repo.base_repo();
     let operation = op_walk::resolve_op_with_repo(base_repo, op_str)
         .map_err(|err| RevsetResolutionError::Other(err.into()))?;
-    base_repo.reload_at(&operation).map_err(|err| match err {
-        RepoLoaderError::Backend(err) => RevsetResolutionError::StoreError(err),
-        RepoLoaderError::IndexRead(_)
-        | RepoLoaderError::OpHeadResolution(_)
-        | RepoLoaderError::OpHeadsStoreError(_)
-        | RepoLoaderError::OpStore(_) => RevsetResolutionError::Other(err.into()),
-    })
+    base_repo
+        .reload_at(&operation)
+        .map_err(|err| RevsetResolutionError::Other(err.into()))
 }
 
 fn resolve_remote_bookmark(repo: &dyn Repo, name: &str, remote: &str) -> Option<Vec<CommitId>> {
@@ -2266,7 +2259,6 @@ impl ExpressionStateFolder<UserExpressionState, ResolvedExpressionState>
                     RevsetResolutionError::EmptyString
                     | RevsetResolutionError::AmbiguousCommitIdPrefix(_)
                     | RevsetResolutionError::AmbiguousChangeIdPrefix(_)
-                    | RevsetResolutionError::StoreError(_)
                     | RevsetResolutionError::Other(_) => Err(err),
                 })
             }
