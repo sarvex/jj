@@ -604,17 +604,37 @@ pub fn read_store_type(
 }
 
 #[derive(Debug, Error)]
-pub enum RepoLoaderError {
-    #[error(transparent)]
-    Backend(#[from] BackendError),
-    #[error(transparent)]
-    IndexRead(#[from] IndexReadError),
-    #[error(transparent)]
-    OpHeadResolution(#[from] OpHeadResolutionError),
-    #[error(transparent)]
-    OpHeadsStoreError(#[from] OpHeadsStoreError),
-    #[error(transparent)]
-    OpStore(#[from] OpStoreError),
+#[error(transparent)]
+pub struct RepoLoaderError(Box<dyn std::error::Error + Send + Sync>);
+
+impl From<BackendError> for RepoLoaderError {
+    fn from(err: BackendError) -> Self {
+        Self(err.into())
+    }
+}
+
+impl From<IndexReadError> for RepoLoaderError {
+    fn from(err: IndexReadError) -> Self {
+        Self(err.into())
+    }
+}
+
+impl From<OpStoreError> for RepoLoaderError {
+    fn from(err: OpStoreError) -> Self {
+        Self(err.into())
+    }
+}
+
+impl From<OpHeadResolutionError> for RepoLoaderError {
+    fn from(err: OpHeadResolutionError) -> Self {
+        Self(err.into())
+    }
+}
+
+impl From<OpHeadsStoreError> for RepoLoaderError {
+    fn from(err: OpHeadsStoreError) -> Self {
+        Self(err.into())
+    }
 }
 
 /// Helps create `ReadonlyRepoo` instances of a repo at the head operation or at
