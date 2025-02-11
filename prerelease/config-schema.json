@@ -1,5 +1,6 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "$comment": "`taplo` and the corresponding VS Code plugins only support draft-04 verstion of JSON Schema, see <https://taplo.tamasfe.dev/configuration/developing-schemas.html>. draft-07 is mostly compatible with it, newer versions may not be.",
     "title": "Jujutsu config",
     "type": "object",
     "description": "User configuration for Jujutsu VCS. See https://jj-vcs.github.io/jj/latest/config/ for details",
@@ -183,11 +184,12 @@
                 "diff-editor": {
                     "type": "string",
                     "description": "Editor tool to use for editing diffs",
-                    "default": "meld"
+                    "default": ":builtin"
                 },
                 "merge-editor": {
                     "type": "string",
-                    "description": "Tool to use for resolving three-way merges. Behavior for a given tool name can be configured in merge-tools.TOOL tables"
+                    "description": "Tool to use for resolving three-way merges. Behavior for a given tool name can be configured in merge-tools.TOOL tables",
+                    "default": ":builtin"
                 },
                 "conflict-marker-style": {
                     "$ref": "#/properties/ui/definitions/conflict-marker-style"
@@ -267,36 +269,7 @@
                         "$ref": "#/properties/colors/definitions/hexColor"
                     }
                   ]
-                },
-                "basicFormatterLabels": {
-                    "enum": [
-                        "description",
-                        "change_id",
-                        "commit_id",
-                        "author",
-                        "committer",
-                        "working_copies",
-                        "current_working_copy",
-                        "bookmarks",
-                        "tags",
-                        "git_refs",
-                        "is_git_head",
-                        "divergent",
-                        "hidden",
-                        "conflict",
-                        "root"
-                    ]
                 }
-            },
-            "propertyNames": {
-                "oneOf": [
-                    {
-                        "$ref": "#/properties/colors/definitions/basicFormatterLabels"
-                    },
-                    {
-                        "type": "string"
-                    }
-                ]
             },
             "additionalProperties": {
                 "description": "A color profile for the given formatter label. Either a bare color name used as the foreground color or a table describing color and formatting",
