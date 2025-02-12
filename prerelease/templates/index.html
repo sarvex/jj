@@ -2378,6 +2378,10 @@ defined.</p>
 <li><code>.substr(start: Integer, end: Integer) -&gt; String</code>: Extract substring. The
   <code>start</code>/<code>end</code> indices should be specified in UTF-8 bytes. Negative values
   count from the end of the string.</li>
+<li><code>.escape_json() -&gt; String</code>: Serializes the string in JSON format. This
+  function is useful for making machine-readable templates. For example, you
+  can use it in a template like <code>"{ \"foo\": " ++ self.foo().escape_json() ++ "}"</code> to
+  return a JSON/JSONL.</li>
 </ul>
 <h4 id="string-literals">String literals<a class="headerlink" href="#string-literals" title="Permanent link">&para;</a></h4>
 <p>String literals must be surrounded by single or double quotes (<code>'</code> or <code>"</code>).
