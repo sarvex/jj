@@ -2208,6 +2208,8 @@ type</a> are available as keywords. For example,
   Note: This function is intended for escape sequences and as such, its output
   is expected to be invisible / of no display width. Outputting content with
   nonzero display width may break wrapping, indentation etc.</li>
+<li><code>stringify(content: Template) -&gt; String</code>: Format <code>content</code> to string. This
+  effectively removes color labels.</li>
 <li><code>if(condition: Boolean, then: Template[, else: Template]) -&gt; Template</code>:
   Conditionally evaluate <code>then</code>/<code>else</code> template content.</li>
 <li><code>coalesce(content: Template...) -&gt; Template</code>: Returns the first <strong>non-empty</strong>
@@ -2429,7 +2431,7 @@ defined.</p>
   count from the end of the string.</li>
 <li><code>.escape_json() -&gt; String</code>: Serializes the string in JSON format. This
   function is useful for making machine-readable templates. For example, you
-  can use it in a template like <code>"{ \"foo\": " ++ self.foo().escape_json() ++ "}"</code> to
+  can use it in a template like <code>'{ "foo": ' ++ foo.escape_json() ++ ' }'</code> to
   return a JSON/JSONL.</li>
 </ul>
 <h4 id="string-literals">String literals<a class="headerlink" href="#string-literals" title="Permanent link">&para;</a></h4>
