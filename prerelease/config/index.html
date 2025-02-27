@@ -1255,6 +1255,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#manually-signing-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manually signing commits
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2747,6 +2756,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#manually-signing-commits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manually signing commits
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3210,6 +3228,14 @@ also consider the <code>release@origin</code> bookmark immutable:</p>
 </code></pre></div>
 <p>Ancestors of the configured set are also immutable. The root commit is always
 immutable even if the set is empty.</p>
+<p>Immutable commits (other than the root commit) can be rewritten using the
+<code>--ignore-immutable</code> CLI flag.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Using <code>--ignore-immutable</code> will allow you to rewrite any commit in the
+history, and all descendants, without warning. Use this power wisely, and
+remember <code>jj undo</code>.</p>
+</div>
 <h3 id="behavior-of-prev-and-next-commands">Behavior of prev and next commands<a class="headerlink" href="#behavior-of-prev-and-next-commands" title="Permanent link">&para;</a></h3>
 <p>If you prefer using an "edit-based" workflow, rather than squashing
 modifications into parent changes, you may find yourself using the <code>prev</code> and
@@ -3297,6 +3323,11 @@ the terminal width.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[template-aliases]</span>
 <span class="c1"># Uppercase change ids. `jj` treats change and commit ids as case-insensitive.</span>
 <span class="s1">&#39;format_short_change_id(id)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;format_short_id(id).upper()&#39;</span>
+</code></pre></div>
+<p>Operation ids can be customized by the <code>format_short_operation_id()</code> alias:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[template-aliases]</span>
+<span class="c1"># Always show 12 characters</span>
+<span class="s1">&#39;format_short_operation_id(id)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;id.short(12)&#39;</span>
 </code></pre></div>
 <p>To get shorter prefixes for certain revisions, set <code>revsets.short-prefixes</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[revsets]</span>
@@ -3825,7 +3856,7 @@ GnuPG or SSH signing keys.</p>
 <p>Setting the backend to <code>"none"</code> disables signing.</p>
 <h3 id="gnupg-signing">GnuPG Signing<a class="headerlink" href="#gnupg-signing" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
-<span class="n">sign-all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">behavior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;own&quot;</span>
 <span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpg&quot;</span>
 <span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;4ED556E9729E000F&quot;</span>
 <span class="c1">## You can set `key` to anything accepted by `gpg -u`</span>
@@ -3843,7 +3874,7 @@ To consider expired keys as invalid you can set:</p>
 </code></pre></div>
 <h3 id="ssh-signing">SSH Signing<a class="headerlink" href="#ssh-signing" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
-<span class="n">sign-all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">behavior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;own&quot;</span>
 <span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh&quot;</span>
 <span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGj+J6N6SO+4P8dOZqfR1oiay2yxhhHnagH52avUqw5h&quot;</span>
 <span class="c1">## You can also use a path instead of embedding the key</span>
@@ -3863,20 +3894,31 @@ as follows:</p>
 <span class="n">backends</span><span class="p">.</span><span class="n">ssh</span><span class="p">.</span><span class="n">allowed-signers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/path/to/allowed-signers&quot;</span>
 </code></pre></div>
 <h3 id="sign-commits-only-on-jj-git-push">Sign commits only on <code>jj git push</code><a class="headerlink" href="#sign-commits-only-on-jj-git-push" title="Permanent link">&para;</a></h3>
-<p>Instead of signing all commits during creation when <code>signing.sign-all</code> is
-set to <code>true</code>, the <code>git.sign-on-push</code> configuration can be used to sign
+<p>Instead of signing all commits during creation when <code>signing.behavior</code> is
+set to <code>own</code>, the <code>git.sign-on-push</code> configuration can be used to sign
 commits only upon running <code>jj git push</code>. All mutable unsigned commits
 being pushed will be signed prior to pushing. This might be preferred if the
 signing backend requires user interaction or is slow, so that signing is
 performed in a single batch operation.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Configure signing backend as before, without setting `signing.sign-all`</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Configure signing backend as before, but lazily signing only on push.</span>
 <span class="k">[signing]</span>
+<span class="n">behavior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;drop&quot;</span>
 <span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh&quot;</span>
 <span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGj+J6N6SO+4P8dOZqfR1oiay2yxhhHnagH52avUqw5h&quot;</span>
 
 <span class="k">[git]</span>
 <span class="n">sign-on-push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
+<h3 id="manually-signing-commits">Manually signing commits<a class="headerlink" href="#manually-signing-commits" title="Permanent link">&para;</a></h3>
+<p>You can use <a href="../cli-reference/#jj-sign"><code>jj sign</code></a>/<a href="../cli-reference/#jj-unsign"><code>jj unsign</code></a>
+to sign/unsign commits manually.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>jj sign</code> is always signing commits, even if they are already signed by the
+user. While this is cumbersome for users signing via hardware devices, we
+cannot reliably check if a commit is already signed without creating a
+signature (see <a href="https://github.com/jj-vcs/jj/issues/5786">this issue</a>).</p>
+</div>
 <h2 id="commit-signature-verification">Commit Signature Verification<a class="headerlink" href="#commit-signature-verification" title="Permanent link">&para;</a></h2>
 <p>By default signature verification and display is <strong>disabled</strong> as it incurs a
 performance cost when rendering medium to large change logs.</p>

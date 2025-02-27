@@ -845,6 +845,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#annotationline-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      AnnotationLine type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#boolean-type" class="md-nav__link">
     <span class="md-ellipsis">
       Boolean type
@@ -1866,6 +1875,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#annotationline-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      AnnotationLine type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#boolean-type" class="md-nav__link">
     <span class="md-ellipsis">
       Boolean type
@@ -2223,6 +2241,15 @@ type</a> are available as keywords. For example,
 <li><code>config(name: String) -&gt; ConfigValue</code>: Look up configuration value by <code>name</code>.</li>
 </ul>
 <h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h2>
+<h3 id="annotationline-type">AnnotationLine type<a class="headerlink" href="#annotationline-type" title="Permanent link">&para;</a></h3>
+<p>The following methods are defined.</p>
+<ul>
+<li><code>.commit() -&gt; Commit</code>: Commit responsible for changing the relevant line.</li>
+<li><code>.content() -&gt; Template</code>: Line content including newline character.</li>
+<li><code>.line_number() -&gt; Integer</code>: 1-based line number.</li>
+<li><code>.first_line_in_hunk() -&gt; Boolean</code>: False when the directly preceding line
+  references the same commit.</li>
+</ul>
 <h3 id="boolean-type">Boolean type<a class="headerlink" href="#boolean-type" title="Permanent link">&para;</a></h3>
 <p>No methods are defined. Can be constructed with <code>false</code> or <code>true</code> literal.</p>
 <h3 id="commit-type">Commit type<a class="headerlink" href="#commit-type" title="Permanent link">&para;</a></h3>
@@ -2426,6 +2453,9 @@ defined.</p>
 <li><code>.ends_with(needle: Template) -&gt; Boolean</code></li>
 <li><code>.remove_prefix(needle: Template) -&gt; String</code>: Removes the passed prefix, if present</li>
 <li><code>.remove_suffix(needle: Template) -&gt; String</code>: Removes the passed suffix, if present</li>
+<li><code>.trim() -&gt; String</code>: Removes leading and trailing whitespace</li>
+<li><code>.trim_start() -&gt; String</code>: Removes leading whitespace</li>
+<li><code>.trim_end() -&gt; String</code>: Removes trailing whitespace</li>
 <li><code>.substr(start: Integer, end: Integer) -&gt; String</code>: Extract substring. The
   <code>start</code>/<code>end</code> indices should be specified in UTF-8 bytes. Negative values
   count from the end of the string.</li>
@@ -2504,7 +2534,8 @@ inside a single-quoted string literal.</p>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
 <p>The default templates and aliases() are defined in the <code>[templates]</code> and
 <code>[template-aliases]</code> sections of the config respectively. The exact definitions
-can be seen in the <code>cli/src/config/templates.toml</code> file in jj's source tree.</p>
+can be seen in the <a href="https://github.com/jj-vcs/jj/blob/main/cli/src/config/templates.toml"><code>cli/src/config/templates.toml</code></a> file in jj's source
+tree.</p>
 <!--- TODO: Find a way to embed the default config files in the docs -->
 
 <p>New keywords and functions can be defined as aliases, by using any
