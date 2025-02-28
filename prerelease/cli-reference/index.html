@@ -8392,6 +8392,7 @@ J           J
 <ul>
 <li>
 <p><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — What revision(s) to sign</p>
+<p>If no revisions are specified, this defaults to the <code>revsets.sign</code> setting.</p>
 <p>Note that revisions are always re-signed.</p>
 <p>While that leads to discomfort for users, which sign with hardware devices, as of now we cannot reliably check if a commit is already signed by the user without creating a signature (see https://github.com/jj-vcs/jj/issues/5786).</p>
 </li>
