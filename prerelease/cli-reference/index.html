@@ -6677,7 +6677,7 @@ does not match the <code>jj help</code> output exactly.</p>
 </ul>
 <h2 id="jj"><code>jj</code><a class="headerlink" href="#jj" title="Permanent link">&para;</a></h2>
 <p>Jujutsu (An experimental VCS)</p>
-<p>To get started, see the tutorial at https://jj-vcs.github.io/jj/latest/tutorial/.</p>
+<p>To get started, see the tutorial [<code>jj help -k tutorial</code>].</p>
 <p><strong>Usage:</strong> <code>jj [OPTIONS] [COMMAND]</code></p>
 <p>'jj help --help' lists available keywords. Use 'jj help -k' to show help for one of these keywords.</p>
 <h6 id="subcommands"><strong>Subcommands:</strong><a class="headerlink" href="#subcommands" title="Permanent link">&para;</a></h6>
@@ -6830,7 +6830,7 @@ does not match the <code>jj help</code> output exactly.</p>
 </ul>
 <h2 id="jj-bookmark"><code>jj bookmark</code><a class="headerlink" href="#jj-bookmark" title="Permanent link">&para;</a></h2>
 <p>Manage bookmarks [default alias: b]</p>
-<p>See the <a href="https://jj-vcs.github.io/jj/latest/bookmarks">bookmark documentation</a> for more information.</p>
+<p>See [<code>jj help -k bookmarks</code>] for more information.</p>
 <p><strong>Usage:</strong> <code>jj bookmark &lt;COMMAND&gt;</code></p>
 <h6 id="subcommands_1"><strong>Subcommands:</strong><a class="headerlink" href="#subcommands_1" title="Permanent link">&para;</a></h6>
 <ul>
@@ -6888,7 +6888,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <h2 id="jj-bookmark-list"><code>jj bookmark list</code><a class="headerlink" href="#jj-bookmark-list" title="Permanent link">&para;</a></h2>
 <p>List bookmarks and their targets</p>
 <p>By default, a tracking remote bookmark will be included only if its target is different from the local target. A non-tracking remote bookmark won't be listed. For a conflicted bookmark (both local and remote), old target revisions are preceded by a "-" and new target revisions are preceded by a "+".</p>
-<p>See the <a href="https://jj-vcs.github.io/jj/latest/bookmarks">bookmark documentation</a> for more information.</p>
+<p>See [<code>jj help -k bookmarks</code>] for more information.</p>
 <p><strong>Usage:</strong> <code>jj bookmark list [OPTIONS] [NAMES]...</code></p>
 <h6 id="arguments_5"><strong>Arguments:</strong><a class="headerlink" href="#arguments_5" title="Permanent link">&para;</a></h6>
 <ul>
@@ -6915,7 +6915,7 @@ does not match the <code>jj help</code> output exactly.</p>
 </li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each bookmark using the given template</p>
-<p>All 0-argument methods of the [<code>RefName</code> type] are available as keywords in the <a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>.</p>
+<p>All 0-argument methods of the [<code>RefName</code> type] are available as keywords in the template expression. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 </ul>
 <h2 id="jj-bookmark-move"><code>jj bookmark move</code><a class="headerlink" href="#jj-bookmark-move" title="Permanent link">&para;</a></h2>
@@ -7010,7 +7010,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <h2 id="jj-config"><code>jj config</code><a class="headerlink" href="#jj-config" title="Permanent link">&para;</a></h2>
 <p>Manage config options</p>
 <p>Operates on jj configuration, which comes from the config file and environment variables.</p>
-<p>See the <a href="https://jj-vcs.github.io/jj/latest/config/">config documentation</a> for file locations, supported config options, and other details about <code>jj config</code>.</p>
+<p>See [<code>jj help -k config</code>] to know more about file locations, supported config options, and other details about <code>jj config</code>.</p>
 <p><strong>Usage:</strong> <code>jj config &lt;COMMAND&gt;</code></p>
 <h6 id="subcommands_2"><strong>Subcommands:</strong><a class="headerlink" href="#subcommands_2" title="Permanent link">&para;</a></h6>
 <ul>
@@ -7058,12 +7058,13 @@ Martin von Zweigbergk</p>
 <li><code>--repo</code> — Target the repo-level config</li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each variable using the given template</p>
-<p>The following keywords are available in the <a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>:</p>
+<p>The following keywords are available in the template expression:</p>
 <ul>
 <li><code>name: String</code>: Config name.</li>
 <li><code>value: ConfigValue</code>: Value to be formatted in TOML syntax.</li>
 <li><code>overridden: Boolean</code>: True if the value is shadowed by other.</li>
 </ul>
+<p>See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 </ul>
 <h2 id="jj-config-path"><code>jj config path</code><a class="headerlink" href="#jj-config-path" title="Permanent link">&para;</a></h2>
@@ -7253,7 +7254,7 @@ Martin von Zweigbergk</p>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each revision using the given template</p>
 <p>Run <code>jj log -T</code> to list the built-in templates.</p>
-<p>You can also specify arbitrary [template expressions] using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>.</p>
+<p>You can also specify arbitrary template expressions using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 <li>
 <p><code>-p</code>, <code>--patch</code> — Show patch compared to the previous version of this change</p>
@@ -7305,7 +7306,7 @@ Martin von Zweigbergk</p>
 <li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> — an optional revision to start at</li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each line using the given template</p>
-<p>All 0-argument methods of the [<code>AnnotationLine</code> type] are available as keywords in the <a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>.</p>
+<p>All 0-argument methods of the [<code>AnnotationLine</code> type] are available as keywords in the template expression. See [<code>jj help -k templates</code>] for more information.</p>
 <p>If not specified, this defaults to the <code>templates.file_annotate</code> setting.</p>
 </li>
 </ul>
@@ -7351,7 +7352,7 @@ Martin von Zweigbergk</p>
 </li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each file entry using the given template</p>
-<p>All 0-argument methods of the [<code>TreeEntry</code> type] are available as keywords in the <a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>.</p>
+<p>All 0-argument methods of the [<code>TreeEntry</code> type] are available as keywords in the template expression. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 </ul>
 <h2 id="jj-file-show"><code>jj file show</code><a class="headerlink" href="#jj-file-show" title="Permanent link">&para;</a></h2>
@@ -7737,9 +7738,8 @@ output of the first tool.</p>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each revision using the given template</p>
 <p>Run <code>jj log -T</code> to list the built-in templates.</p>
-<p>You can also specify arbitrary [template expressions] using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>.</p>
+<p>You can also specify arbitrary template expressions using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>. See [<code>jj help -k templates</code>] for more information.</p>
 <p>If not specified, this defaults to the <code>templates.log</code> setting.</p>
-<p><a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>: https://jj-vcs.github.io/jj/latest/templates/ <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>: https://jj-vcs.github.io/jj/latest/templates/#commit-keywords</p>
 </li>
 <li>
 <p><code>-p</code>, <code>--patch</code> — Show patch</p>
@@ -7899,7 +7899,7 @@ B   =&gt;   @
 <li><code>--no-graph</code> — Don't show the graph, show a flat list of operations</li>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each operation using the given template</p>
-<p>You can specify arbitrary [template expressions] using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>.</p>
+<p>You can specify arbitrary template expressions using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 <li>
 <p><code>--op-diff</code> — Show changes to the repository at each operation</p>
@@ -8362,7 +8362,7 @@ J           J
 <ul>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render a revision using the given template</p>
-<p>You can specify arbitrary [template expressions] using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>.</p>
+<p>You can specify arbitrary template expressions using the <a href="https://jj-vcs.github.io/jj/latest/templates/#commit-keywords">built-in keywords</a>. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 <li>
 <p><code>-s</code>, <code>--summary</code> — For each path, show only whether it was modified, added, or deleted</p>
@@ -8521,7 +8521,7 @@ J           J
 <ul>
 <li>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each tag using the given template</p>
-<p>All 0-argument methods of the [<code>RefName</code> type] are available as keywords in the <a href="https://jj-vcs.github.io/jj/latest/templates/">template expression</a>.</p>
+<p>All 0-argument methods of the [<code>RefName</code> type] are available as keywords in the template expression. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
 </ul>
 <h2 id="jj-util"><code>jj util</code><a class="headerlink" href="#jj-util" title="Permanent link">&para;</a></h2>
