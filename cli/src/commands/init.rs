@@ -56,9 +56,9 @@ pub(crate) fn cmd_init(
 
     if !command.settings().get_bool("ui.allow-init-native")? {
         return Err(user_error_with_hint(
-            "The native backend is disallowed by default.",
+            "The native backend is not ready for production use.",
             "Did you mean to call `jj git init`?
-Set `ui.allow-init-native` to allow initializing a repo with the native backend.",
+The `jj init` command is for the native backend, which is just a proof of concept.",
         ));
     }
     Workspace::init_local(&command.settings_for_new_workspace(&wc_path)?, &wc_path)?;

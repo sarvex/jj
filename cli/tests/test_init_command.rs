@@ -20,9 +20,9 @@ fn test_init_local_disallowed() {
     let output = test_env.run_jj_in(".", ["init", "repo"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
-    Error: The native backend is disallowed by default.
+    Error: The native backend is not ready for production use.
     Hint: Did you mean to call `jj git init`?
-    Set `ui.allow-init-native` to allow initializing a repo with the native backend.
+    The `jj init` command is for the native backend, which is just a proof of concept.
     [EOF]
     [exit status: 1]
     ");
