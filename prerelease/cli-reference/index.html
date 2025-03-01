@@ -8387,6 +8387,7 @@ J           J
 </ul>
 <h2 id="jj-sign"><code>jj sign</code><a class="headerlink" href="#jj-sign" title="Permanent link">&para;</a></h2>
 <p>Cryptographically sign a revision</p>
+<p>This command requires configuring a <a href="https://jj-vcs.github.io/jj/latest/config/#commit-signing">commit signing</a> backend.</p>
 <p><strong>Usage:</strong> <code>jj sign [OPTIONS]</code></p>
 <h6 id="options_44"><strong>Options:</strong><a class="headerlink" href="#options_44" title="Permanent link">&para;</a></h6>
 <ul>
@@ -8394,7 +8395,7 @@ J           J
 <p><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — What revision(s) to sign</p>
 <p>If no revisions are specified, this defaults to the <code>revsets.sign</code> setting.</p>
 <p>Note that revisions are always re-signed.</p>
-<p>While that leads to discomfort for users, which sign with hardware devices, as of now we cannot reliably check if a commit is already signed by the user without creating a signature (see https://github.com/jj-vcs/jj/issues/5786).</p>
+<p>While that leads to discomfort for users, which sign with hardware devices, as of now we cannot reliably check if a commit is already signed by the user without creating a signature (see <a href="https://github.com/jj-vcs/jj/issues/5786">#5786</a>).</p>
 </li>
 <li>
 <p><code>--key &lt;KEY&gt;</code> — The key used for signing</p>
@@ -8656,6 +8657,7 @@ inline it into your config file:</p>
 </ul>
 <h2 id="jj-unsign"><code>jj unsign</code><a class="headerlink" href="#jj-unsign" title="Permanent link">&para;</a></h2>
 <p>Drop a cryptographic signature</p>
+<p>See also <a href="https://jj-vcs.github.io/jj/latest/config/#commit-signing">commit signing</a> docs.</p>
 <p><strong>Usage:</strong> <code>jj unsign [OPTIONS]</code></p>
 <h6 id="options_52"><strong>Options:</strong><a class="headerlink" href="#options_52" title="Permanent link">&para;</a></h6>
 <ul>
