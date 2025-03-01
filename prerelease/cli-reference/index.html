@@ -7504,6 +7504,7 @@ output of the first tool.</p>
 <li>
 <p><code>--remote &lt;REMOTE&gt;</code> — The remote to fetch from (only named remotes are supported, can be repeated)</p>
 <p>This defaults to the <code>git.fetch</code> setting. If that is not configured, and if there are multiple remotes, the remote named "origin" will be used.</p>
+<p>By default, the specified remote names matches exactly. Use a <a href="https://jj-vcs.github.io/jj/latest/revsets#string-patterns">string pattern</a>, e.g. <code>--remote 'glob:*'</code>, to select remotes using patterns.</p>
 </li>
 <li>
 <p><code>--all-remotes</code> — Fetch from all remotes</p>

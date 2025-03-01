@@ -3939,6 +3939,11 @@ single remote, or a list of remotes to fetch from multiple places:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>git.fetch<span class="w"> </span><span class="s2">&quot;upstream&quot;</span>
 jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>git.fetch<span class="w"> </span><span class="s1">&#39;[&quot;origin&quot;, &quot;upstream&quot;]&#39;</span>
 </code></pre></div>
+<p>By default, the specified remote names matches exactly. You can also use a
+<a href="../revsets/#string-patterns">string pattern</a> to select remotes using patterns:</p>
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>git.fetch<span class="w"> </span><span class="s2">&quot;glob:*&quot;</span>
+jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>git.fetch<span class="w"> </span><span class="s1">&#39;[&quot;glob:remote*&quot;, &quot;glob:upstream*&quot;]&#39;</span>
+</code></pre></div>
 <p>Similarly, you can also set the variable <code>git.push</code> to cause <code>jj git push</code> to
 push to a different remote:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--repo<span class="w"> </span>git.push<span class="w"> </span><span class="s2">&quot;github&quot;</span>
