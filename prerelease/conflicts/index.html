@@ -1671,11 +1671,11 @@ will materialize the conflict in the working copy using conflict markers, which
 would look like this:</p>
 <div class="highlight"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Conflict 1 of 1
 %%%%%%% Changes from base to side #1
-<span class="w"> </span>apple
-<span class="gd">-grape</span>
-<span class="gi">+grapefruit</span>
-<span class="w"> </span>orange
-<span class="gi">+++++++ Contents of side #2</span>
+ apple
+-grape
++grapefruit
+ orange
++++++++ Contents of side #2
 APPLE
 GRAPE
 ORANGE
@@ -1706,15 +1706,15 @@ requires applying each diff to the snapshot one-by-one.</p>
 diff, Jujutsu also supports a "snapshot" style, which can be enabled by setting
 the <code>ui.conflict-marker-style</code> config option to "snapshot":</p>
 <div class="highlight"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Conflict 1 of 1
-<span class="gi">+++++++ Contents of side #1</span>
++++++++ Contents of side #1
 apple
 grapefruit
 orange
-<span class="gd">------- Contents of base</span>
+------- Contents of base
 apple
 grape
 orange
-<span class="gi">+++++++ Contents of side #2</span>
++++++++ Contents of side #2
 APPLE
 GRAPE
 ORANGE
@@ -1732,7 +1732,7 @@ orange
 apple
 grape
 orange
-<span class="gh">=======</span>
+=======
 APPLE
 GRAPE
 ORANGE
@@ -1749,12 +1749,12 @@ markers and which are just part of the file contents, <code>jj</code> sometimes 
 conflict markers which are longer than normal:</p>
 <div class="highlight"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; Conflict 1 of 1
 %%%%%%%%%%%%%%% Changes from base to side #1
-<span class="gd">-Heading</span>
-<span class="gi">+HEADING</span>
-<span class="w"> </span>=======
-<span class="gi">+++++++++++++++ Contents of side #2</span>
+-Heading
++HEADING
+ =======
++++++++++++++++ Contents of side #2
 New Heading
-<span class="gh">===========</span>
+===========
 &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Conflict 1 of 1 ends
 </code></pre></div>
 <h2 id="conflicts-with-missing-terminating-newline">Conflicts with missing terminating newline<a class="headerlink" href="#conflicts-with-missing-terminating-newline" title="Permanent link">&para;</a></h2>
@@ -1772,11 +1772,11 @@ character, and one person changed <code>grape</code> to <code>grapefruit</code>,
 added the missing newline character to make <code>grape\n</code>, the resulting conflict
 would look like this:</p>
 <div class="highlight"><pre><span></span><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; Conflict 1 of 1
-<span class="gi">+++++++ Contents of side #1 (no terminating newline)</span>
++++++++ Contents of side #1 (no terminating newline)
 grapefruit
 %%%%%%% Changes from base to side #2 (adds terminating newline)
-<span class="gd">-grape</span>
-<span class="gi">+grape</span>
+-grape
++grape
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; Conflict 1 of 1 ends
 </code></pre></div>
 <p>Therefore, a resolution of this conflict could be <code>grapefruit\n</code>, with the
