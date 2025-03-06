@@ -566,6 +566,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="I accidentally changed files in the wrong commit, how do I move the recent changes into another commit?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-find-the-commit-id-for-the-last-good-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Find the commit id for the "last good version"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-create-a-new-change-for-the-current-state-and-restore-the-existing-change-to-the-older-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Create a new change for the current state and restore the existing change to the older state
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1782,6 +1806,30 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="I accidentally changed files in the wrong commit, how do I move the recent changes into another commit?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-find-the-commit-id-for-the-last-good-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1: Find the commit id for the "last good version"
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-create-a-new-change-for-the-current-state-and-restore-the-existing-change-to-the-older-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2: Create a new change for the current state and restore the existing change to the older state
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2087,14 +2135,150 @@ Parent<span class="w"> </span>commit<span class="w">      </span>:<span class="w
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>--user<span class="w"> </span>git.private-commits<span class="w"> </span><span class="s2">&quot;&#39;&#39;&#39;description(glob:&#39;private:*&#39;)&#39;&#39;&#39;&quot;</span>
 </code></pre></div>
 <h3 id="i-accidentally-changed-files-in-the-wrong-commit-how-do-i-move-the-recent-changes-into-another-commit">I accidentally changed files in the wrong commit, how do I move the recent changes into another commit?<a class="headerlink" href="#i-accidentally-changed-files-in-the-wrong-commit-how-do-i-move-the-recent-changes-into-another-commit" title="Permanent link">&para;</a></h3>
-<p>Use <code>jj evolog -p</code> to see how your working-copy commit has evolved. Find the
-commit you want to restore the contents to. Let's say the current commit (with
-the changes intended for a new commit) are in commit X and the state you wanted
-is in commit Y. Note the commit id (normally in blue at the end of the line in
-the log output) of each of them. Now use <code>jj new</code> to create a new working-copy
-commit, then run <code>jj restore --from Y --into @-</code> to restore the parent commit
-to the old state, and <code>jj restore --from X</code> to restore the new working-copy
-commit to the new state.</p>
+<p>Let's say we are editing a commit for "featureA", and we forgot to run <code>jj
+new</code> or <code>jj commit</code> before doing some work that belongs in a new commit:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>jj<span class="w"> </span>log
+<span class="go">@  lnvvtrzo jjfan@example.org 2025-02-28 21:01:10 31a347e0</span>
+<span class="go">│  featureA</span>
+<span class="go">◆  zzzzzzzz root() 00000000</span>
+<span class="gp">$ </span>cat<span class="w"> </span>file<span class="w">  </span><span class="c1"># Oh no, the work on &quot;feature B&quot; should be in a separate commit!</span>
+<span class="go">Done with feature A</span>
+<span class="go">Working on feature B</span>
+</code></pre></div>
+<h4 id="step-1-find-the-commit-id-for-the-last-good-version">Step 1: Find the commit id for the "last good version"<a class="headerlink" href="#step-1-find-the-commit-id-for-the-last-good-version" title="Permanent link">&para;</a></h4>
+<!-- TODO: Reorganize the two related questions, this one and
+  -- the one linked below
+  -->
+<p>You can find <a href="#jj-is-said-to-record-the-working-copy-after-jj-log-and-every-other-command-where-can-i-see-these-automatic-saves">all the past versions of the working copy revision that <code>jj</code> has
+saved</a>
+by running <code>jj evolog</code>. The obsolete versions will be marked as "hidden" and
+will have the same change id, but will have different commit ids. This
+represents different <a href="../glossary/#commit">commits</a> that are all parts of the same <a href="../glossary/#change">change</a>.</p>
+<p>For example, this is what the evolog might look like after you made two edits to
+the same change:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span><span class="c1"># Note the word &quot;hidden&quot;, the commit ids on the right,</span>
+<span class="gp">$ </span><span class="c1"># and the unchanging change id on the left.</span>
+<span class="gp">$ </span>jj<span class="w"> </span>evolog
+<span class="go">@  lnvvtrzo jjfan@example.org 2025-02-28 21:01:10 31a347e0</span>
+<span class="go">│  featureA</span>
+<span class="go">○  lnvvtrzo hidden jjfan@example.org 2025-02-28 21:00:51 b8004ab8</span>
+<span class="go">│  featureA</span>
+<span class="go">○  lnvvtrzo hidden jjfan@example.org 2025-02-28 20:50:05 e4d831d</span>
+<span class="go">   (no description set)</span>
+</code></pre></div>
+<p>Since commit <code>b800</code> is hidden, it is considered obsolete and <code>jj log</code> (without
+arguments) will not show it, nor can it be accessed by its change id. However,
+most <code>jj</code> operations work normally on such commits if you refer to them by their
+commit id.</p>
+<p>To find out which of these versions is the last time before we started working
+on feature B (the point where we should have created a new change, but failed
+to do so), we can look at the actual changes between the <code>evolog</code> commits by
+running <code>jj evolog -p</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span><span class="c1"># When was the last saved point before we started working on feature B?</span>
+<span class="gp">$ </span>jj<span class="w"> </span>evolog<span class="w"> </span>-p<span class="w"> </span>--git<span class="w">  </span><span class="c1"># We use `--git` to make diffs clear without colors</span>
+<span class="go">@  lnvvtrzo jjfan@example.org 2025-02-28 21:01:10 31a347e0</span>
+<span class="go">│  featureA</span>
+<span class="go">│  diff --git a/file b/file</span>
+<span class="go">│  index 2b455c4207..2a7e05a01a 100644</span>
+<span class="go">│  --- a/file</span>
+<span class="go">│  +++ b/file</span>
+<span class="go">│  @@ -1,1 +1,2 @@</span>
+<span class="go">│   Done with feature A</span>
+<span class="go">│  +Working on feature B</span>
+<span class="go">○  lnvvtrzo hidden jjfan@example.org 2025-02-28 21:00:51 b8004ab8</span>
+<span class="go">│  featureA</span>
+<span class="go">│  diff --git a/file b/file</span>
+<span class="go">│  index cb61245109..2b455c4207</span>
+<span class="go">│  --- a/file</span>
+<span class="go">│  +++ b/file</span>
+<span class="go">│  @@ -1,1 +1,1 @@</span>
+<span class="go">│  -Working on feature A</span>
+<span class="go">│  +Done with feature A</span>
+<span class="go">○  lnvvtrzo hidden jjfan@example.org 2025-02-28 20:50:05 e4d831d</span>
+<span class="go">   (no description set)</span>
+<span class="go">   diff --git a/file b/file</span>
+<span class="go">   index 0000000000..cb61245109</span>
+<span class="go">   --- /dev/null</span>
+<span class="go">   +++ b/file</span>
+<span class="go">   @@ 0,0 +1,1 @@</span>
+<span class="go">   +Working on feature A</span>
+</code></pre></div>
+<p>In this example, the version of the change when we were actually done with
+feature A is when we edited the file to say "Done with feature A". This state
+was saved in the commit with id <code>b80</code> (the second one in the list). The
+following edit (commit <code>31a</code>) belongs in a new change.</p>
+<h4 id="step-2-create-a-new-change-for-the-current-state-and-restore-the-existing-change-to-the-older-state">Step 2: Create a new change for the current state and restore the existing change to the older state<a class="headerlink" href="#step-2-create-a-new-change-for-the-current-state-and-restore-the-existing-change-to-the-older-state" title="Permanent link">&para;</a></h4>
+<p>The "featureA" change is currently at commit <code>31a</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>jj<span class="w"> </span>log
+<span class="go">@  lnvvtrzo jjfan@example.org 2025-02-28 21:01:10 31a347e0</span>
+<span class="go">│  featureA</span>
+<span class="go">◆  zzzzzzzz root() 00000000</span>
+</code></pre></div>
+<p>We'd like to create a new "featureB" change with the contents of the current
+commit <code>31a</code>, and we'd like the "featureA" change to be reverted to its former
+state at commit <code>b80</code> (see step 1 above for how we found that commit id).</p>
+<p>First, we create a new empty child commit. Since it is empty, it has the same
+contents as <code>31a</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>jj<span class="w"> </span>new<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;featureB&quot;</span>
+<span class="go">Working copy now at: pvnrkl 47171aa (empty) featureB</span>
+<span class="go">Parent commit      : lnvvtr 31a347e featureA</span>
+<span class="gp">$ </span>cat<span class="w"> </span>file
+<span class="go">Done with feature A</span>
+<span class="go">Working on feature B</span>
+</code></pre></div>
+<p>Now, we <code>jj restore</code> the change <code>lnvvtr</code> to its state at commit <code>b80</code>. We use
+the <code>--restore-descendants</code> flag so that the <em>file contents</em> (AKA snapshot) of
+the "featureB" change is preserved.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span><span class="c1"># We refer to `lnvvtr` as `@-` for brevity</span>
+<span class="gp">$ </span>jj<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>b80<span class="w"> </span>--into<span class="w"> </span>@-<span class="w"> </span>--restore-descendants
+<span class="go">Created lnvvtr 599994e featureA</span>
+<span class="go">Rebased 1 descendant commits (while preserving their content)</span>
+<span class="go">Working copy now at: pvnrkl 468104c featureB</span>
+<span class="go">Parent commit      : lnvvtr 599994e featureA</span>
+</code></pre></div>
+<p>Even though <code>@-</code> was modified, <code>--restore-descendants</code> preserved the contents of
+the current change:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>jj<span class="w"> </span>file<span class="w"> </span>show<span class="w"> </span>-r<span class="w"> </span>@<span class="w"> </span>file<span class="w">  </span><span class="c1"># Same as `cat file`</span>
+<span class="go">Done with feature A</span>
+<span class="go">Working on feature B</span>
+<span class="gp">$ </span>jj<span class="w"> </span>file<span class="w"> </span>show<span class="w"> </span>-r<span class="w"> </span>@-<span class="w"> </span>file
+<span class="go">Done with feature A</span>
+</code></pre></div>
+<details class="info">
+<summary>More details on what <code>--restore-descendants</code> does</summary>
+<p>When we ran the <code>jj restore</code> command, the working copy change <code>@</code> was
+at commit <code>471</code> and <code>@</code> was the only child of <code>@-</code>. In this situation,</p>
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>b80<span class="w"> </span>--into<span class="w"> </span>@-<span class="w"> </span>--restore-descendants
+</code></pre></div>
+<p>is equivalent to</p>
+<div class="highlight"><pre><span></span><code>jj<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>b80<span class="w"> </span>--into<span class="w"> </span>@-
+jj<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span><span class="m">471</span><span class="w"> </span>--into<span class="w"> </span>@
+</code></pre></div>
+</details>
+<p>Now, we have achieved the exact state we desired:</p>
+<div class="highlight"><pre><span></span><code>$ jj log -p --git
+@  pvnrklkn jjfan@example.org 2025-02-28 21:39:29 468104c2
+│  featureB
+│  diff --git a/file b/file
+│  index 2b455c4207..2a7e05a01a 100644
+│  --- a/file
+│  +++ b/file
+│  @@ -1,1 +1,2 @@
+│   Done with feature A
+│  +Working on feature B
+○  lnvvtrzo jjfan@example.org 2025-02-28 21:39:29 599994ee
+│  featureA
+│  diff --git a/file b/file
+│  new file mode 100644
+│  index 0000000000..2b455c4207
+│  --- /dev/null
+│  +++ b/file
+│  @@ -0,0 +1,1 @@
+│  +Done with feature A
+◆  zzzzzzzz root() 00000000
+$ jj diff --from b80 --to @- # No output means these are identical
+$ jj diff --from 31a --to @  # No output means these are identical
+</code></pre></div>
 <h3 id="how-do-i-resume-working-on-an-existing-change">How do I resume working on an existing change?<a class="headerlink" href="#how-do-i-resume-working-on-an-existing-change" title="Permanent link">&para;</a></h3>
 <p>There are two ways to resume working on an earlier change: <code>jj new</code> then <code>jj squash</code>,
 and <code>jj edit</code>. The first is generally recommended, but <code>jj edit</code> can be useful. When
