@@ -1448,6 +1448,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Conditional variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-scope-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using [[--scope]] tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using multiple files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-condition-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available condition keys
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2949,6 +2982,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Conditional variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-scope-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using [[--scope]] tables
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using multiple files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-condition-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available condition keys
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -4098,11 +4164,16 @@ services. It is an error for both of these files to exist.</p>
 </tbody>
 </table>
 <p>The location of the <code>jj</code> config file can also be overridden with the
-<code>JJ_CONFIG</code> environment variable. If it is not empty, it should contain the path
-to a TOML file that will be used instead of any configuration file in the
-default locations. For example,</p>
+<code>JJ_CONFIG</code> environment variable. If it is not empty, it will be used instead
+of any configuration file in the default locations. If it is a path to a TOML
+file, then that file will be loaded instead. If it is a path to a directory,
+then all the TOML files in that directory will be loaded in lexicographic order
+and merged. This allows you to split your configuration across multiple files
+and can combine well with <a href="#conditional-variables">Conditional Variables</a>.</p>
+<p>For example,
 <div class="highlight"><pre><span></span><code>env<span class="w"> </span><span class="nv">JJ_CONFIG</span><span class="o">=</span>/dev/null<span class="w"> </span>jj<span class="w"> </span>log<span class="w">       </span><span class="c1"># Ignores any settings specified in the config file.</span>
 </code></pre></div>
+could be used to run jj without loading any user configs.</p>
 <h3 id="json-schema-support">JSON Schema Support<a class="headerlink" href="#json-schema-support" title="Permanent link">&para;</a></h3>
 <p>Many popular editors support TOML file syntax highlighting and validation. To
 enable schema validation in your editor, add this line at the top of your TOML
@@ -4163,11 +4234,12 @@ jj<span class="w"> </span>log<span class="w"> </span>--config<span class="w"> </
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>--config-file<span class="o">=</span>extra-config.toml<span class="w"> </span>log
 </code></pre></div>
 <h3 id="conditional-variables">Conditional variables<a class="headerlink" href="#conditional-variables" title="Permanent link">&para;</a></h3>
-<p>You can conditionally enable config variables by using <code>--when</code> and
-<code>[[--scope]]</code> tables. Variables defined in <code>[[--scope]]</code> tables are expanded to
-the root table. <code>--when</code> specifies the condition to enable the scope table.</p>
-<p>If no conditions are specified, table is always enabled. If multiple conditions
-are specified, the intersection is used.</p>
+<p>You can conditionally enable config variables by using <code>--when</code>.</p>
+<h4 id="using-scope-tables">Using <code>[[--scope]]</code> tables<a class="headerlink" href="#using-scope-tables" title="Permanent link">&para;</a></h4>
+<p>Variables defined in <code>[[--scope]]</code> tables are expanded to the root table.
+<code>--when</code> specifies the condition to enable the scope table.</p>
+<p>If no conditions are specified, the table is always enabled. If multiple
+conditions are specified, their intersection is used.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[user]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR NAME&quot;</span>
 <span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_DEFAULT_EMAIL@example.com&quot;</span>
@@ -4188,7 +4260,32 @@ are specified, the intersection is used.</p>
 <span class="k">[--scope.ui]</span>
 <span class="n">pager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;delta&quot;</span>
 </code></pre></div>
-<p>Condition keys:</p>
+<h4 id="using-multiple-files">Using multiple files<a class="headerlink" href="#using-multiple-files" title="Permanent link">&para;</a></h4>
+<p><code>--when</code> can also be used on the top level of a TOML file, which is convenient
+when splitting your config across multiple files using <a href="#user-config-file"><code>JJ_CONFIG</code></a>.
+The behavior of conditions are the same as when using <code>[[--scope]]</code> tables.</p>
+<p>Note that the TOML files are read and merged in lexicographical order. This
+means that in the below example <code>work.toml</code> will override <code>config.toml</code>, but if
+<code>work.toml</code> would be renamed <code>at_work.toml</code> the overriding would not work as
+intended.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># In config.toml</span>
+<span class="k">[user]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR NAME&quot;</span>
+<span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_DEFAULT_EMAIL@example.com&quot;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># In work.toml</span>
+<span class="n">--when</span><span class="p">.</span><span class="n">repositories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;~/the/work/repo&quot;</span><span class="p">]</span>
+
+<span class="k">[user]</span>
+<span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_WORK_EMAIL@workplace.com&quot;</span>
+
+<span class="k">[revset-aliases]</span>
+<span class="n">work</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;heads(::@ ~ description(exact:&#39;&#39;))::&quot;</span>
+
+<span class="k">[aliases]</span>
+<span class="n">wip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;-r&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;work&quot;</span><span class="p">]</span>
+</code></pre></div>
+<h4 id="available-condition-keys">Available condition keys<a class="headerlink" href="#available-condition-keys" title="Permanent link">&para;</a></h4>
 <ul>
 <li>
 <p><code>--when.repositories</code>: List of paths to match the repository path prefix.</p>
