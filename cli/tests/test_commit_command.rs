@@ -32,7 +32,6 @@ fn test_commit_with_description_from_cli() {
     @  e8ea92a8b6b3
     ○  fa15625b4a98 first
     ◆  000000000000
-    [EOF]
     ");
 }
 
@@ -54,7 +53,6 @@ fn test_commit_with_editor() {
     @  a57b2c95fb75
     ○  159271101e05 modified
     ◆  000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
@@ -175,7 +173,6 @@ fn test_commit_interactive() {
     │  add files
     │  A file1
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -211,7 +208,6 @@ fn test_commit_interactive_with_paths() {
     ------- stderr -------
     Working copy now at: kkmpptxz f3e6062e (no description set)
     Parent commit      : rlvkpnrz 9453cb28 edit
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -238,7 +234,6 @@ fn test_commit_interactive_with_paths() {
     │  A file2
     │  A file3
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -259,7 +254,6 @@ fn test_commit_with_default_description() {
     @  c65242099289
     ○  573b6df51aea TESTED=TODO
     ◆  000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -373,7 +367,6 @@ fn test_commit_without_working_copy() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: This command requires a working copy
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -394,14 +387,12 @@ fn test_commit_paths() {
     insta::assert_snapshot!(output, @r"
     Added regular file file1:
             1: foo
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&workspace_path, ["diff"]);
     insta::assert_snapshot!(output, @r"
     Added regular file file2:
             1: bar
-    [EOF]
     ");
 }
 
@@ -420,7 +411,6 @@ fn test_commit_paths_warning() {
     Warning: The given paths do not match any file: file3
     Working copy now at: rlvkpnrz d1872100 (no description set)
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&workspace_path, ["diff"]);
@@ -429,7 +419,6 @@ fn test_commit_paths_warning() {
             1: foo
     Added regular file file2:
             1: bar
-    [EOF]
     ");
 }
 
@@ -451,7 +440,6 @@ fn test_commit_reset_author() {
     @  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     │  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     ~
-    [EOF]
     ");
 
     // Reset the author (the committer is always reset)
@@ -471,7 +459,6 @@ fn test_commit_reset_author() {
     @  Ove Ridder ove.ridder@example.com 2001-02-03 04:05:09.000 +07:00
     │  Ove Ridder ove.ridder@example.com 2001-02-03 04:05:09.000 +07:00
     ~
-    [EOF]
     ");
 }
 

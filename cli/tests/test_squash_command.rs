@@ -44,7 +44,6 @@ fn test_squash() {
     ○  d5d59175b481 b
     ○  184ddbcce5a9 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // Squashes the working copy into the parent by default
@@ -53,20 +52,15 @@ fn test_squash() {
     ------- stderr -------
     Working copy now at: vruxwmqv f7bb78d8 (empty) (no description set)
     Parent commit      : kkmpptxz 59f44460 b c | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f7bb78d8da62 (empty)
     ○  59f4446070a0 b c
     ○  184ddbcce5a9 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
 
     // Can squash a given commit into its parent
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -76,24 +70,16 @@ fn test_squash() {
     Rebased 1 descendant commits
     Working copy now at: mzvwutvl 1d70f50a c | (no description set)
     Parent commit      : qpvuntsm 9146bcc8 a b | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  1d70f50afa6d c
     ○  9146bcc8d996 a b
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
 
     // Cannot squash a merge commit (because it's unclear which parent it should go
     // into)
@@ -117,14 +103,12 @@ fn test_squash() {
     ○  d5d59175b481 b
     ○  184ddbcce5a9 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["squash"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Cannot squash merge commits without a specified destination
     Hint: Use `--into` to specify which parent to squash into
-    [EOF]
     [exit status: 1]
     ");
 
@@ -136,7 +120,6 @@ fn test_squash() {
     ------- stderr -------
     Working copy now at: xlzxqlsl b50b843d (empty) (no description set)
     Parent commit      : nmzmmopx 338cbc05 e | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  b50b843d8555 (empty)
@@ -148,13 +131,9 @@ fn test_squash() {
     ○  d5d59175b481 b
     ○  184ddbcce5a9 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "e"]);
-    insta::assert_snapshot!(output, @r"
-    e
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"e");
 }
 
 #[test]
@@ -186,7 +165,6 @@ fn test_squash_partial() {
     ○  d117da276a0f b
     ○  54d3c1c0e9fd a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // If we don't make any changes in the diff-editor, the whole change is moved
@@ -199,7 +177,6 @@ fn test_squash_partial() {
     Rebased 1 descendant commits
     Working copy now at: mzvwutvl 3c633226 c | (no description set)
     Parent commit      : qpvuntsm 38ffd8b9 a b | (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -220,13 +197,9 @@ fn test_squash_partial() {
     @  3c6332267ea8 c
     ○  38ffd8b98578 a b
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
 
     // Can squash only some changes in interactive mode
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -237,35 +210,21 @@ fn test_squash_partial() {
     Rebased 2 descendant commits
     Working copy now at: mzvwutvl 57c3cf20 c | (no description set)
     Parent commit      : kkmpptxz c4925e01 b | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  57c3cf20d0b1 c
     ○  c4925e01d298 b
     ○  1fc159063ed3 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
 
     // Can squash only some changes in non-interactive mode
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -277,35 +236,21 @@ fn test_squash_partial() {
     Rebased 2 descendant commits
     Working copy now at: mzvwutvl 64d7ad7c c | (no description set)
     Parent commit      : kkmpptxz 60a26452 b | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  64d7ad7c43c1 c
     ○  60a264527aee b
     ○  7314692d32e3 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
 
     // If we specify only a non-existent file, then nothing changes.
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -313,7 +258,6 @@ fn test_squash_partial() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     // We get a warning if we pass a positional argument that looks like a revset
@@ -323,7 +267,6 @@ fn test_squash_partial() {
     ------- stderr -------
     Warning: The argument "b" is being interpreted as a fileset expression. To specify a revset, pass -r "b" instead.
     Nothing changed.
-    [EOF]
     "#);
 }
 
@@ -354,7 +297,6 @@ fn test_squash_keep_emptied() {
     ○  d5d59175b481 b
     ○  184ddbcce5a9 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["squash", "-r", "b", "--keep-emptied"]);
@@ -363,7 +305,6 @@ fn test_squash_keep_emptied() {
     Rebased 2 descendant commits
     Working copy now at: mzvwutvl 7ee7f18a c | (no description set)
     Parent commit      : kkmpptxz 9490bd7f b | (empty) (no description set)
-    [EOF]
     ");
     // With --keep-emptied, b remains even though it is now empty.
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -371,13 +312,9 @@ fn test_squash_keep_emptied() {
     ○  9490bd7f1e6a b (empty)
     ○  53bf93080518 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
 }
 
 #[test]
@@ -439,7 +376,6 @@ fn test_squash_from_to() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // Errors out if source and destination are the same
@@ -447,7 +383,6 @@ fn test_squash_from_to() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Source and destination cannot be the same
-    [EOF]
     [exit status: 1]
     ");
 
@@ -458,7 +393,6 @@ fn test_squash_from_to() {
     Working copy now at: kmkuslsw b902d1dd f | (no description set)
     Parent commit      : znkkpsqq c2f9de87 e | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  b902d1dd59d9 f
@@ -468,20 +402,13 @@ fn test_squash_from_to() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The change from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     // File `file2`, which was not changed in source, is unchanged
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    f
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"f");
 
     // Can squash from ancestor
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -490,7 +417,6 @@ fn test_squash_from_to() {
     ------- stderr -------
     Working copy now at: kmkuslsw cfc5eb87 f | (no description set)
     Parent commit      : znkkpsqq 4dc7c279 e | (no description set)
-    [EOF]
     ");
     // The change has been removed from the source (the change pointed to by 'd'
     // became empty and was abandoned)
@@ -502,15 +428,11 @@ fn test_squash_from_to() {
     ├─╯
     ○  b7b767179c44 a d
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The change from the source has been applied (the file contents were already
     // "f", as is typically the case when moving changes from an ancestor)
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    f
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"f");
 
     // Can squash from descendant
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -520,7 +442,6 @@ fn test_squash_from_to() {
     Rebased 1 descendant commits
     Working copy now at: kmkuslsw 6de62c22 f | (no description set)
     Parent commit      : vruxwmqv 32196a11 d e | (no description set)
-    [EOF]
     ");
     // The change has been removed from the source (the change pointed to by 'e'
     // became empty and was abandoned)
@@ -532,14 +453,10 @@ fn test_squash_from_to() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The change from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "d"]);
-    insta::assert_snapshot!(output, @r"
-    e
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"e");
 }
 
 #[test]
@@ -585,7 +502,6 @@ fn test_squash_from_to_partial() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     let edit_script = test_env.set_up_fake_diff_editor();
@@ -597,7 +513,6 @@ fn test_squash_from_to_partial() {
     Working copy now at: vruxwmqv 987bcfb2 d | (no description set)
     Parent commit      : qpvuntsm b7b76717 a | (no description set)
     Added 0 files, modified 2 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  987bcfb2eb62 d
@@ -605,25 +520,15 @@ fn test_squash_from_to_partial() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The changes from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     // File `file3`, which was not changed in source, is unchanged
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file3"]);
-    insta::assert_snapshot!(output, @r"
-    d
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"d");
 
     // Can squash only part of the change in interactive mode
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -634,7 +539,6 @@ fn test_squash_from_to_partial() {
     Working copy now at: vruxwmqv 576244e8 d | (no description set)
     Parent commit      : qpvuntsm b7b76717 a | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  576244e87883 d
@@ -643,26 +547,16 @@ fn test_squash_from_to_partial() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The selected change from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     // The unselected change from the source has not been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     // File `file3`, which was changed in source's parent, is unchanged
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file3"]);
-    insta::assert_snapshot!(output, @r"
-    d
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"d");
 
     // Can squash only part of the change from a sibling in non-interactive mode
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -674,7 +568,6 @@ fn test_squash_from_to_partial() {
     Working copy now at: vruxwmqv 5b407c24 d | (no description set)
     Parent commit      : qpvuntsm b7b76717 a | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  5b407c249fa7 d
@@ -683,26 +576,16 @@ fn test_squash_from_to_partial() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The selected change from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     // The unselected change from the source has not been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     // File `file3`, which was changed in source's parent, is unchanged
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file3"]);
-    insta::assert_snapshot!(output, @r"
-    d
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"d");
 
     // Can squash only part of the change from a descendant in non-interactive mode
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -715,7 +598,6 @@ fn test_squash_from_to_partial() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Rebased 1 descendant commits
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  e0dac715116f d
@@ -724,20 +606,13 @@ fn test_squash_from_to_partial() {
     ├─╯
     ○  b7b767179c44 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The selected change from the source has been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
     // The unselected change from the source has not been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
 
     // If we specify only a non-existent file, then nothing changes.
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -745,7 +620,6 @@ fn test_squash_from_to_partial() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -807,7 +681,6 @@ fn test_squash_from_multiple() {
     ├─╯
     ○  3b1673b6370c a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // Squash a few commits sideways
@@ -824,7 +697,6 @@ fn test_squash_from_multiple() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  7ea391676d52 f
@@ -834,7 +706,6 @@ fn test_squash_from_multiple() {
     ├─╯
     ○  3b1673b6370c a b c
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The changes from the sources have been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=d", "file"]);
@@ -849,7 +720,6 @@ fn test_squash_from_multiple() {
     +++++++ Contents of side #3
     c
     >>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
 
     // Squash a few commits up an down
@@ -860,7 +730,6 @@ fn test_squash_from_multiple() {
     Rebased 1 descendant commits
     Working copy now at: xznxytkn 6a670d1a (empty) (no description set)
     Parent commit      : yostqsxw c1293ff7 e f | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  6a670d1ac76e (empty)
@@ -870,21 +739,16 @@ fn test_squash_from_multiple() {
     ├─╯
     ○  3b1673b6370c a b c
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The changes from the sources have been applied to the destination
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=e", "file"]);
-    insta::assert_snapshot!(output, @r"
-    f
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"f");
 
     // Empty squash shouldn't crash
     let output = test_env.run_jj_in(&repo_path, ["squash", "--from=none()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -953,7 +817,6 @@ fn test_squash_from_multiple_partial() {
     ├─╯
     ○  54d3c1c0e9fd a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // Partially squash a few commits sideways
@@ -970,7 +833,6 @@ fn test_squash_from_multiple_partial() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  a8530305127c f
@@ -983,19 +845,12 @@ fn test_squash_from_multiple_partial() {
     ├─╯
     ○  54d3c1c0e9fd a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The selected changes have been removed from the sources
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=b", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=c", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     // The selected changes from the sources have been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=d", "file1"]);
     insta::assert_snapshot!(output, @r"
@@ -1009,15 +864,11 @@ fn test_squash_from_multiple_partial() {
     +++++++ Contents of side #3
     c
     >>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
     // The unselected change from the sources have not been applied to the
     // destination
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=d", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    d
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"d");
 
     // Partially squash a few commits up an down
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -1027,7 +878,6 @@ fn test_squash_from_multiple_partial() {
     Rebased 1 descendant commits
     Working copy now at: kpqxywon 3b7559b8 f | (no description set)
     Parent commit      : yostqsxw a3b1714c e | (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  3b7559b89a57 f
@@ -1040,36 +890,20 @@ fn test_squash_from_multiple_partial() {
     ├─╯
     ○  54d3c1c0e9fd a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     // The selected changes have been removed from the sources
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=b", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=c", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=f", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    f
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"f");
     // The selected changes from the sources have been applied to the destination
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=e", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    f
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"f");
     // The unselected changes from the sources have not been applied
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "-r=d", "file2"]);
-    insta::assert_snapshot!(output, @r"
-    d
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"d");
 }
 
 #[test]
@@ -1109,7 +943,6 @@ fn test_squash_from_multiple_partial_no_op() {
     ├─╯
     ○  2443ea76b0b1 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 
     // Source commits that didn't match the paths are not rewritten
@@ -1122,7 +955,6 @@ fn test_squash_from_multiple_partial_no_op() {
     Working copy now at: mzvwutvl e178068a d
     Parent commit      : qpvuntsm 2443ea76 a
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  e178068add8c d
@@ -1130,7 +962,6 @@ fn test_squash_from_multiple_partial_no_op() {
     ├─╯
     ○  2443ea76b0b1 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -1147,7 +978,6 @@ fn test_squash_from_multiple_partial_no_op() {
     │ ○  a786561e909f b
     ○  b37ca1ee3306 d
     ○  1d9eb34614c9 d
-    [EOF]
     ");
 
     // If no source commits match the paths, then the whole operation is a no-op
@@ -1159,7 +989,6 @@ fn test_squash_from_multiple_partial_no_op() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  b37ca1ee3306 d
@@ -1169,7 +998,6 @@ fn test_squash_from_multiple_partial_no_op() {
     ├─╯
     ○  2443ea76b0b1 a
     ◆  000000000000 (empty)
-    [EOF]
     ");
 }
 
@@ -1210,10 +1038,7 @@ fn test_squash_description() {
         .run_jj_in(&repo_path, ["describe", "-m", "source"])
         .success();
     test_env.run_jj_in(&repo_path, ["squash"]).success();
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    source
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"source");
 
     // If the destination description is non-empty and the source's description is
     // empty, the resulting description is from the destination
@@ -1224,20 +1049,14 @@ fn test_squash_description() {
         .run_jj_in(&repo_path, ["describe", "@-", "-m", "destination"])
         .success();
     test_env.run_jj_in(&repo_path, ["squash"]).success();
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    destination
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"destination");
 
     // An explicit description on the command-line overrides this
     test_env.run_jj_in(&repo_path, ["undo"]).success();
     test_env
         .run_jj_in(&repo_path, ["squash", "-m", "custom"])
         .success();
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    custom
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"custom");
 
     // If both descriptions were non-empty, we get asked for a combined description
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -1250,7 +1069,6 @@ fn test_squash_description() {
     destination
 
     source
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
@@ -1274,10 +1092,7 @@ fn test_squash_description() {
     test_env
         .run_jj_in(&repo_path, ["squash", "-m", "custom"])
         .success();
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    custom
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"custom");
 
     // If the source's *content* doesn't become empty, then the source remains and
     // both descriptions are unchanged
@@ -1285,14 +1100,8 @@ fn test_squash_description() {
     test_env
         .run_jj_in(&repo_path, ["squash", "file1"])
         .success();
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    destination
-    [EOF]
-    ");
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@"), @r"
-    source
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"destination");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@"), @"source");
 }
 
 #[test]
@@ -1340,12 +1149,8 @@ fn test_squash_empty() {
     ------- stderr -------
     Working copy now at: kkmpptxz adece6e8 (empty) (no description set)
     Parent commit      : qpvuntsm 5076fc41 (empty) parent
-    [EOF]
     ");
-    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @r"
-    parent
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_description(&test_env, &repo_path, "@-"), @"parent");
 
     test_env
         .run_jj_in(&repo_path, ["describe", "-m", "child"])
@@ -1356,7 +1161,6 @@ fn test_squash_empty() {
     parent
 
     child
-    [EOF]
     ");
 }
 
@@ -1377,7 +1181,6 @@ fn test_squash_use_destination_message() {
     ○  017c7f689ed7 b
     ○  d8d5f980a897 a
     ◆  000000000000
-    [EOF]
     ");
 
     // Squash the current revision using the short name for the option.
@@ -1387,7 +1190,6 @@ fn test_squash_use_destination_message() {
     ○  3a17aa5dcce9 b
     ○  d8d5f980a897 a
     ◆  000000000000
-    [EOF]
     ");
 
     // Undo and squash again, but this time squash both "b" and "c" into "a".
@@ -1409,7 +1211,6 @@ fn test_squash_use_destination_message() {
     @  7c832accbf60
     ○  688660377651 a
     ◆  000000000000
-    [EOF]
     ");
 }
 
@@ -1437,7 +1238,6 @@ fn test_squash_use_destination_message_and_message_mutual_exclusion() {
     Usage: jj squash --message <MESSAGE> [FILESETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }

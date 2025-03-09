@@ -58,15 +58,11 @@ fn test_config_no_tools() {
     ------- stderr -------
     Config error: No `fix.tools` are configured
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    content
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"content");
 }
 
 #[test]
@@ -96,20 +92,11 @@ fn test_config_multiple_tools() {
     test_env.run_jj_in(&repo_path, ["fix"]).success();
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    FOO
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"FOO");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "bar", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    bar
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"bar");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "baz", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    Baz
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Baz");
 }
 
 #[test]
@@ -151,21 +138,14 @@ fn test_config_multiple_tools_with_same_name() {
 
     Hint: Check the config file: $TEST_ENV/config/config0002.toml
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
     test_env.set_config_path("/dev/null");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    Foo
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Foo");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "bar", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    Bar
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Bar");
 }
 
 #[test]
@@ -202,20 +182,11 @@ fn test_config_disabled_tools() {
     test_env.run_jj_in(&repo_path, ["fix"]).success();
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    FOO
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"FOO");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "bar", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    bar
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"bar");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "baz", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    Baz
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Baz");
 }
 
 #[test]
@@ -242,7 +213,6 @@ fn test_config_disabled_tools_warning_when_all_tools_are_disabled() {
     ------- stderr -------
     Config error: At least one entry of `fix.tools` must be enabled.
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -277,18 +247,18 @@ fn test_config_tables_overlapping_patterns() {
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     foo
-    tool-1[EOF]
+    tool-1[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "bar", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     bar
     tool-1
-    tool-2[EOF]
+    tool-2[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "baz", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     baz
-    tool-2[EOF]
+    tool-2[no newline]
     ");
 }
 
@@ -317,15 +287,11 @@ fn test_config_tables_all_commands_missing() {
 
     Hint: Check the config file: $TEST_ENV/config/config0002.toml
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    foo
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"foo");
 }
 
 #[test]
@@ -357,15 +323,11 @@ fn test_config_tables_some_commands_missing() {
 
     Hint: Check the config file: $TEST_ENV/config/config0002.toml
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    foo
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"foo");
 }
 
 #[test]
@@ -391,14 +353,10 @@ fn test_config_tables_empty_patterns_list() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    foo
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"foo");
 }
 
 #[test]
@@ -432,20 +390,11 @@ fn test_config_filesets() {
     test_env.run_jj_in(&repo_path, ["fix"]).success();
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "a1", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    A1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A1");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b1", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    1b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"1b");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b2", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    2b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"2b");
 }
 
 #[test]
@@ -476,37 +425,22 @@ fn test_relative_paths() {
         .run_jj_in(&repo_path.join("dir"), ["fix", "foo3"])
         .success();
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo1", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo2", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "dir/foo3", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
 
     // Positional arguments can specify a subset of the configured fileset.
     test_env
         .run_jj_in(&repo_path.join("dir"), ["fix", "../foo1"])
         .success();
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo1", "-r", "@"]);
-    insta::assert_snapshot!(output, @"Fixed![EOF]");
+    insta::assert_snapshot!(output, @"Fixed![no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo2", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "dir/foo3", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
 
     // The current directory does not change the interpretation of the config, so
     // foo2 is fixed but not dir/foo3.
@@ -514,14 +448,11 @@ fn test_relative_paths() {
         .run_jj_in(&repo_path.join("dir"), ["fix"])
         .success();
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo1", "-r", "@"]);
-    insta::assert_snapshot!(output, @"Fixed![EOF]");
+    insta::assert_snapshot!(output, @"Fixed![no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "foo2", "-r", "@"]);
-    insta::assert_snapshot!(output, @"Fixed![EOF]");
+    insta::assert_snapshot!(output, @"Fixed![no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "dir/foo3", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    unfixed
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"unfixed");
 }
 
 #[test]
@@ -532,7 +463,6 @@ fn test_fix_empty_commit() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -550,15 +480,11 @@ fn test_fix_leaf_commit() {
     Working copy now at: rlvkpnrz 85ce8924 (no description set)
     Parent commit      : qpvuntsm b2ca2bc5 (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@-"]);
-    insta::assert_snapshot!(output, @"unaffected[EOF]");
+    insta::assert_snapshot!(output, @"unaffected[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    AFFECTED
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"AFFECTED");
 }
 
 #[test]
@@ -589,23 +515,13 @@ fn test_fix_parent_commit() {
     Working copy now at: mzvwutvl d30c8ae2 child2 | (no description set)
     Parent commit      : qpvuntsm 70a4dae2 parent | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "parent"]);
-    insta::assert_snapshot!(output, @r"
-    PARENT
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"PARENT");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "child1"]);
-    insta::assert_snapshot!(output, @r"
-    CHILD1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHILD1");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "child2"]);
-    insta::assert_snapshot!(output, @r"
-    CHILD2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHILD2");
 }
 
 #[test]
@@ -632,17 +548,13 @@ fn test_fix_sibling_commit() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Fixed 1 commits of 1 checked.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "parent"]);
-    insta::assert_snapshot!(output, @"parent[EOF]");
+    insta::assert_snapshot!(output, @"parent[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "child1"]);
-    insta::assert_snapshot!(output, @r"
-    CHILD1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHILD1");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "child2"]);
-    insta::assert_snapshot!(output, @"child2[EOF]");
+    insta::assert_snapshot!(output, @"child2[no newline]");
 }
 
 #[test]
@@ -690,29 +602,19 @@ fn test_default_revset() {
     Working copy now at: yostqsxw dabc47b2 bar2 | (no description set)
     Parent commit      : yqosqzyt 984b5924 bar1 | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "trunk1"]);
-    insta::assert_snapshot!(output, @"trunk1[EOF]");
+    insta::assert_snapshot!(output, @"trunk1[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "trunk2"]);
-    insta::assert_snapshot!(output, @"trunk2[EOF]");
+    insta::assert_snapshot!(output, @"trunk2[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "foo"]);
-    insta::assert_snapshot!(output, @"foo[EOF]");
+    insta::assert_snapshot!(output, @"foo[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "bar1"]);
-    insta::assert_snapshot!(output, @r"
-    BAR1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR1");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "bar2"]);
-    insta::assert_snapshot!(output, @r"
-    BAR2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR2");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "bar3"]);
-    insta::assert_snapshot!(output, @r"
-    BAR3
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR3");
 }
 
 #[test]
@@ -740,15 +642,11 @@ fn test_custom_default_revset() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Fixed 1 commits of 1 checked.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "foo"]);
-    insta::assert_snapshot!(output, @"foo[EOF]");
+    insta::assert_snapshot!(output, @"foo[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "bar"]);
-    insta::assert_snapshot!(output, @r"
-    BAR
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR");
 }
 
 #[test]
@@ -775,13 +673,12 @@ fn test_fix_immutable_commit() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "immutable"]);
-    insta::assert_snapshot!(output, @"immutable[EOF]");
+    insta::assert_snapshot!(output, @"immutable[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "mutable"]);
-    insta::assert_snapshot!(output, @"mutable[EOF]");
+    insta::assert_snapshot!(output, @"mutable[no newline]");
 }
 
 #[test]
@@ -794,7 +691,6 @@ fn test_fix_empty_file() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
     insta::assert_snapshot!(output, @"");
@@ -813,15 +709,11 @@ fn test_fix_some_paths() {
     Working copy now at: qpvuntsm 54a90d2b (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    FOO
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"FOO");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @"bar[EOF]");
+    insta::assert_snapshot!(output, @"bar[no newline]");
 }
 
 #[test]
@@ -836,13 +728,9 @@ fn test_fix_cyclic() {
     Working copy now at: qpvuntsm bf5e6a5a (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    tnetnoc
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"tnetnoc");
 
     let output = test_env.run_jj_in(&repo_path, ["fix"]);
     insta::assert_snapshot!(output, @r"
@@ -851,13 +739,9 @@ fn test_fix_cyclic() {
     Working copy now at: qpvuntsm 0e2d20d6 (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    content
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"content");
 }
 
 #[test]
@@ -895,28 +779,15 @@ fn test_deduplication() {
     Working copy now at: yqosqzyt cf770245 d | (no description set)
     Parent commit      : mzvwutvl 370615a5 c | (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    FOO
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"FOO");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    BAR
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "c"]);
-    insta::assert_snapshot!(output, @r"
-    BAR
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"BAR");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "d"]);
-    insta::assert_snapshot!(output, @r"
-    FOO
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"FOO");
 
     // Each new content string only appears once in the log, because all the other
     // inputs (like file name) were identical, and so the results were reused. We
@@ -949,13 +820,9 @@ fn test_executed_but_nothing_changed() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    content
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"content");
     let copy_content = std::fs::read_to_string(repo_path.join("file-copy").as_os_str()).unwrap();
     insta::assert_snapshot!(copy_content, @"content");
 
@@ -967,7 +834,6 @@ fn test_executed_but_nothing_changed() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
 
     let copy_content = std::fs::read_to_string(repo_path.join("file-copy").as_os_str()).unwrap();
@@ -988,10 +854,9 @@ fn test_failure() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @"content[EOF]");
+    insta::assert_snapshot!(output, @"content[no newline]");
 }
 
 #[test]
@@ -1009,10 +874,9 @@ fn test_stderr_success() {
     Working copy now at: qpvuntsm 487808ba (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @"new content[EOF]");
+    insta::assert_snapshot!(output, @"new content[no newline]");
 }
 
 #[test]
@@ -1026,10 +890,9 @@ fn test_stderr_failure() {
     ------- stderr -------
     errorFixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @"old content[EOF]");
+    insta::assert_snapshot!(output, @"old content[no newline]");
 }
 
 #[test]
@@ -1050,7 +913,6 @@ fn test_missing_command() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -1068,13 +930,9 @@ fn test_fix_file_types() {
     Working copy now at: qpvuntsm 6836a9e4 (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CONTENT
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CONTENT");
 }
 
 #[cfg(unix)]
@@ -1094,13 +952,9 @@ fn test_fix_executable() {
     Working copy now at: qpvuntsm fee78e99 (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CONTENT
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CONTENT");
     let executable = std::fs::metadata(&path).unwrap().permissions().mode() & 0o111;
     assert_eq!(executable, 0o111);
 }
@@ -1128,14 +982,13 @@ fn test_fix_trivial_merge_commit() {
     ------- stderr -------
     Fixed 0 commits of 1 checked.
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_a", "-r", "@"]);
-    insta::assert_snapshot!(output, @"content a[EOF]");
+    insta::assert_snapshot!(output, @"content a[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_b", "-r", "@"]);
-    insta::assert_snapshot!(output, @"content b[EOF]");
+    insta::assert_snapshot!(output, @"content b[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_c", "-r", "@"]);
-    insta::assert_snapshot!(output, @"content c[EOF]");
+    insta::assert_snapshot!(output, @"content c[no newline]");
 }
 
 #[test]
@@ -1168,28 +1021,15 @@ fn test_fix_adding_merge_commit() {
     Parent commit      : qpvuntsm 6e64e7a7 a | (no description set)
     Parent commit      : kkmpptxz c536f264 b | (no description set)
     Added 0 files, modified 4 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_a", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CHANGE A
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHANGE A");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_b", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CHANGE B
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHANGE B");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_c", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CHANGE C
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHANGE C");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file_d", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CHANGE D
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CHANGE D");
 }
 
 #[test]
@@ -1218,18 +1058,11 @@ fn test_fix_both_sides_of_conflict() {
     Added 0 files, modified 1 files, removed 0 files
     Warning: There are unresolved conflicts at these paths:
     file    2-sided conflict
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "a"]);
-    insta::assert_snapshot!(output, @r"
-    CONTENT A
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CONTENT A");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "b"]);
-    insta::assert_snapshot!(output, @r"
-    CONTENT B
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CONTENT B");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     <<<<<<< Conflict 1 of 1
@@ -1238,7 +1071,6 @@ fn test_fix_both_sides_of_conflict() {
     +++++++ Contents of side #2
     CONTENT B
     >>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
 }
 
@@ -1268,13 +1100,9 @@ fn test_fix_resolve_conflict() {
     Parent commit      : qpvuntsm dd2721f1 a | (no description set)
     Parent commit      : kkmpptxz 07c27a8e b | (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    CONTENT
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"CONTENT");
 }
 
 #[test]
@@ -1338,50 +1166,31 @@ fn test_all_files() {
     Working copy now at: rlvkpnrz c098d165 child
     Parent commit      : qpvuntsm 0bb31627 parent
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "a/a", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    parent aaa
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent aaa");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b/b", "-r", "@-"]);
     insta::assert_snapshot!(output, @r"
     parent bbb
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "c/c", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    parent ccc
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ccc");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "ddd", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    parent ddd
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ddd");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "a/a", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    child aaa
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"child aaa");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b/b", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     parent bbb
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "c/c", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    parent ccc
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ccc");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "ddd", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    child ddd
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"child ddd");
 
     // Not specifying files means all files will be fixed in each revision.
     let output = test_env.run_jj_in(&repo_path, ["fix", "--include-unchanged-files"]);
@@ -1391,50 +1200,37 @@ fn test_all_files() {
     Working copy now at: rlvkpnrz c5d0aa1d child
     Parent commit      : qpvuntsm b4d02ca9 parent
     Added 0 files, modified 2 files, removed 0 files
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "a/a", "-r", "@-"]);
     insta::assert_snapshot!(output, @r"
     parent aaa
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b/b", "-r", "@-"]);
     insta::assert_snapshot!(output, @r"
     parent bbb
     fixed
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "c/c", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    parent ccc
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ccc");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "ddd", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    parent ddd
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ddd");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "a/a", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     child aaa
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "b/b", "-r", "@"]);
     insta::assert_snapshot!(output, @r"
     parent bbb
     fixed
-    fixed[EOF]
+    fixed[no newline]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "c/c", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    parent ccc
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"parent ccc");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "ddd", "-r", "@"]);
-    insta::assert_snapshot!(output, @r"
-    child ddd
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"child ddd");
 }

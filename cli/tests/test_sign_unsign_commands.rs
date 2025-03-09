@@ -52,7 +52,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 876f4b7e
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["sign", "-r", "..@"]);
@@ -65,7 +64,6 @@ backend = "test"
       zsuskuln 4947c6dd (empty) (no description set)
     Working copy now at: zsuskuln 4947c6dd (empty) (no description set)
     Parent commit      : kkmpptxz bcfaa4c3 (empty) three
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()"]);
@@ -79,7 +77,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:12 8174ec98 [✓︎]
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     // Commits already always signed, even if they are already signed by me.
@@ -94,7 +91,6 @@ backend = "test"
       zsuskuln 15d1b128 (empty) (no description set)
     Working copy now at: zsuskuln 15d1b128 (empty) (no description set)
     Parent commit      : kkmpptxz 227f5e15 (empty) three
-    [EOF]
     ");
 }
 
@@ -130,7 +126,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 876f4b7e
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -186,8 +181,6 @@ key = "some-key"
        Signature: good signature by test-display another-key
 
            one
-
-    [EOF]
     ");
 }
 
@@ -241,7 +234,6 @@ backend = "test"
     Rebased 1 descendant commits
     Working copy now at: zsuskuln ede04d15 (empty) (no description set)
     Parent commit      : kkmpptxz c2bc0eb0 (empty) three
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()"]);
@@ -255,7 +247,6 @@ backend = "test"
     ○  qpvuntsm someone@else.com 2001-02-03 08:05:12 254d1a64 [✓︎]
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -295,7 +286,6 @@ backend = "test"
     Rebased 1 descendant commits
     Working copy now at: kkmpptxz 29dc7928 (empty) C
     Parent commit      : rlvkpnrz 014c011c (empty) B
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()"]);
@@ -307,7 +297,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:11 034b975d [✓︎]
     │  (empty) A
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -331,7 +320,6 @@ backend = "none"
     ------- stderr -------
     Error: No signing backend configured
     Hint: For configuring a signing backend, see https://jj-vcs.github.io/jj/latest/config/#commit-signing
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -378,7 +366,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:11 b90f5370 [✓︎]
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["unsign", "-r", "..@"]);
@@ -391,7 +378,6 @@ backend = "test"
       zsuskuln be9daa4d (empty) (no description set)
     Working copy now at: zsuskuln be9daa4d (empty) (no description set)
     Parent commit      : kkmpptxz 7c11ee12 (empty) three
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()"]);
@@ -405,7 +391,6 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:13 cb05440c
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -460,7 +445,6 @@ backend = "test"
     Warning: 4 of these commits are not authored by you
     Working copy now at: zsuskuln 8cea2d75 (empty) (no description set)
     Parent commit      : kkmpptxz 8859969b (empty) three
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()"]);
@@ -474,6 +458,5 @@ backend = "test"
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:12 757aba72
     │  (empty) one
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }

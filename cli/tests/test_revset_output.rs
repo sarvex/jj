@@ -31,7 +31,6 @@ fn test_syntax_error() {
       |
       = `:` is not a prefix operator
     Hint: Did you mean `::` for ancestors?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -46,7 +45,6 @@ fn test_syntax_error() {
       |
       = expected `::`, `..`, `~`, or <primary>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for revsets syntax and how to quote symbols.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -61,7 +59,6 @@ fn test_syntax_error() {
       |
       = `-` is not an infix operator
     Hint: Did you mean `~` for difference?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -76,7 +73,6 @@ fn test_syntax_error() {
       |
       = `^` is not a postfix operator
     Hint: Did you mean `-` for parents?
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -97,7 +93,6 @@ fn test_bad_function_call() {
       |     ^---------^
       |
       = Function `all`: Expected 0 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -111,7 +106,6 @@ fn test_bad_function_call() {
       |         ^
       |
       = Function `parents`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -125,7 +119,6 @@ fn test_bad_function_call() {
       |         ^------^
       |
       = Function `parents`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -139,7 +132,6 @@ fn test_bad_function_call() {
       |       ^------^
       |
       = Function `heads`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -153,7 +145,6 @@ fn test_bad_function_call() {
       |           ^------------^
       |
       = Expected expression of type integer
-    [EOF]
     [exit status: 1]
     ");
 
@@ -168,7 +159,6 @@ fn test_bad_function_call() {
       |           ^
       |
       = Function `ancestors`: Expected 1 to 2 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -190,7 +180,6 @@ fn test_bad_function_call() {
       |
       = expected <identifier>, <string_literal>, or <raw_string_literal>
     Hint: See https://jj-vcs.github.io/jj/latest/filesets/ or use `jj help -k filesets` for filesets syntax and how to match file paths.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -212,7 +201,6 @@ fn test_bad_function_call() {
       |
       = Invalid file pattern
     3: Invalid file pattern kind `foo:`
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -235,7 +223,6 @@ fn test_bad_function_call() {
       = Invalid file pattern
     3: Path "../out" is not in the repo "."
     4: Invalid component ".." in repo-relative path "../out"
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -252,7 +239,6 @@ fn test_bad_function_call() {
       = Invalid string pattern
     2: Invalid string pattern kind `bad:`
     Hint: Try prefixing with one of `exact:`, `glob:`, `regex:`, or `substring:`
-    [EOF]
     [exit status: 1]
     ");
 
@@ -271,7 +257,6 @@ fn test_bad_function_call() {
         (
         ^
     error: unclosed group
-    [EOF]
     [exit status: 1]
     ");
 
@@ -285,7 +270,6 @@ fn test_bad_function_call() {
       |         ^------^
       |
       = Function `whatever` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -302,7 +286,6 @@ fn test_bad_function_call() {
       |                        ^------^
       |
       = Function `remote_bookmarks`: Got multiple values for keyword "remote"
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -316,7 +299,6 @@ fn test_bad_function_call() {
       |                            ^
       |
       = Function `remote_bookmarks`: Positional argument follows keyword argument
-    [EOF]
     [exit status: 1]
     ");
 
@@ -331,7 +313,6 @@ fn test_bad_function_call() {
       |
       = expected <strict_identifier> or <expression>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for revsets syntax and how to quote symbols.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -346,7 +327,6 @@ fn test_bad_function_call() {
       |
       = expected <expression>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for revsets syntax and how to quote symbols.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -379,7 +359,6 @@ fn test_function_name_hint() {
       |
       = Function `bookmark` doesn't exist
     Hint: Did you mean `bookmarks`, `remote_bookmarks`?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -394,7 +373,6 @@ fn test_function_name_hint() {
       |
       = Function `author_` doesn't exist
     Hint: Did you mean `author`, `author_date`, `author_email`, `author_name`, `my_author`?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -415,7 +393,6 @@ fn test_function_name_hint() {
       |
       = Function `bookmark` doesn't exist
     Hint: Did you mean `bookmarks`, `remote_bookmarks`?
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -440,16 +417,10 @@ fn test_alias() {
     );
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "my-root"]);
-    insta::assert_snapshot!(output, @r"
-    ◆  zzzzzzzz root() 00000000
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"◆  zzzzzzzz root() 00000000");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "identity(my-root)"]);
-    insta::assert_snapshot!(output, @r"
-    ◆  zzzzzzzz root() 00000000
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"◆  zzzzzzzz root() 00000000");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "root() & syntax-error"]);
     insta::assert_snapshot!(output, @r"
@@ -469,7 +440,6 @@ fn test_alias() {
       |
       = expected `::`, `..`, `~`, or <primary>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for revsets syntax and how to quote symbols.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -483,7 +453,6 @@ fn test_alias() {
       |          ^
       |
       = Function `identity`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -510,7 +479,6 @@ fn test_alias() {
       |           ^----^
       |
       = Expected expression of string pattern
-    [EOF]
     [exit status: 1]
     ");
 
@@ -543,7 +511,6 @@ fn test_alias() {
       | ^-----^
       |
       = Alias `recurse` expanded recursively
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -570,7 +537,6 @@ fn test_alias_override() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `arg` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -594,7 +560,6 @@ fn test_bad_alias_decl() {
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "my-root"]);
     insta::assert_snapshot!(output, @r#"
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ------- stderr -------
     Warning: Failed to load `revset-aliases."bad"`:  --> 1:1
       |
@@ -608,7 +573,6 @@ fn test_bad_alias_decl() {
       |       ^--^
       |
       = Redefinition of function parameter
-    [EOF]
     "#);
 }
 
@@ -627,14 +591,12 @@ fn test_all_modifier() {
       qpvuntsm 230dd059 (empty) (no description set)
       zzzzzzzz 00000000 (empty) (no description set)
     Hint: Prefix the expression with `all:` to allow any number of revisions (i.e. `all:all()`).
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["new", "all:all()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The Git backend does not support creating merge commits with the root commit as one of the parents.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -644,7 +606,6 @@ fn test_all_modifier() {
     @  qpvuntsm test.user@example.com 2001-02-03 08:05:07 230dd059
     │  (empty) (no description set)
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     // Command that accepts only single revision
@@ -652,7 +613,6 @@ fn test_all_modifier() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to qpvuntsm 230dd059 x | (empty) (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "set", "-rall:all()", "x"]);
     insta::assert_snapshot!(output, @r"
@@ -661,7 +621,6 @@ fn test_all_modifier() {
     Hint: The revset `all:all()` resolved to these revisions:
       qpvuntsm 230dd059 x | (empty) (no description set)
       zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
 
@@ -670,7 +629,6 @@ fn test_all_modifier() {
     insta::assert_snapshot!(output, @r"
     @  true
     ◆  true
-    [EOF]
     ");
 
     // Typo
@@ -684,7 +642,6 @@ fn test_all_modifier() {
       | ^-^
       |
       = Modifier `ale` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -709,7 +666,6 @@ fn test_all_modifier() {
       | ^-^
       |
       = Modifier `all:` is not allowed in sub expression
-    [EOF]
     [exit status: 1]
     ");
 
@@ -733,7 +689,6 @@ fn test_all_modifier() {
       |
       = Modifier `all:` is not allowed in sub expression
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -822,28 +777,20 @@ fn test_revset_committer_date_with_time_zone() {
 
     let (before_log, after_log) =
         log_commits_before_and_after("2023-01-25 12:00", "2023-02-01T00:00:00-05:00", NEW_YORK);
-    insta::assert_snapshot!(before_log, @r"
-    first 2023-01-25 11:30:00.000 -05:00
-    [EOF]
-    ");
+    insta::assert_snapshot!(before_log, @"first 2023-01-25 11:30:00.000 -05:00");
     insta::assert_snapshot!(after_log, @r"
     third 2023-01-25 13:30:00.000 -05:00
     second 2023-01-25 12:30:00.000 -05:00
-    [EOF]
     ");
 
     // Switch to DST and ensure we get the same results, because it should
     // evaluate 12:00 on commit date, not the current date
     let (before_log, after_log) =
         log_commits_before_and_after("2023-01-25 12:00", "2023-06-01T00:00:00-04:00", NEW_YORK);
-    insta::assert_snapshot!(before_log, @r"
-    first 2023-01-25 11:30:00.000 -05:00
-    [EOF]
-    ");
+    insta::assert_snapshot!(before_log, @"first 2023-01-25 11:30:00.000 -05:00");
     insta::assert_snapshot!(after_log, @r"
     third 2023-01-25 13:30:00.000 -05:00
     second 2023-01-25 12:30:00.000 -05:00
-    [EOF]
     ");
 
     // Change the local time zone and ensure the result changes
@@ -852,23 +799,15 @@ fn test_revset_committer_date_with_time_zone() {
     insta::assert_snapshot!(before_log, @r"
     second 2023-01-25 12:30:00.000 -05:00
     first 2023-01-25 11:30:00.000 -05:00
-    [EOF]
     ");
-    insta::assert_snapshot!(after_log, @r"
-    third 2023-01-25 13:30:00.000 -05:00
-    [EOF]
-    ");
+    insta::assert_snapshot!(after_log, @"third 2023-01-25 13:30:00.000 -05:00");
 
     // Time zone far outside USA with no DST
     let (before_log, after_log) =
         log_commits_before_and_after("2023-01-26 03:00", "2023-06-01T00:00:00+10:00", AUSTRALIA);
-    insta::assert_snapshot!(before_log, @r"
-    first 2023-01-25 11:30:00.000 -05:00
-    [EOF]
-    ");
+    insta::assert_snapshot!(before_log, @"first 2023-01-25 11:30:00.000 -05:00");
     insta::assert_snapshot!(after_log, @r"
     third 2023-01-25 13:30:00.000 -05:00
     second 2023-01-25 12:30:00.000 -05:00
-    [EOF]
     ");
 }

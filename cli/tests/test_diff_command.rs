@@ -42,7 +42,6 @@ fn test_diff_basic() {
        4     : 4
     Modified regular file file3 (file1 => file3):
     Modified regular file file4 (file2 => file4):
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--context=0"]);
@@ -54,27 +53,16 @@ fn test_diff_basic() {
        4     : 4
     Modified regular file file3 (file1 => file3):
     Modified regular file file4 (file2 => file4):
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    [38;5;3m<<diff header::Modified regular file file2:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: 1>>
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: >>[4m[38;5;1m<<diff removed token::2>>[38;5;2m<<diff added token::5>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   3>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: 3>>
-    [38;5;1m<<diff removed line_number::   4>>[39m<<diff::     : >>[4m[38;5;1m<<diff removed token::4>>[24m[39m
-    [38;5;3m<<diff header::Modified regular file file3 (file1 => file3):>>[39m
-    [38;5;3m<<diff header::Modified regular file file4 (file2 => file4):>>[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[38;5;3m<<diff header::Modified regular file file2:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: 1>>\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::2>>\u{1b}[38;5;2m<<diff added token::5>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   3>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: 3>>\n\u{1b}[38;5;1m<<diff removed line_number::   4>>\u{1b}[39m<<diff::     : >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::4>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file3 (file1 => file3):>>\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file4 (file2 => file4):>>\u{1b}[39m");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     M file2
     R {file1 => file3}
     C {file2 => file4}
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--types"]);
@@ -82,14 +70,12 @@ fn test_diff_basic() {
     FF file2
     FF {file1 => file3}
     FF {file2 => file4}
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--types", "glob:file[12]"]);
     insta::assert_snapshot!(output, @r"
     F- file1
     FF file2
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git", "file1"]);
@@ -101,7 +87,6 @@ fn test_diff_basic() {
     +++ /dev/null
     @@ -1,1 +0,0 @@
     -foo
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
@@ -122,7 +107,6 @@ fn test_diff_basic() {
     diff --git a/file2 b/file4
     copy from file2
     copy to file4
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git", "--context=0"]);
@@ -142,29 +126,10 @@ fn test_diff_basic() {
     diff --git a/file2 b/file4
     copy from file2
     copy to file4
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    [1m<<diff file_header::diff --git a/file2 b/file2>>[0m
-    [1m<<diff file_header::index 94ebaf9001..1ffc51b472 100644>>[0m
-    [1m<<diff file_header::--- a/file2>>[0m
-    [1m<<diff file_header::+++ b/file2>>[0m
-    [38;5;6m<<diff hunk_header::@@ -1,4 +1,3 @@>>[39m
-    <<diff context:: 1>>
-    [38;5;1m<<diff removed::->>[4m<<diff removed token::2>>[24m<<diff removed::>>[39m
-    [38;5;2m<<diff added::+>>[4m<<diff added token::5>>[24m<<diff added::>>[39m
-    <<diff context:: 3>>
-    [38;5;1m<<diff removed::->>[4m<<diff removed token::4>>[24m[39m
-    [1m<<diff file_header::diff --git a/file1 b/file3>>[0m
-    [1m<<diff file_header::rename from file1>>[0m
-    [1m<<diff file_header::rename to file3>>[0m
-    [1m<<diff file_header::diff --git a/file2 b/file4>>[0m
-    [1m<<diff file_header::copy from file2>>[0m
-    [1m<<diff file_header::copy to file4>>[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m<<diff file_header::diff --git a/file2 b/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::index 94ebaf9001..1ffc51b472 100644>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::--- a/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::+++ b/file2>>\u{1b}[0m\n\u{1b}[38;5;6m<<diff hunk_header::@@ -1,4 +1,3 @@>>\u{1b}[39m\n<<diff context:: 1>>\n\u{1b}[38;5;1m<<diff removed::->>\u{1b}[4m<<diff removed token::2>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+>>\u{1b}[4m<<diff added token::5>>\u{1b}[24m<<diff added::>>\u{1b}[39m\n<<diff context:: 3>>\n\u{1b}[38;5;1m<<diff removed::->>\u{1b}[4m<<diff removed token::4>>\u{1b}[24m\u{1b}[39m\n\u{1b}[1m<<diff file_header::diff --git a/file1 b/file3>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::rename from file1>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::rename to file3>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::diff --git a/file2 b/file4>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::copy from file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::copy to file4>>\u{1b}[0m");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -187,7 +152,6 @@ fn test_diff_basic() {
     diff --git a/file2 b/file4
     copy from file2
     copy to file4
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
@@ -196,7 +160,6 @@ fn test_diff_basic() {
     {file1 => file3} | 0
     {file2 => file4} | 0
     3 files changed, 1 insertion(+), 2 deletions(-)
-    [EOF]
     ");
 
     // Filter by glob pattern
@@ -204,7 +167,6 @@ fn test_diff_basic() {
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Unmatched paths should generate warnings
@@ -224,10 +186,8 @@ fn test_diff_basic() {
     M repo/file2
     R repo/{file1 => file3}
     C repo/{file2 => file4}
-    [EOF]
     ------- stderr -------
     Warning: No matching entries for paths: repo/x, repo/y/z
-    [EOF]
     ");
 
     // Unmodified paths shouldn't generate warnings
@@ -246,7 +206,6 @@ fn test_diff_empty() {
     insta::assert_snapshot!(output, @r"
     Added regular file file1:
         (empty)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -255,14 +214,12 @@ fn test_diff_empty() {
     insta::assert_snapshot!(output, @r"
     Removed regular file file1:
         (empty)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
     insta::assert_snapshot!(output, @r"
     file1 | 0
     1 file changed, 0 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 }
 
@@ -312,7 +269,6 @@ fn test_diff_file_mode() {
             1: 1
     Added regular file file4:
         (empty)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-r@-"]);
     insta::assert_snapshot!(output, @r"
@@ -322,7 +278,6 @@ fn test_diff_file_mode() {
     Non-executable file became executable at file3:
        1    1: 12
     Non-executable file became executable at file4:
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-r@"]);
     insta::assert_snapshot!(output, @r"
@@ -334,7 +289,6 @@ fn test_diff_file_mode() {
        1     : 2
     Removed executable file file4:
         (empty)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-r@--", "--git"]);
@@ -359,7 +313,6 @@ fn test_diff_file_mode() {
     diff --git a/file4 b/file4
     new file mode 100644
     index 0000000000..e69de29bb2
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-r@-", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -386,7 +339,6 @@ fn test_diff_file_mode() {
     diff --git a/file4 b/file4
     old mode 100644
     new mode 100755
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-r@", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -414,7 +366,6 @@ fn test_diff_file_mode() {
     diff --git a/file4 b/file4
     deleted file mode 100755
     index e69de29bb2..0000000000
-    [EOF]
     ");
 }
 
@@ -478,29 +429,14 @@ fn test_diff_types() {
             ],
         )
     };
-    insta::assert_snapshot!(diff("missing", "file"), @r"
-    -F foo
-    [EOF]
-    ");
-    insta::assert_snapshot!(diff("file", "conflict"), @r"
-    FC foo
-    [EOF]
-    ");
-    insta::assert_snapshot!(diff("conflict", "missing"), @r"
-    C- foo
-    [EOF]
-    ");
+    insta::assert_snapshot!(diff("missing", "file"), @"-F foo");
+    insta::assert_snapshot!(diff("file", "conflict"), @"FC foo");
+    insta::assert_snapshot!(diff("conflict", "missing"), @"C- foo");
 
     #[cfg(unix)]
     {
-        insta::assert_snapshot!(diff("symlink", "file"), @r"
-        LF foo
-        [EOF]
-        ");
-        insta::assert_snapshot!(diff("missing", "executable"), @r"
-        -F foo
-        [EOF]
-        ");
+        insta::assert_snapshot!(diff("symlink", "file"), @"LF foo");
+        insta::assert_snapshot!(diff("missing", "executable"), @"-F foo");
     }
 }
 
@@ -516,7 +452,6 @@ fn test_diff_name_only() {
     insta::assert_snapshot!(test_env.run_jj_in(&repo_path, ["diff", "--name-only"]), @r"
     deleted
     modified
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["commit", "-mfirst"])
@@ -532,7 +467,6 @@ fn test_diff_name_only() {
     deleted
     modified
     sub/added
-    [EOF]
     ");
 }
 
@@ -550,7 +484,6 @@ fn test_diff_bad_args() {
     Usage: jj diff --summary [FILESETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -562,7 +495,6 @@ fn test_diff_bad_args() {
     Usage: jj diff --color-words [FILESETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -604,7 +536,6 @@ fn test_diff_relative_paths() {
        1    1: foo4bar4
     Modified regular file ../file1:
        1    1: foo1bar1
-    [EOF]
     ");
     #[cfg(windows)]
     insta::assert_snapshot!(output, @r"
@@ -626,7 +557,6 @@ fn test_diff_relative_paths() {
     M subdir1/file3
     M ../dir2/file4
     M ../file1
-    [EOF]
     ");
     #[cfg(windows)]
     insta::assert_snapshot!(output, @r"
@@ -644,7 +574,6 @@ fn test_diff_relative_paths() {
     FF subdir1/file3
     FF ../dir2/file4
     FF ../file1
-    [EOF]
     ");
     #[cfg(windows)]
     insta::assert_snapshot!(output, @r"
@@ -685,7 +614,6 @@ fn test_diff_relative_paths() {
     @@ -1,1 +1,1 @@
     -foo1
     +bar1
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path.join("dir1"), ["diff", "--stat"]);
@@ -696,7 +624,6 @@ fn test_diff_relative_paths() {
     ../dir2/file4 | 2 +-
     ../file1      | 2 +-
     4 files changed, 4 insertions(+), 4 deletions(-)
-    [EOF]
     ");
     #[cfg(windows)]
     insta::assert_snapshot!(output, @r"
@@ -735,21 +662,10 @@ fn test_diff_hunks() {
        1    1: foo
             2: bar
        2    3: baz quxquux blah blah
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    [38;5;3m<<diff header::Modified regular file file1:>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::foo>>[24m[39m
-    [38;5;3m<<diff header::Modified regular file file2:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff::     : >>[4m[38;5;1m<<diff removed token::foo>>[24m[39m
-    [38;5;3m<<diff header::Modified regular file file3:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: foo>>
-    <<diff::     >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::bar>>[24m[39m
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: baz >>[4m[38;5;1m<<diff removed token::qux>>[38;5;2m<<diff added token::quux>>[24m[39m<<diff:: blah blah>>
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[38;5;3m<<diff header::Modified regular file file1:>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::foo>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file2:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff::     : >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::foo>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file3:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: foo>>\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::bar>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: baz >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::qux>>\u{1b}[38;5;2m<<diff added token::quux>>\u{1b}[24m\u{1b}[39m<<diff:: blah blah>>");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -774,34 +690,10 @@ fn test_diff_hunks() {
     -baz qux blah blah
     +bar
     +baz quux blah blah
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    [1m<<diff file_header::diff --git a/file1 b/file1>>[0m
-    [1m<<diff file_header::index e69de29bb2..257cc5642c 100644>>[0m
-    [1m<<diff file_header::--- a/file1>>[0m
-    [1m<<diff file_header::+++ b/file1>>[0m
-    [38;5;6m<<diff hunk_header::@@ -0,0 +1,1 @@>>[39m
-    [38;5;2m<<diff added::+>>[4m<<diff added token::foo>>[24m[39m
-    [1m<<diff file_header::diff --git a/file2 b/file2>>[0m
-    [1m<<diff file_header::index 257cc5642c..e69de29bb2 100644>>[0m
-    [1m<<diff file_header::--- a/file2>>[0m
-    [1m<<diff file_header::+++ b/file2>>[0m
-    [38;5;6m<<diff hunk_header::@@ -1,1 +0,0 @@>>[39m
-    [38;5;1m<<diff removed::->>[4m<<diff removed token::foo>>[24m[39m
-    [1m<<diff file_header::diff --git a/file3 b/file3>>[0m
-    [1m<<diff file_header::index 221a95a095..a543ef3892 100644>>[0m
-    [1m<<diff file_header::--- a/file3>>[0m
-    [1m<<diff file_header::+++ b/file3>>[0m
-    [38;5;6m<<diff hunk_header::@@ -1,2 +1,3 @@>>[39m
-    <<diff context:: foo>>
-    [38;5;1m<<diff removed::-baz >>[4m<<diff removed token::qux>>[24m<<diff removed:: blah blah>>[39m
-    [38;5;2m<<diff added::+>>[4m<<diff added token::bar>>[24m[39m
-    [38;5;2m<<diff added::+baz >>[4m<<diff added token::quux>>[24m<<diff added:: blah blah>>[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m<<diff file_header::diff --git a/file1 b/file1>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::index e69de29bb2..257cc5642c 100644>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::--- a/file1>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::+++ b/file1>>\u{1b}[0m\n\u{1b}[38;5;6m<<diff hunk_header::@@ -0,0 +1,1 @@>>\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+>>\u{1b}[4m<<diff added token::foo>>\u{1b}[24m\u{1b}[39m\n\u{1b}[1m<<diff file_header::diff --git a/file2 b/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::index 257cc5642c..e69de29bb2 100644>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::--- a/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::+++ b/file2>>\u{1b}[0m\n\u{1b}[38;5;6m<<diff hunk_header::@@ -1,1 +0,0 @@>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed::->>\u{1b}[4m<<diff removed token::foo>>\u{1b}[24m\u{1b}[39m\n\u{1b}[1m<<diff file_header::diff --git a/file3 b/file3>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::index 221a95a095..a543ef3892 100644>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::--- a/file3>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::+++ b/file3>>\u{1b}[0m\n\u{1b}[38;5;6m<<diff hunk_header::@@ -1,2 +1,3 @@>>\u{1b}[39m\n<<diff context:: foo>>\n\u{1b}[38;5;1m<<diff removed::-baz >>\u{1b}[4m<<diff removed token::qux>>\u{1b}[24m<<diff removed:: blah blah>>\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+>>\u{1b}[4m<<diff added token::bar>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+baz >>\u{1b}[4m<<diff added token::quux>>\u{1b}[24m<<diff added:: blah blah>>\u{1b}[39m");
 }
 
 #[test]
@@ -967,7 +859,6 @@ fn test_diff_color_words_inlining_threshold() {
       14     : c d e f g
            13: X a Y b d
            14: Z e
-    [EOF]
     ");
 
     // -1: inline all
@@ -1010,7 +901,6 @@ fn test_diff_color_words_inlining_threshold() {
       13   13: X a Y b
       14   13: c d
       14   14: Z e f g
-    [EOF]
     ");
 
     // 0: no inlining
@@ -1068,7 +958,6 @@ fn test_diff_color_words_inlining_threshold() {
       14     : c d e f g
            13: X a Y b d
            14: Z e
-    [EOF]
     ");
 
     // 1: inline adds-only or removes-only lines
@@ -1122,7 +1011,6 @@ fn test_diff_color_words_inlining_threshold() {
       14     : c d e f g
            13: X a Y b d
            14: Z e
-    [EOF]
     ");
 
     // 2: inline up to adds + removes lines
@@ -1171,7 +1059,6 @@ fn test_diff_color_words_inlining_threshold() {
       14     : c d e f g
            13: X a Y b d
            14: Z e
-    [EOF]
     ");
 
     // 3: inline up to adds + removes + adds lines
@@ -1218,7 +1105,6 @@ fn test_diff_color_words_inlining_threshold() {
       14     : c d e f g
            13: X a Y b d
            14: Z e
-    [EOF]
     ");
 
     // 4: inline up to adds + removes + adds + removes lines
@@ -1261,104 +1147,11 @@ fn test_diff_color_words_inlining_threshold() {
       13   13: X a Y b
       14   13: c d
       14   14: Z e f g
-    [EOF]
     ");
 
     // context words in added/removed lines should be labeled as such
-    insta::assert_snapshot!(render_diff(2, &["--color=always"]), @r"
-    [38;5;3mModified regular file file1-single-line:[39m
-    [38;5;1m   1[39m [38;5;2m   1[39m: == adds ==
-    [38;5;1m   2[39m [38;5;2m   2[39m: a [4m[38;5;2mX [24m[39mb [4m[38;5;2mY Z [24m[39mc
-    [38;5;1m   3[39m [38;5;2m   3[39m: == removes ==
-    [38;5;1m   4[39m [38;5;2m   4[39m: a [4m[38;5;1mb [24m[39mc [4m[38;5;1md e [24m[39mf[4m[38;5;1m g[24m[39m
-    [38;5;1m   5[39m [38;5;2m   5[39m: == adds + removes ==
-    [38;5;1m   6[39m [38;5;2m   6[39m: a [4m[38;5;2mX [24m[39mb [4m[38;5;1mc [24m[39md[4m[38;5;1m e[24m[39m
-    [38;5;1m   7[39m [38;5;2m   7[39m: == adds + removes + adds ==
-    [38;5;1m   8[39m     : [38;5;1ma b [4mc [24md [4me[24m[39m
-         [38;5;2m   8[39m: [38;5;2ma [4mX [24mb d [4mY[24m[39m
-    [38;5;1m   9[39m [38;5;2m   9[39m: == adds + removes + adds + removes ==
-    [38;5;1m  10[39m     : [38;5;1ma b [4mc [24md e[4m f g[24m[39m
-         [38;5;2m  10[39m: [4m[38;5;2mX [24ma [4mY [24mb d [4mZ [24me[39m
-    [38;5;3mModified regular file file2-multiple-lines-in-single-hunk:[39m
-    [38;5;1m   1[39m [38;5;2m   1[39m: == adds; removes; adds + removes ==
-    [38;5;1m   2[39m [38;5;2m   2[39m: a [4m[38;5;2mX [24m[39mb [4m[38;5;2mY Z [24m[39mc
-    [38;5;1m   3[39m [38;5;2m   3[39m: a [4m[38;5;1mb [24m[39mc [4m[38;5;1md e [24m[39mf[4m[38;5;1m g[24m[39m
-    [38;5;1m   4[39m [38;5;2m   4[39m: a [4m[38;5;2mX [24m[39mb [4m[38;5;1mc [24m[39md[4m[38;5;1m e[24m[39m
-    [38;5;1m   5[39m [38;5;2m   5[39m: == adds + removes + adds; adds + removes + adds + removes ==
-    [38;5;1m   6[39m     : [38;5;1ma b [4mc [24md [4me[24m[39m
-    [38;5;1m   7[39m     : [38;5;1ma b [4mc [24md e[4m f g[24m[39m
-         [38;5;2m   6[39m: [38;5;2ma [4mX [24mb d [4mY[24m[39m
-         [38;5;2m   7[39m: [4m[38;5;2mX [24ma [4mY [24mb d [4mZ [24me[39m
-    [38;5;3mModified regular file file3-changes-across-lines:[39m
-    [38;5;1m   1[39m [38;5;2m   1[39m: == adds ==
-    [38;5;1m   2[39m [38;5;2m   2[39m: a [4m[38;5;2mX [24m[39mb[4m[38;5;2m[24m[39m
-    [38;5;1m   2[39m [38;5;2m   3[39m: [4m[38;5;2mY Z[24m[39m c
-    [38;5;1m   3[39m [38;5;2m   4[39m: == removes ==
-    [38;5;1m   4[39m [38;5;2m   5[39m: a [4m[38;5;1mb [24m[39mc [4m[38;5;1md[24m[39m
-    [38;5;1m   5[39m [38;5;2m   5[39m: [4m[38;5;1me [24m[39mf[4m[38;5;1m g[24m[39m
-    [38;5;1m   6[39m [38;5;2m   6[39m: == adds + removes ==
-    [38;5;1m   7[39m [38;5;2m   7[39m: a[4m[38;5;2m[24m[39m
-    [38;5;1m   7[39m [38;5;2m   8[39m: [4m[38;5;2mX[24m[39m b [4m[38;5;1mc[24m[39m
-    [38;5;1m   8[39m [38;5;2m   8[39m: d[4m[38;5;1m e[24m[39m
-    [38;5;1m   9[39m [38;5;2m   9[39m: == adds + removes + adds ==
-    [38;5;1m  10[39m     : [38;5;1ma b [4mc[24m[39m
-    [38;5;1m  11[39m     : [38;5;1md[4m e[24m[39m
-         [38;5;2m  10[39m: [38;5;2ma [4mX [24mb d[4m[24m[39m
-         [38;5;2m  11[39m: [4m[38;5;2mY[24m[39m
-    [38;5;1m  12[39m [38;5;2m  12[39m: == adds + removes + adds + removes ==
-    [38;5;1m  13[39m     : [38;5;1ma b[4m[24m[39m
-    [38;5;1m  14[39m     : [4m[38;5;1mc[24m d e[4m f g[24m[39m
-         [38;5;2m  13[39m: [4m[38;5;2mX [24ma [4mY [24mb d[4m[24m[39m
-         [38;5;2m  14[39m: [4m[38;5;2mZ[24m e[39m
-    [EOF]
-    ");
-    insta::assert_snapshot!(render_diff(2, &["--color=debug"]), @r"
-    [38;5;3m<<diff header::Modified regular file file1-single-line:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: == adds ==>>
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: a >>[4m[38;5;2m<<diff added token::X >>[24m[39m<<diff::b >>[4m[38;5;2m<<diff added token::Y Z >>[24m[39m<<diff::c>>
-    [38;5;1m<<diff removed line_number::   3>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: == removes ==>>
-    [38;5;1m<<diff removed line_number::   4>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   4>>[39m<<diff::: a >>[4m[38;5;1m<<diff removed token::b >>[24m[39m<<diff::c >>[4m[38;5;1m<<diff removed token::d e >>[24m[39m<<diff::f>>[4m[38;5;1m<<diff removed token:: g>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   5>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   5>>[39m<<diff::: == adds + removes ==>>
-    [38;5;1m<<diff removed line_number::   6>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   6>>[39m<<diff::: a >>[4m[38;5;2m<<diff added token::X >>[24m[39m<<diff::b >>[4m[38;5;1m<<diff removed token::c >>[24m[39m<<diff::d>>[4m[38;5;1m<<diff removed token:: e>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   7>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   7>>[39m<<diff::: == adds + removes + adds ==>>
-    [38;5;1m<<diff removed line_number::   8>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b >>[4m<<diff removed token::c >>[24m<<diff removed::d >>[4m<<diff removed token::e>>[24m<<diff removed::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::   8>>[39m<<diff::: >>[38;5;2m<<diff added::a >>[4m<<diff added token::X >>[24m<<diff added::b d >>[4m<<diff added token::Y>>[24m<<diff added::>>[39m
-    [38;5;1m<<diff removed line_number::   9>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   9>>[39m<<diff::: == adds + removes + adds + removes ==>>
-    [38;5;1m<<diff removed line_number::  10>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b >>[4m<<diff removed token::c >>[24m<<diff removed::d e>>[4m<<diff removed token:: f g>>[24m<<diff removed::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::  10>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::X >>[24m<<diff added::a >>[4m<<diff added token::Y >>[24m<<diff added::b d >>[4m<<diff added token::Z >>[24m<<diff added::e>>[39m
-    [38;5;3m<<diff header::Modified regular file file2-multiple-lines-in-single-hunk:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: == adds; removes; adds + removes ==>>
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: a >>[4m[38;5;2m<<diff added token::X >>[24m[39m<<diff::b >>[4m[38;5;2m<<diff added token::Y Z >>[24m[39m<<diff::c>>
-    [38;5;1m<<diff removed line_number::   3>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: a >>[4m[38;5;1m<<diff removed token::b >>[24m[39m<<diff::c >>[4m[38;5;1m<<diff removed token::d e >>[24m[39m<<diff::f>>[4m[38;5;1m<<diff removed token:: g>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   4>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   4>>[39m<<diff::: a >>[4m[38;5;2m<<diff added token::X >>[24m[39m<<diff::b >>[4m[38;5;1m<<diff removed token::c >>[24m[39m<<diff::d>>[4m[38;5;1m<<diff removed token:: e>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   5>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   5>>[39m<<diff::: == adds + removes + adds; adds + removes + adds + removes ==>>
-    [38;5;1m<<diff removed line_number::   6>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b >>[4m<<diff removed token::c >>[24m<<diff removed::d >>[4m<<diff removed token::e>>[24m<<diff removed::>>[39m
-    [38;5;1m<<diff removed line_number::   7>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b >>[4m<<diff removed token::c >>[24m<<diff removed::d e>>[4m<<diff removed token:: f g>>[24m<<diff removed::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::   6>>[39m<<diff::: >>[38;5;2m<<diff added::a >>[4m<<diff added token::X >>[24m<<diff added::b d >>[4m<<diff added token::Y>>[24m<<diff added::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::   7>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::X >>[24m<<diff added::a >>[4m<<diff added token::Y >>[24m<<diff added::b d >>[4m<<diff added token::Z >>[24m<<diff added::e>>[39m
-    [38;5;3m<<diff header::Modified regular file file3-changes-across-lines:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: == adds ==>>
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: a >>[4m[38;5;2m<<diff added token::X >>[24m[39m<<diff::b>>[4m[38;5;2m<<diff added token::>>[24m[39m
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::Y Z>>[24m[39m<<diff:: c>>
-    [38;5;1m<<diff removed line_number::   3>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   4>>[39m<<diff::: == removes ==>>
-    [38;5;1m<<diff removed line_number::   4>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   5>>[39m<<diff::: a >>[4m[38;5;1m<<diff removed token::b >>[24m[39m<<diff::c >>[4m[38;5;1m<<diff removed token::d>>[24m[39m
-    [38;5;1m<<diff removed line_number::   5>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   5>>[39m<<diff::: >>[4m[38;5;1m<<diff removed token::e >>[24m[39m<<diff::f>>[4m[38;5;1m<<diff removed token:: g>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   6>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   6>>[39m<<diff::: == adds + removes ==>>
-    [38;5;1m<<diff removed line_number::   7>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   7>>[39m<<diff::: a>>[4m[38;5;2m<<diff added token::>>[24m[39m
-    [38;5;1m<<diff removed line_number::   7>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   8>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::X>>[24m[39m<<diff:: b >>[4m[38;5;1m<<diff removed token::c>>[24m[39m
-    [38;5;1m<<diff removed line_number::   8>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   8>>[39m<<diff::: d>>[4m[38;5;1m<<diff removed token:: e>>[24m[39m<<diff::>>
-    [38;5;1m<<diff removed line_number::   9>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   9>>[39m<<diff::: == adds + removes + adds ==>>
-    [38;5;1m<<diff removed line_number::  10>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b >>[4m<<diff removed token::c>>[24m[39m
-    [38;5;1m<<diff removed line_number::  11>>[39m<<diff::     : >>[38;5;1m<<diff removed::d>>[4m<<diff removed token:: e>>[24m<<diff removed::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::  10>>[39m<<diff::: >>[38;5;2m<<diff added::a >>[4m<<diff added token::X >>[24m<<diff added::b d>>[4m<<diff added token::>>[24m[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::  11>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::Y>>[24m<<diff added::>>[39m
-    [38;5;1m<<diff removed line_number::  12>>[39m<<diff:: >>[38;5;2m<<diff added line_number::  12>>[39m<<diff::: == adds + removes + adds + removes ==>>
-    [38;5;1m<<diff removed line_number::  13>>[39m<<diff::     : >>[38;5;1m<<diff removed::a b>>[4m<<diff removed token::>>[24m[39m
-    [38;5;1m<<diff removed line_number::  14>>[39m<<diff::     : >>[4m[38;5;1m<<diff removed token::c>>[24m<<diff removed:: d e>>[4m<<diff removed token:: f g>>[24m<<diff removed::>>[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::  13>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::X >>[24m<<diff added::a >>[4m<<diff added token::Y >>[24m<<diff added::b d>>[4m<<diff added token::>>[24m[39m
-    <<diff::     >>[38;5;2m<<diff added line_number::  14>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::Z>>[24m<<diff added:: e>>[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(render_diff(2, &["--color=always"]), @"\u{1b}[38;5;3mModified regular file file1-single-line:\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   1\u{1b}[39m: == adds ==\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24m\u{1b}[39mb \u{1b}[4m\u{1b}[38;5;2mY Z \u{1b}[24m\u{1b}[39mc\n\u{1b}[38;5;1m   3\u{1b}[39m \u{1b}[38;5;2m   3\u{1b}[39m: == removes ==\n\u{1b}[38;5;1m   4\u{1b}[39m \u{1b}[38;5;2m   4\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;1mb \u{1b}[24m\u{1b}[39mc \u{1b}[4m\u{1b}[38;5;1md e \u{1b}[24m\u{1b}[39mf\u{1b}[4m\u{1b}[38;5;1m g\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   5\u{1b}[39m \u{1b}[38;5;2m   5\u{1b}[39m: == adds + removes ==\n\u{1b}[38;5;1m   6\u{1b}[39m \u{1b}[38;5;2m   6\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24m\u{1b}[39mb \u{1b}[4m\u{1b}[38;5;1mc \u{1b}[24m\u{1b}[39md\u{1b}[4m\u{1b}[38;5;1m e\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   7\u{1b}[39m \u{1b}[38;5;2m   7\u{1b}[39m: == adds + removes + adds ==\n\u{1b}[38;5;1m   8\u{1b}[39m     : \u{1b}[38;5;1ma b \u{1b}[4mc \u{1b}[24md \u{1b}[4me\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m   8\u{1b}[39m: \u{1b}[38;5;2ma \u{1b}[4mX \u{1b}[24mb d \u{1b}[4mY\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   9\u{1b}[39m \u{1b}[38;5;2m   9\u{1b}[39m: == adds + removes + adds + removes ==\n\u{1b}[38;5;1m  10\u{1b}[39m     : \u{1b}[38;5;1ma b \u{1b}[4mc \u{1b}[24md e\u{1b}[4m f g\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m  10\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24ma \u{1b}[4mY \u{1b}[24mb d \u{1b}[4mZ \u{1b}[24me\u{1b}[39m\n\u{1b}[38;5;3mModified regular file file2-multiple-lines-in-single-hunk:\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   1\u{1b}[39m: == adds; removes; adds + removes ==\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24m\u{1b}[39mb \u{1b}[4m\u{1b}[38;5;2mY Z \u{1b}[24m\u{1b}[39mc\n\u{1b}[38;5;1m   3\u{1b}[39m \u{1b}[38;5;2m   3\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;1mb \u{1b}[24m\u{1b}[39mc \u{1b}[4m\u{1b}[38;5;1md e \u{1b}[24m\u{1b}[39mf\u{1b}[4m\u{1b}[38;5;1m g\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   4\u{1b}[39m \u{1b}[38;5;2m   4\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24m\u{1b}[39mb \u{1b}[4m\u{1b}[38;5;1mc \u{1b}[24m\u{1b}[39md\u{1b}[4m\u{1b}[38;5;1m e\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   5\u{1b}[39m \u{1b}[38;5;2m   5\u{1b}[39m: == adds + removes + adds; adds + removes + adds + removes ==\n\u{1b}[38;5;1m   6\u{1b}[39m     : \u{1b}[38;5;1ma b \u{1b}[4mc \u{1b}[24md \u{1b}[4me\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   7\u{1b}[39m     : \u{1b}[38;5;1ma b \u{1b}[4mc \u{1b}[24md e\u{1b}[4m f g\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m   6\u{1b}[39m: \u{1b}[38;5;2ma \u{1b}[4mX \u{1b}[24mb d \u{1b}[4mY\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m   7\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24ma \u{1b}[4mY \u{1b}[24mb d \u{1b}[4mZ \u{1b}[24me\u{1b}[39m\n\u{1b}[38;5;3mModified regular file file3-changes-across-lines:\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   1\u{1b}[39m: == adds ==\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24m\u{1b}[39mb\u{1b}[4m\u{1b}[38;5;2m\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   3\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mY Z\u{1b}[24m\u{1b}[39m c\n\u{1b}[38;5;1m   3\u{1b}[39m \u{1b}[38;5;2m   4\u{1b}[39m: == removes ==\n\u{1b}[38;5;1m   4\u{1b}[39m \u{1b}[38;5;2m   5\u{1b}[39m: a \u{1b}[4m\u{1b}[38;5;1mb \u{1b}[24m\u{1b}[39mc \u{1b}[4m\u{1b}[38;5;1md\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   5\u{1b}[39m \u{1b}[38;5;2m   5\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;1me \u{1b}[24m\u{1b}[39mf\u{1b}[4m\u{1b}[38;5;1m g\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   6\u{1b}[39m \u{1b}[38;5;2m   6\u{1b}[39m: == adds + removes ==\n\u{1b}[38;5;1m   7\u{1b}[39m \u{1b}[38;5;2m   7\u{1b}[39m: a\u{1b}[4m\u{1b}[38;5;2m\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   7\u{1b}[39m \u{1b}[38;5;2m   8\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mX\u{1b}[24m\u{1b}[39m b \u{1b}[4m\u{1b}[38;5;1mc\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   8\u{1b}[39m \u{1b}[38;5;2m   8\u{1b}[39m: d\u{1b}[4m\u{1b}[38;5;1m e\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   9\u{1b}[39m \u{1b}[38;5;2m   9\u{1b}[39m: == adds + removes + adds ==\n\u{1b}[38;5;1m  10\u{1b}[39m     : \u{1b}[38;5;1ma b \u{1b}[4mc\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m  11\u{1b}[39m     : \u{1b}[38;5;1md\u{1b}[4m e\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m  10\u{1b}[39m: \u{1b}[38;5;2ma \u{1b}[4mX \u{1b}[24mb d\u{1b}[4m\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m  11\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mY\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m  12\u{1b}[39m \u{1b}[38;5;2m  12\u{1b}[39m: == adds + removes + adds + removes ==\n\u{1b}[38;5;1m  13\u{1b}[39m     : \u{1b}[38;5;1ma b\u{1b}[4m\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m  14\u{1b}[39m     : \u{1b}[4m\u{1b}[38;5;1mc\u{1b}[24m d e\u{1b}[4m f g\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m  13\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mX \u{1b}[24ma \u{1b}[4mY \u{1b}[24mb d\u{1b}[4m\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m  14\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mZ\u{1b}[24m e\u{1b}[39m");
+    insta::assert_snapshot!(render_diff(2, &["--color=debug"]), @"\u{1b}[38;5;3m<<diff header::Modified regular file file1-single-line:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: == adds ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m\u{1b}[39m<<diff::b >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::Y Z >>\u{1b}[24m\u{1b}[39m<<diff::c>>\n\u{1b}[38;5;1m<<diff removed line_number::   3>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: == removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   4>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   4>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::b >>\u{1b}[24m\u{1b}[39m<<diff::c >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::d e >>\u{1b}[24m\u{1b}[39m<<diff::f>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: g>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   5>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   5>>\u{1b}[39m<<diff::: == adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   6>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   6>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m\u{1b}[39m<<diff::b >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::c >>\u{1b}[24m\u{1b}[39m<<diff::d>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: e>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   7>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   7>>\u{1b}[39m<<diff::: == adds + removes + adds ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   8>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b >>\u{1b}[4m<<diff removed token::c >>\u{1b}[24m<<diff removed::d >>\u{1b}[4m<<diff removed token::e>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   8>>\u{1b}[39m<<diff::: >>\u{1b}[38;5;2m<<diff added::a >>\u{1b}[4m<<diff added token::X >>\u{1b}[24m<<diff added::b d >>\u{1b}[4m<<diff added token::Y>>\u{1b}[24m<<diff added::>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   9>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   9>>\u{1b}[39m<<diff::: == adds + removes + adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::  10>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b >>\u{1b}[4m<<diff removed token::c >>\u{1b}[24m<<diff removed::d e>>\u{1b}[4m<<diff removed token:: f g>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::  10>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m<<diff added::a >>\u{1b}[4m<<diff added token::Y >>\u{1b}[24m<<diff added::b d >>\u{1b}[4m<<diff added token::Z >>\u{1b}[24m<<diff added::e>>\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file2-multiple-lines-in-single-hunk:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: == adds; removes; adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m\u{1b}[39m<<diff::b >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::Y Z >>\u{1b}[24m\u{1b}[39m<<diff::c>>\n\u{1b}[38;5;1m<<diff removed line_number::   3>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::b >>\u{1b}[24m\u{1b}[39m<<diff::c >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::d e >>\u{1b}[24m\u{1b}[39m<<diff::f>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: g>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   4>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   4>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m\u{1b}[39m<<diff::b >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::c >>\u{1b}[24m\u{1b}[39m<<diff::d>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: e>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   5>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   5>>\u{1b}[39m<<diff::: == adds + removes + adds; adds + removes + adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   6>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b >>\u{1b}[4m<<diff removed token::c >>\u{1b}[24m<<diff removed::d >>\u{1b}[4m<<diff removed token::e>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   7>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b >>\u{1b}[4m<<diff removed token::c >>\u{1b}[24m<<diff removed::d e>>\u{1b}[4m<<diff removed token:: f g>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   6>>\u{1b}[39m<<diff::: >>\u{1b}[38;5;2m<<diff added::a >>\u{1b}[4m<<diff added token::X >>\u{1b}[24m<<diff added::b d >>\u{1b}[4m<<diff added token::Y>>\u{1b}[24m<<diff added::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   7>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m<<diff added::a >>\u{1b}[4m<<diff added token::Y >>\u{1b}[24m<<diff added::b d >>\u{1b}[4m<<diff added token::Z >>\u{1b}[24m<<diff added::e>>\u{1b}[39m\n\u{1b}[38;5;3m<<diff header::Modified regular file file3-changes-across-lines:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: == adds ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m\u{1b}[39m<<diff::b>>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::Y Z>>\u{1b}[24m\u{1b}[39m<<diff:: c>>\n\u{1b}[38;5;1m<<diff removed line_number::   3>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   4>>\u{1b}[39m<<diff::: == removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   4>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   5>>\u{1b}[39m<<diff::: a >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::b >>\u{1b}[24m\u{1b}[39m<<diff::c >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::d>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   5>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   5>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::e >>\u{1b}[24m\u{1b}[39m<<diff::f>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: g>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   6>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   6>>\u{1b}[39m<<diff::: == adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::   7>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   7>>\u{1b}[39m<<diff::: a>>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   7>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   8>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X>>\u{1b}[24m\u{1b}[39m<<diff:: b >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   8>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   8>>\u{1b}[39m<<diff::: d>>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token:: e>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;1m<<diff removed line_number::   9>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   9>>\u{1b}[39m<<diff::: == adds + removes + adds ==>>\n\u{1b}[38;5;1m<<diff removed line_number::  10>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b >>\u{1b}[4m<<diff removed token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::  11>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::d>>\u{1b}[4m<<diff removed token:: e>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::  10>>\u{1b}[39m<<diff::: >>\u{1b}[38;5;2m<<diff added::a >>\u{1b}[4m<<diff added token::X >>\u{1b}[24m<<diff added::b d>>\u{1b}[4m<<diff added token::>>\u{1b}[24m\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::  11>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::Y>>\u{1b}[24m<<diff added::>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::  12>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::  12>>\u{1b}[39m<<diff::: == adds + removes + adds + removes ==>>\n\u{1b}[38;5;1m<<diff removed line_number::  13>>\u{1b}[39m<<diff::     : >>\u{1b}[38;5;1m<<diff removed::a b>>\u{1b}[4m<<diff removed token::>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::  14>>\u{1b}[39m<<diff::     : >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::c>>\u{1b}[24m<<diff removed:: d e>>\u{1b}[4m<<diff removed token:: f g>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::  13>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::X >>\u{1b}[24m<<diff added::a >>\u{1b}[4m<<diff added token::Y >>\u{1b}[24m<<diff added::b d>>\u{1b}[4m<<diff added token::>>\u{1b}[24m\u{1b}[39m\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::  14>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::Z>>\u{1b}[24m<<diff added:: e>>\u{1b}[39m");
 }
 
 #[test]
@@ -1381,7 +1174,6 @@ fn test_diff_missing_newline() {
     Modified regular file file2:
        1    1: foo
        2     : bar
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
@@ -1406,7 +1198,6 @@ fn test_diff_missing_newline() {
     \ No newline at end of file
     +foo
     \ No newline at end of file
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
@@ -1414,7 +1205,6 @@ fn test_diff_missing_newline() {
     file1 | 3 ++-
     file2 | 3 +--
     2 files changed, 3 insertions(+), 3 deletions(-)
-    [EOF]
     ");
 }
 
@@ -1532,7 +1322,6 @@ fn test_color_words_diff_missing_newline() {
        7     : g
        8     : h
        9     : I
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -1616,7 +1405,6 @@ fn test_color_words_diff_missing_newline() {
        7     : g
        8     : h
        9     : I
-    [EOF]
     ");
 }
 
@@ -1667,7 +1455,6 @@ fn test_diff_ignore_whitespace() {
          }
     +}
      baz {  }
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git", "--ignore-space-change"]);
     insta::assert_snapshot!(output, @r"
@@ -1684,7 +1471,6 @@ fn test_diff_ignore_whitespace() {
      }
     -baz {}
     +baz {  }
-    [EOF]
     ");
 
     // Diff-stat should respects the whitespace options
@@ -1692,41 +1478,21 @@ fn test_diff_ignore_whitespace() {
     insta::assert_snapshot!(output, @r"
     file1 | 2 ++
     1 file changed, 2 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat", "--ignore-space-change"]);
     insta::assert_snapshot!(output, @r"
     file1 | 6 ++++--
     1 file changed, 4 insertions(+), 2 deletions(-)
-    [EOF]
     ");
 
     // Word-level changes are still highlighted
     let output = test_env.run_jj_in(&repo_path, ["diff", "--color=always", "--ignore-all-space"]);
-    insta::assert_snapshot!(output, @r"
-    [38;5;3mModified regular file file1:[39m
-         [38;5;2m   1[39m: [4m[38;5;2m{[24m[39m
-    [38;5;1m   1[39m [38;5;2m   2[39m: [4m[38;5;2m    [24m[39mfoo {
-    [38;5;1m   2[39m [38;5;2m   3[39m:     [4m[38;5;2m    [24m[39mbar;
-    [38;5;1m   3[39m [38;5;2m   4[39m: [4m[38;5;2m    [24m[39m}
-         [38;5;2m   5[39m: [4m[38;5;2m}[24m[39m
-    [38;5;1m   4[39m [38;5;2m   6[39m: baz {[4m[38;5;2m  [24m[39m}
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[38;5;3mModified regular file file1:\u{1b}[39m\n     \u{1b}[38;5;2m   1\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m{\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m    \u{1b}[24m\u{1b}[39mfoo {\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   3\u{1b}[39m:     \u{1b}[4m\u{1b}[38;5;2m    \u{1b}[24m\u{1b}[39mbar;\n\u{1b}[38;5;1m   3\u{1b}[39m \u{1b}[38;5;2m   4\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m    \u{1b}[24m\u{1b}[39m}\n     \u{1b}[38;5;2m   5\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m}\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   4\u{1b}[39m \u{1b}[38;5;2m   6\u{1b}[39m: baz {\u{1b}[4m\u{1b}[38;5;2m  \u{1b}[24m\u{1b}[39m}");
     let output = test_env.run_jj_in(
         &repo_path,
         ["diff", "--color=always", "--ignore-space-change"],
     );
-    insta::assert_snapshot!(output, @r"
-    [38;5;3mModified regular file file1:[39m
-         [38;5;2m   1[39m: [4m[38;5;2m{[24m[39m
-    [38;5;1m   1[39m [38;5;2m   2[39m: [4m[38;5;2m    [24m[39mfoo {
-    [38;5;1m   2[39m [38;5;2m   3[39m:     [4m[38;5;2m    [24m[39mbar;
-         [38;5;2m   4[39m: [4m[38;5;2m    }[24m[39m
-    [38;5;1m   3[39m [38;5;2m   5[39m: }
-    [38;5;1m   4[39m [38;5;2m   6[39m: baz {[4m[38;5;2m  [24m[39m}
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[38;5;3mModified regular file file1:\u{1b}[39m\n     \u{1b}[38;5;2m   1\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m{\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m    \u{1b}[24m\u{1b}[39mfoo {\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   3\u{1b}[39m:     \u{1b}[4m\u{1b}[38;5;2m    \u{1b}[24m\u{1b}[39mbar;\n     \u{1b}[38;5;2m   4\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2m    }\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m   3\u{1b}[39m \u{1b}[38;5;2m   5\u{1b}[39m: }\n\u{1b}[38;5;1m   4\u{1b}[39m \u{1b}[38;5;2m   6\u{1b}[39m: baz {\u{1b}[4m\u{1b}[38;5;2m  \u{1b}[24m\u{1b}[39m}");
 }
 
 #[test]
@@ -1851,7 +1617,6 @@ fn test_diff_skipped_context() {
        8    8: h
        9    9: i
       10   10: j
-    [EOF]
     ");
 }
 
@@ -1895,7 +1660,6 @@ context = 0
         ...
        3    3: cC
         ...
-    [EOF]
     ");
 }
 
@@ -1955,7 +1719,6 @@ context = 0
     @@ -3,1 +3,1 @@
     -c
     +C
-    [EOF]
     ");
 }
 
@@ -2036,7 +1799,6 @@ fn test_diff_skipped_context_nondefault() {
         ...
        3    3: cC
        4    4: d
-    [EOF]
     ");
 }
 
@@ -2076,7 +1838,6 @@ fn test_diff_leading_trailing_context() {
       10   10: 9
       11   11: 10
       12   12: 11
-    [EOF]
     ");
 
     // N=5 <= 2 * num_context_lines + 1: The last hunk wouldn't be split if
@@ -2095,7 +1856,6 @@ fn test_diff_leading_trailing_context() {
        9    9: 8
       10   10: 9
         ...
-    [EOF]
     ");
 
     // N=5 > 2 * num_context_lines + 1: The last hunk should be split no matter
@@ -2110,7 +1870,6 @@ fn test_diff_leading_trailing_context() {
             7: R
        8    8: 7
         ...
-    [EOF]
     ");
 
     // N=5 <= num_context_lines: No room to skip.
@@ -2134,7 +1893,6 @@ fn test_diff_leading_trailing_context() {
      9
      10
      11
-    [EOF]
     ");
 
     // N=5 <= 2 * num_context_lines: The last hunk wouldn't be split if
@@ -2155,7 +1913,6 @@ fn test_diff_leading_trailing_context() {
      7
      8
      9
-    [EOF]
     ");
 
     // N=5 > 2 * num_context_lines: The last hunk should be split no matter
@@ -2174,7 +1931,6 @@ fn test_diff_leading_trailing_context() {
     +R
      7
      8
-    [EOF]
     ");
 }
 
@@ -2205,7 +1961,6 @@ fn test_diff_external_tool() {
         insta::assert_snapshot!(output, @r"
         ------- stderr -------
         Warning: Tool exited with <exit status>: 1 (run with --debug to see the exact invocation)
-        [EOF]
         ");
     });
 
@@ -2236,7 +1991,6 @@ fn test_diff_external_tool() {
     --
     file2
     file3
-    [EOF]
     ");
 
     // diff with file patterns
@@ -2244,7 +1998,6 @@ fn test_diff_external_tool() {
         test_env.run_jj_in(&repo_path, ["diff", "--tool=fake-diff-editor", "file1"]), @r"
     file1
     --
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -2263,7 +2016,6 @@ fn test_diff_external_tool() {
     │  file2
     ◆  zzzzzzzz root() 00000000
        --
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -2280,7 +2032,6 @@ fn test_diff_external_tool() {
     --
     file2
     file3
-    [EOF]
     ");
 
     // Enabled by default, looks up the merge-tools table
@@ -2291,7 +2042,6 @@ fn test_diff_external_tool() {
     --
     file2
     file3
-    [EOF]
     ");
 
     // Inlined command arguments
@@ -2303,17 +2053,13 @@ fn test_diff_external_tool() {
     --
     file1
     file2
-    [EOF]
     ");
 
     // Output of external diff tool shouldn't be escaped
     std::fs::write(&edit_script, "print \x1b[1;31mred").unwrap();
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["diff", "--color=always", "--tool=fake-diff-editor"]),
-        @r"
-    [1;31mred
-    [EOF]
-    ");
+        @"\u{1b}[1;31mred");
 
     // Non-zero exit code isn't an error
     std::fs::write(&edit_script, "print diff\0fail").unwrap();
@@ -2327,10 +2073,8 @@ fn test_diff_external_tool() {
         (no description set)
 
     diff
-    [EOF]
     ------- stderr -------
     Warning: Tool exited with exit status: 1 (run with --debug to see the exact invocation)
-    [EOF]
     ");
 
     // --tool=:builtin shouldn't be ignored
@@ -2340,7 +2084,6 @@ fn test_diff_external_tool() {
     Error: Failed to generate diff
     Caused by:
     1: Error executing ':builtin' (run with --debug to see the exact invocation)
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -2387,7 +2130,6 @@ fn test_diff_external_file_by_file_tool() {
     file1
     --
     file4
-    [EOF]
     ");
 
     // diff with file patterns
@@ -2401,7 +2143,6 @@ fn test_diff_external_file_by_file_tool() {
     file1
     --
     file1
-    [EOF]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_with(|cmd| {
@@ -2434,7 +2175,6 @@ fn test_diff_external_file_by_file_tool() {
     │  --
     │  file2
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -2458,7 +2198,6 @@ fn test_diff_external_file_by_file_tool() {
     file1
     --
     file4
-    [EOF]
     ");
 }
 
@@ -2496,7 +2235,6 @@ fn test_diff_external_tool_symlink() {
     --
     dead
     file
-    [EOF]
     ");
 
     // External file should be intact
@@ -2631,16 +2369,12 @@ fn test_diff_stat() {
     insta::assert_snapshot!(output, @r"
     file1 | 1 +
     1 file changed, 1 insertion(+), 0 deletions(-)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
-    insta::assert_snapshot!(output, @r"
-    0 files changed, 0 insertions(+), 0 deletions(-)
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"0 files changed, 0 insertions(+), 0 deletions(-)");
 
     std::fs::write(repo_path.join("file1"), "foo\nbar\n").unwrap();
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -2650,7 +2384,6 @@ fn test_diff_stat() {
     insta::assert_snapshot!(output, @r"
     file1 | 1 -
     1 file changed, 0 insertions(+), 1 deletion(-)
-    [EOF]
     ");
 }
 
@@ -2679,55 +2412,46 @@ fn test_diff_stat_long_name_or_stat() {
     1   | 1 +
     一  | 1 +
     2 files changed, 2 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 1, 10), @r"
     1   | 10 ++++++++++
     一  | 10 ++++++++++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 1, 100), @r"
     1   | 100 +++++++++++++++++
     一  | 100 +++++++++++++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 10, 1), @r"
     1234567890      | 1 +
     ...五六七八九十 | 1 +
     2 files changed, 2 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 10, 10), @r"
     1234567890     | 10 +++++++
     ...六七八九十  | 10 +++++++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 10, 100), @r"
     1234567890     | 100 ++++++
     ...六七八九十  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 50, 1), @r"
     ...901234567890 | 1 +
     ...五六七八九十 | 1 +
     2 files changed, 2 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 50, 10), @r"
     ...01234567890 | 10 +++++++
     ...六七八九十  | 10 +++++++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 50, 100), @r"
     ...01234567890 | 100 ++++++
     ...六七八九十  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 
     // Lengths around where we introduce the ellipsis
@@ -2735,25 +2459,21 @@ fn test_diff_stat_long_name_or_stat() {
     1234567890123  | 100 ++++++
     ...九十一二三  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 14, 100), @r"
     12345678901234 | 100 ++++++
     ...十一二三四  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 15, 100), @r"
     ...56789012345 | 100 ++++++
     ...一二三四五  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 16, 100), @r"
     ...67890123456 | 100 ++++++
     ...二三四五六  | 100 ++++++
     2 files changed, 200 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 
     // Very narrow terminal (doesn't have to fit, just don't crash)
@@ -2762,26 +2482,22 @@ fn test_diff_stat_long_name_or_stat() {
     ... | 10 ++
     ... | 10 ++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     test_env.add_env_var("COLUMNS", "3");
     insta::assert_snapshot!(get_stat(&test_env, 10, 10), @r"
     ... | 10 ++
     ... | 10 ++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 3, 10), @r"
     123 | 10 ++
     ... | 10 ++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
     insta::assert_snapshot!(get_stat(&test_env, 1, 10), @r"
     1   | 10 ++
     一  | 10 ++
     2 files changed, 20 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 }
 
@@ -2810,7 +2526,6 @@ fn test_diff_binary() {
         (binary)
     Added regular file file4.png:
         (binary)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
@@ -2830,7 +2545,6 @@ fn test_diff_binary() {
     new file mode 100644
     index 0000000000..4227ca4e87
     Binary files /dev/null and b/file4.png differ
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
@@ -2840,6 +2554,5 @@ fn test_diff_binary() {
     file3.png | 3 +++
     file4.png | 1 +
     4 files changed, 6 insertions(+), 6 deletions(-)
-    [EOF]
     ");
 }

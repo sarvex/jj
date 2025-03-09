@@ -47,7 +47,6 @@ fn test_next_simple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Move to `first`
@@ -60,7 +59,6 @@ fn test_next_simple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next"]);
@@ -68,7 +66,6 @@ fn test_next_simple() {
     ------- stderr -------
     Working copy now at: vruxwmqv 0c7d7732 (empty) (no description set)
     Parent commit      : kkmpptxz 30056b0c (empty) third
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -77,7 +74,6 @@ fn test_next_simple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -109,7 +105,6 @@ fn test_next_multiple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // We should now be the child of the fourth commit.
@@ -118,7 +113,6 @@ fn test_next_multiple() {
     ------- stderr -------
     Working copy now at: vruxwmqv 41cc776d (empty) (no description set)
     Parent commit      : zsuskuln 9d7e5e99 (empty) fourth
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -128,7 +122,6 @@ fn test_next_multiple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -153,7 +146,6 @@ fn test_prev_simple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev"]);
@@ -161,7 +153,6 @@ fn test_prev_simple() {
     ------- stderr -------
     Working copy now at: royxmykx 6db74f64 (empty) (no description set)
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -171,7 +162,6 @@ fn test_prev_simple() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -200,7 +190,6 @@ fn test_prev_multiple_without_root() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "2"]);
@@ -208,7 +197,6 @@ fn test_prev_multiple_without_root() {
     ------- stderr -------
     Working copy now at: yqosqzyt 794ffd20 (empty) (no description set)
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -219,7 +207,6 @@ fn test_prev_multiple_without_root() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -247,7 +234,6 @@ fn test_next_exceeding_history() {
     @  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // `jj next` beyond existing history fails.
@@ -256,7 +242,6 @@ fn test_next_exceeding_history() {
     ------- stderr -------
     Error: No other descendant found 3 commit(s) forward from the working copy parent(s)
     Hint: Working copy parent: qpvuntsm fa15625b (empty) first
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -287,7 +272,6 @@ fn test_next_parent_has_multiple_descendants() {
     │ ○  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--edit"]);
@@ -295,7 +279,6 @@ fn test_next_parent_has_multiple_descendants() {
     ------- stderr -------
     Working copy now at: mzvwutvl 1b8531ce (empty) 4
     Parent commit      : zsuskuln b1394455 (empty) 3
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  mzvwutvlkqwt 4
@@ -304,7 +287,6 @@ fn test_next_parent_has_multiple_descendants() {
     │ ○  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -338,7 +320,6 @@ fn test_next_with_merge_commit_parent() {
     ○ │  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next"]);
@@ -346,7 +327,6 @@ fn test_next_with_merge_commit_parent() {
     ------- stderr -------
     Working copy now at: vruxwmqv e2cefcb7 (empty) (no description set)
     Parent commit      : mzvwutvl b54bbdea (empty) 4
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  vruxwmqvtpmx
@@ -357,7 +337,6 @@ fn test_next_with_merge_commit_parent() {
     ○ │  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -391,7 +370,6 @@ fn test_next_on_merge_commit() {
     ○ │  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--edit"]);
@@ -399,7 +377,6 @@ fn test_next_on_merge_commit() {
     ------- stderr -------
     Working copy now at: mzvwutvl b54bbdea (empty) 4
     Parent commit      : zsuskuln 5542f0b4 (empty) 3
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  mzvwutvlkqwt 4
@@ -409,7 +386,6 @@ fn test_next_on_merge_commit() {
     ○ │  qpvuntsmwlqt 1
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -438,7 +414,6 @@ fn test_next_fails_on_bookmarking_children_no_stdin() {
     ├─╯
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Try to advance the working copy commit.
@@ -448,10 +423,8 @@ fn test_next_fails_on_bookmarking_children_no_stdin() {
     1: zsuskuln 5f24490d (empty) third
     2: rlvkpnrz 9ed53a4a (empty) second
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     Error: Cannot prompt for input since the output is not connected to a terminal
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -481,7 +454,6 @@ fn test_next_fails_on_bookmarking_children_quit_prompt() {
     ├─╯
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Try to advance the working copy commit.
@@ -496,10 +468,8 @@ fn test_next_fails_on_bookmarking_children_quit_prompt() {
     1: zsuskuln 5f24490d (empty) third
     2: rlvkpnrz 9ed53a4a (empty) second
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Error: ambiguous target commit
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -537,11 +507,9 @@ fn test_next_choose_bookmarking_child() {
     2: zsuskuln 5f24490d (empty) third
     3: rlvkpnrz 9ed53a4a (empty) second
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Working copy now at: yostqsxw 5c8fa96d (empty) (no description set)
     Parent commit      : zsuskuln 5f24490d (empty) third
-    [EOF]
     ");
 }
 
@@ -574,7 +542,6 @@ fn test_prev_on_merge_commit() {
     ○ │  qpvuntsmwlqt left first
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev"]);
@@ -582,7 +549,6 @@ fn test_prev_on_merge_commit() {
     ------- stderr -------
     Working copy now at: vruxwmqv 41658cf4 (empty) (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -597,11 +563,9 @@ fn test_prev_on_merge_commit() {
     1: zsuskuln b0d21db3 right | (empty) second
     2: qpvuntsm fa15625b left | (empty) first
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Working copy now at: qpvuntsm fa15625b left | (empty) first
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -644,7 +608,6 @@ fn test_prev_on_merge_commit_with_parent_merge() {
     ○ │  qpvuntsmwlqt x
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_with(|cmd| {
@@ -659,11 +622,9 @@ fn test_prev_on_merge_commit_with_parent_merge() {
     2: qpvuntsm 6799aaa2 (empty) x
     3: zzzzzzzz 00000000 (empty) (no description set)
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Working copy now at: vruxwmqv e5a6794c (empty) (no description set)
     Parent commit      : qpvuntsm 6799aaa2 (empty) x
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -678,12 +639,10 @@ fn test_prev_on_merge_commit_with_parent_merge() {
     1: mzvwutvl 89b8a355 (empty) 1
     2: zsuskuln a83fc061 (empty) z
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Working copy now at: zsuskuln a83fc061 (empty) z
     Parent commit      : qpvuntsm 6799aaa2 (empty) x
     Parent commit      : kkmpptxz 146d5c67 (empty) y
-    [EOF]
     ");
 }
 
@@ -726,7 +685,6 @@ fn test_prev_prompts_on_multiple_parents() {
     ○ │  mzvwutvlkqwt third
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Move @ backwards.
@@ -742,11 +700,9 @@ fn test_prev_prompts_on_multiple_parents() {
     2: kkmpptxz b0d21db3 (empty) second
     3: qpvuntsm fa15625b (empty) first
     q: quit the prompt
-    [EOF]
     ------- stderr -------
     enter the index of the commit you want to target: Working copy now at: kpqxywon ddac00b0 (empty) (no description set)
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -760,7 +716,6 @@ fn test_prev_prompts_on_multiple_parents() {
     │ ○  mzvwutvlkqwt third
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["next"]).success();
@@ -776,7 +731,6 @@ fn test_prev_prompts_on_multiple_parents() {
     ○ │  mzvwutvlkqwt third
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--no-edit"]);
@@ -786,7 +740,6 @@ fn test_prev_prompts_on_multiple_parents() {
     Hint: Working copy parent: mzvwutvl bc4f4fe3 (empty) third
     Hint: Working copy parent: kkmpptxz b0d21db3 (empty) second
     Hint: Working copy parent: qpvuntsm fa15625b (empty) first
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -815,7 +768,6 @@ fn test_prev_beyond_root_fails() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
     // @- is at "fourth", and there is no parent 5 commits behind it.
     let output = test_env.run_jj_in(&repo_path, ["prev", "5"]);
@@ -823,7 +775,6 @@ fn test_prev_beyond_root_fails() {
     ------- stderr -------
     Error: No ancestor found 5 commit(s) back from the working copy parents(s)
     Hint: Working copy parent: zsuskuln 9d7e5e99 (empty) fourth
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -855,7 +806,6 @@ fn test_prev_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "--edit"]);
@@ -863,7 +813,6 @@ fn test_prev_editing() {
     ------- stderr -------
     Working copy now at: kkmpptxz 30056b0c (empty) third
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -872,7 +821,6 @@ fn test_prev_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -902,7 +850,6 @@ fn test_next_editing() {
     @  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--edit"]);
@@ -910,7 +857,6 @@ fn test_next_editing() {
     ------- stderr -------
     Working copy now at: kkmpptxz 30056b0c (empty) third
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -919,7 +865,6 @@ fn test_next_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -960,7 +905,6 @@ fn test_prev_conflict() {
     ×  rlvkpnrzqnoo conflict second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["prev", "--conflict"])
@@ -973,7 +917,6 @@ fn test_prev_conflict() {
     ×  rlvkpnrzqnoo conflict second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -1009,7 +952,6 @@ fn test_prev_conflict_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["prev", "--conflict", "--edit"])
@@ -1020,7 +962,6 @@ fn test_prev_conflict_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -1059,7 +1000,6 @@ fn test_next_conflict() {
     ├─╯
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["next", "--conflict"])
@@ -1070,7 +1010,6 @@ fn test_next_conflict() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -1102,7 +1041,6 @@ fn test_next_conflict_editing() {
     ○  rlvkpnrzqnoo second
     @  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["next", "--conflict", "--edit"])
@@ -1112,7 +1050,6 @@ fn test_next_conflict_editing() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -1131,7 +1068,6 @@ fn test_next_conflict_head() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  rlvkpnrzqnoo conflict
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--conflict"]);
@@ -1139,7 +1075,6 @@ fn test_next_conflict_head() {
     ------- stderr -------
     Error: The working copy parent(s) have no other descendants with conflicts
     Hint: Working copy parent: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1148,7 +1083,6 @@ fn test_next_conflict_head() {
     ------- stderr -------
     Error: The working copy has no descendants with conflicts
     Hint: Working copy: rlvkpnrz 0273eeab (conflict) (no description set)
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -1176,7 +1110,6 @@ fn test_movement_edit_mode_true() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["prev"]).success();
@@ -1186,7 +1119,6 @@ fn test_movement_edit_mode_true() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev"]);
@@ -1194,7 +1126,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: rlvkpnrz 9ed53a4a (empty) second
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1202,7 +1133,6 @@ fn test_movement_edit_mode_true() {
     @  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev"]);
@@ -1210,7 +1140,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: qpvuntsm fa15625b (empty) first
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1218,14 +1147,12 @@ fn test_movement_edit_mode_true() {
     ○  rlvkpnrzqnoo second
     @  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1234,7 +1161,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: rlvkpnrz 9ed53a4a (empty) second
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1242,7 +1168,6 @@ fn test_movement_edit_mode_true() {
     @  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next"]);
@@ -1250,7 +1175,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: kkmpptxz 30056b0c (empty) third
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1258,7 +1182,6 @@ fn test_movement_edit_mode_true() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "--no-edit"]);
@@ -1266,7 +1189,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: uyznsvlq 7ad57fb8 (empty) (no description set)
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1276,7 +1198,6 @@ fn test_movement_edit_mode_true() {
     ├─╯
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--no-edit"]);
@@ -1284,7 +1205,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Working copy now at: xtnwkqum 7ac7a1c4 (empty) (no description set)
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1294,7 +1214,6 @@ fn test_movement_edit_mode_true() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next"]);
@@ -1302,7 +1221,6 @@ fn test_movement_edit_mode_true() {
     ------- stderr -------
     Error: No descendant found 1 commit(s) forward from the working copy
     Hint: Working copy: xtnwkqum 7ac7a1c4 (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -1330,7 +1248,6 @@ fn test_movement_edit_mode_false() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["prev"]).success();
@@ -1342,7 +1259,6 @@ fn test_movement_edit_mode_false() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "--no-edit"]);
@@ -1350,7 +1266,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Working copy now at: vruxwmqv 087a65b1 (empty) (no description set)
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1360,7 +1275,6 @@ fn test_movement_edit_mode_false() {
     ├─╯
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "3"]);
@@ -1368,7 +1282,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Error: No ancestor found 3 commit(s) back from the working copy parents(s)
     Hint: Working copy parent: qpvuntsm fa15625b (empty) first
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1377,7 +1290,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Working copy now at: kpqxywon d06750fb (empty) (no description set)
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1387,7 +1299,6 @@ fn test_movement_edit_mode_false() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--no-edit"]);
@@ -1395,7 +1306,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Working copy now at: wqnwkozp 10fa181f (empty) (no description set)
     Parent commit      : kkmpptxz 30056b0c (empty) third
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["prev", "--edit", "2"]);
@@ -1403,7 +1313,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Working copy now at: rlvkpnrz 9ed53a4a (empty) second
     Parent commit      : qpvuntsm fa15625b (empty) first
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1411,7 +1320,6 @@ fn test_movement_edit_mode_false() {
     @  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["next", "--edit"]);
@@ -1419,7 +1327,6 @@ fn test_movement_edit_mode_false() {
     ------- stderr -------
     Working copy now at: kkmpptxz 30056b0c (empty) third
     Parent commit      : rlvkpnrz 9ed53a4a (empty) second
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1427,7 +1334,6 @@ fn test_movement_edit_mode_false() {
     ○  rlvkpnrzqnoo second
     ○  qpvuntsmwlqt first
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -1478,7 +1384,6 @@ fn test_next_offset_when_wc_has_descendants() {
     ├─╯
     ○  qpvuntsmwlqt base
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["next", "2"]).success();
@@ -1494,7 +1399,6 @@ fn test_next_offset_when_wc_has_descendants() {
     ├─╯
     ○  qpvuntsmwlqt base
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env
@@ -1510,7 +1414,6 @@ fn test_next_offset_when_wc_has_descendants() {
     ├─╯
     ○  qpvuntsmwlqt base
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["next"]).success();
@@ -1526,7 +1429,6 @@ fn test_next_offset_when_wc_has_descendants() {
     ├─╯
     ○  qpvuntsmwlqt base
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 

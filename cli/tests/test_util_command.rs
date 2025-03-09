@@ -33,7 +33,6 @@ fn test_util_config_schema() {
                 [...]
             }
         }
-        [EOF]
         "#);
     });
 }
@@ -51,7 +50,6 @@ fn test_gc_args() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Cannot garbage collect from a non-head operation
-    [EOF]
     [exit status: 1]
     ");
 
@@ -59,7 +57,6 @@ fn test_gc_args() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: --expire only accepts 'now'
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -101,7 +98,6 @@ fn test_gc_operation_log() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Error: No operation ID matching "bda58b425f645d895ce92608576509b4fcc0c96dbc5f18717a817f09a530117dff0c2054a28781b4c7f1fdbf5a726c89ebd8666fe54dc9f3cc52ca9596110418"
-    [EOF]
     [exit status: 1]
     "#);
 }
@@ -144,7 +140,7 @@ fn test_util_exec() {
         ],
     );
     // Ensures only stdout contains text
-    insta::assert_snapshot!(output, @"hello[EOF]");
+    insta::assert_snapshot!(output, @"hello[no newline]");
 }
 
 #[test]
@@ -154,7 +150,6 @@ fn test_util_exec_fail() {
     insta::assert_snapshot!(output.strip_stderr_last_line(), @r"
     ------- stderr -------
     Error: Failed to execute external command 'jj-test-missing-program'
-    [EOF]
     [exit status: 1]
     ");
 }

@@ -42,7 +42,6 @@ fn test_root_outside_a_repo() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Error: There is no jj repo in "."
-    [EOF]
     [exit status: 1]
     "#);
 }

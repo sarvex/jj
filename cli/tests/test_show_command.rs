@@ -30,8 +30,6 @@ fn test_show() {
     Committer: Test User <test.user@example.com> (2001-02-03 08:05:07)
 
         (no description set)
-
-    [EOF]
     ");
 }
 
@@ -62,7 +60,6 @@ fn test_show_basic() {
             2: bar
        2    3: baz quxquux
     Modified regular file file3 (file1 => file3):
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--context=0"]);
@@ -79,25 +76,10 @@ fn test_show_basic() {
             2: bar
        2    3: baz quxquux
     Modified regular file file3 (file1 => file3):
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    Commit ID: [38;5;4m<<commit_id::e34f04317a81edc6ba41fef239c0d0180f10656f>>[39m
-    Change ID: [38;5;5m<<change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>[39m
-    Author   : [38;5;3m<<author name::Test User>>[39m <[38;5;3m<<author email local::test.user>><<author email::@>><<author email domain::example.com>>[39m> ([38;5;6m<<author timestamp local format::2001-02-03 08:05:09>>[39m)
-    Committer: [38;5;3m<<committer name::Test User>>[39m <[38;5;3m<<committer email local::test.user>><<committer email::@>><<committer email domain::example.com>>[39m> ([38;5;6m<<committer timestamp local format::2001-02-03 08:05:09>>[39m)
-
-    [38;5;3m<<description placeholder::    (no description set)>>[39m
-
-    [38;5;3m<<diff header::Modified regular file file2:>>[39m
-    [38;5;1m<<diff removed line_number::   1>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   1>>[39m<<diff::: foo>>
-    <<diff::     >>[38;5;2m<<diff added line_number::   2>>[39m<<diff::: >>[4m[38;5;2m<<diff added token::bar>>[24m[39m
-    [38;5;1m<<diff removed line_number::   2>>[39m<<diff:: >>[38;5;2m<<diff added line_number::   3>>[39m<<diff::: baz >>[4m[38;5;1m<<diff removed token::qux>>[38;5;2m<<diff added token::quux>>[24m[39m<<diff::>>
-    [38;5;3m<<diff header::Modified regular file file3 (file1 => file3):>>[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Commit ID: \u{1b}[38;5;4m<<commit_id::e34f04317a81edc6ba41fef239c0d0180f10656f>>\u{1b}[39m\nChange ID: \u{1b}[38;5;5m<<change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>\u{1b}[39m\nAuthor   : \u{1b}[38;5;3m<<author name::Test User>>\u{1b}[39m <\u{1b}[38;5;3m<<author email local::test.user>><<author email::@>><<author email domain::example.com>>\u{1b}[39m> (\u{1b}[38;5;6m<<author timestamp local format::2001-02-03 08:05:09>>\u{1b}[39m)\nCommitter: \u{1b}[38;5;3m<<committer name::Test User>>\u{1b}[39m <\u{1b}[38;5;3m<<committer email local::test.user>><<committer email::@>><<committer email domain::example.com>>\u{1b}[39m> (\u{1b}[38;5;6m<<committer timestamp local format::2001-02-03 08:05:09>>\u{1b}[39m)\n\n\u{1b}[38;5;3m<<description placeholder::    (no description set)>>\u{1b}[39m\n\n\u{1b}[38;5;3m<<diff header::Modified regular file file2:>>\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   1>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   1>>\u{1b}[39m<<diff::: foo>>\n<<diff::     >>\u{1b}[38;5;2m<<diff added line_number::   2>>\u{1b}[39m<<diff::: >>\u{1b}[4m\u{1b}[38;5;2m<<diff added token::bar>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;1m<<diff removed line_number::   2>>\u{1b}[39m<<diff:: >>\u{1b}[38;5;2m<<diff added line_number::   3>>\u{1b}[39m<<diff::: baz >>\u{1b}[4m\u{1b}[38;5;1m<<diff removed token::qux>>\u{1b}[38;5;2m<<diff added token::quux>>\u{1b}[24m\u{1b}[39m<<diff::>>\n\u{1b}[38;5;3m<<diff header::Modified regular file file3 (file1 => file3):>>\u{1b}[39m");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "-s"]);
     insta::assert_snapshot!(output, @r"
@@ -110,7 +92,6 @@ fn test_show_basic() {
 
     M file2
     R {file1 => file3}
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--types"]);
@@ -124,7 +105,6 @@ fn test_show_basic() {
 
     FF file2
     FF {file1 => file3}
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--git"]);
@@ -148,7 +128,6 @@ fn test_show_basic() {
     diff --git a/file1 b/file3
     rename from file1
     rename to file3
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--git", "--context=0"]);
@@ -171,32 +150,10 @@ fn test_show_basic() {
     diff --git a/file1 b/file3
     rename from file1
     rename to file3
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--git", "--color=debug"]);
-    insta::assert_snapshot!(output, @r"
-    Commit ID: [38;5;4m<<commit_id::e34f04317a81edc6ba41fef239c0d0180f10656f>>[39m
-    Change ID: [38;5;5m<<change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>[39m
-    Author   : [38;5;3m<<author name::Test User>>[39m <[38;5;3m<<author email local::test.user>><<author email::@>><<author email domain::example.com>>[39m> ([38;5;6m<<author timestamp local format::2001-02-03 08:05:09>>[39m)
-    Committer: [38;5;3m<<committer name::Test User>>[39m <[38;5;3m<<committer email local::test.user>><<committer email::@>><<committer email domain::example.com>>[39m> ([38;5;6m<<committer timestamp local format::2001-02-03 08:05:09>>[39m)
-
-    [38;5;3m<<description placeholder::    (no description set)>>[39m
-
-    [1m<<diff file_header::diff --git a/file2 b/file2>>[0m
-    [1m<<diff file_header::index 523a4a9de8..485b56a572 100644>>[0m
-    [1m<<diff file_header::--- a/file2>>[0m
-    [1m<<diff file_header::+++ b/file2>>[0m
-    [38;5;6m<<diff hunk_header::@@ -1,2 +1,3 @@>>[39m
-    <<diff context:: foo>>
-    [38;5;1m<<diff removed::-baz >>[4m<<diff removed token::qux>>[24m<<diff removed::>>[39m
-    [38;5;2m<<diff added::+>>[4m<<diff added token::bar>>[24m[39m
-    [38;5;2m<<diff added::+baz >>[4m<<diff added token::quux>>[24m<<diff added::>>[39m
-    [1m<<diff file_header::diff --git a/file1 b/file3>>[0m
-    [1m<<diff file_header::rename from file1>>[0m
-    [1m<<diff file_header::rename to file3>>[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"Commit ID: \u{1b}[38;5;4m<<commit_id::e34f04317a81edc6ba41fef239c0d0180f10656f>>\u{1b}[39m\nChange ID: \u{1b}[38;5;5m<<change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>\u{1b}[39m\nAuthor   : \u{1b}[38;5;3m<<author name::Test User>>\u{1b}[39m <\u{1b}[38;5;3m<<author email local::test.user>><<author email::@>><<author email domain::example.com>>\u{1b}[39m> (\u{1b}[38;5;6m<<author timestamp local format::2001-02-03 08:05:09>>\u{1b}[39m)\nCommitter: \u{1b}[38;5;3m<<committer name::Test User>>\u{1b}[39m <\u{1b}[38;5;3m<<committer email local::test.user>><<committer email::@>><<committer email domain::example.com>>\u{1b}[39m> (\u{1b}[38;5;6m<<committer timestamp local format::2001-02-03 08:05:09>>\u{1b}[39m)\n\n\u{1b}[38;5;3m<<description placeholder::    (no description set)>>\u{1b}[39m\n\n\u{1b}[1m<<diff file_header::diff --git a/file2 b/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::index 523a4a9de8..485b56a572 100644>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::--- a/file2>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::+++ b/file2>>\u{1b}[0m\n\u{1b}[38;5;6m<<diff hunk_header::@@ -1,2 +1,3 @@>>\u{1b}[39m\n<<diff context:: foo>>\n\u{1b}[38;5;1m<<diff removed::-baz >>\u{1b}[4m<<diff removed token::qux>>\u{1b}[24m<<diff removed::>>\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+>>\u{1b}[4m<<diff added token::bar>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;2m<<diff added::+baz >>\u{1b}[4m<<diff added token::quux>>\u{1b}[24m<<diff added::>>\u{1b}[39m\n\u{1b}[1m<<diff file_header::diff --git a/file1 b/file3>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::rename from file1>>\u{1b}[0m\n\u{1b}[1m<<diff file_header::rename to file3>>\u{1b}[0m");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "-s", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -221,7 +178,6 @@ fn test_show_basic() {
     diff --git a/file1 b/file3
     rename from file1
     rename to file3
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["show", "--stat"]);
@@ -236,7 +192,6 @@ fn test_show_basic() {
     file2            | 3 ++-
     {file1 => file3} | 0
     2 files changed, 2 insertions(+), 1 deletion(-)
-    [EOF]
     ");
 }
 
@@ -251,10 +206,7 @@ fn test_show_with_template() {
 
     let output = test_env.run_jj_in(&repo_path, ["show", "-T", "description"]);
 
-    insta::assert_snapshot!(output, @r"
-    a new commit
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a new commit");
 }
 
 #[test]
@@ -286,7 +238,6 @@ fn test_show_with_no_template() {
     - description_placeholder
     - email_placeholder
     - name_placeholder
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -318,7 +269,5 @@ fn test_show_relative_timestamps() {
     Committer: Test User <test.user@example.com> (...timestamp...)
 
         (no description set)
-
-    [EOF]
     ");
 }

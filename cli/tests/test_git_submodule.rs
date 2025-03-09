@@ -55,9 +55,6 @@ fn test_gitsubmodule_print_gitmodules() {
     name:old
     url:https://github.com/old/old.git
     path:old
-
-
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&workspace_root, ["git", "submodule", "print-gitmodules"]);
@@ -65,8 +62,5 @@ fn test_gitsubmodule_print_gitmodules() {
     name:new
     url:https://github.com/new/new.git
     path:new
-
-
-    [EOF]
     ");
 }

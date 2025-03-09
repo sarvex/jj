@@ -31,7 +31,6 @@ fn test_snapshot_large_file() {
     let output = test_env.run_jj_in(&repo_path, ["file", "list"]);
     insta::assert_snapshot!(output, @r"
     empty
-    [EOF]
     ------- stderr -------
     Warning: Refused to snapshot some files:
       large: 13.0B (13 bytes); the maximum size allowed is 10.0B (10 bytes)
@@ -41,7 +40,6 @@ fn test_snapshot_large_file() {
         This will increase the maximum file size allowed for new files, in this repository only.
       - Run `jj --config snapshot.max-new-file-size=13 st`
         This will increase the maximum file size allowed for new files, for this command only.
-    [EOF]
     ");
 
     // test with a larger file using 'KB' human-readable syntax
@@ -51,7 +49,6 @@ fn test_snapshot_large_file() {
     let output = test_env.run_jj_in(&repo_path, ["file", "list"]);
     insta::assert_snapshot!(output, @r"
     empty
-    [EOF]
     ------- stderr -------
     Warning: Refused to snapshot some files:
       large: 11.0KiB (11264 bytes); the maximum size allowed is 10.0KiB (10240 bytes)
@@ -61,7 +58,6 @@ fn test_snapshot_large_file() {
         This will increase the maximum file size allowed for new files, in this repository only.
       - Run `jj --config snapshot.max-new-file-size=11264 st`
         This will increase the maximum file size allowed for new files, for this command only.
-    [EOF]
     ");
 
     // test with file track for hint formatting, both files should appear in
@@ -87,7 +83,6 @@ fn test_snapshot_large_file() {
         This will increase the maximum file size allowed for new files, in this repository only.
       - Run `jj --config snapshot.max-new-file-size=11264 file track large large2`
         This will increase the maximum file size allowed for new files, for this command only.
-    [EOF]
     ");
 
     // test invalid configuration
@@ -100,7 +95,6 @@ fn test_snapshot_large_file() {
     Config error: Invalid type or value for snapshot.max-new-file-size
     Caused by: Expected a positive integer or a string in '<number><unit>' form
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -109,10 +103,7 @@ fn test_snapshot_large_file() {
         &repo_path,
         ["file", "list", "--config=snapshot.auto-track='none()'"],
     );
-    insta::assert_snapshot!(output, @r"
-    empty
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"empty");
 
     // max-new-file-size=0 means no limit
     let output = test_env.run_jj_in(
@@ -123,7 +114,6 @@ fn test_snapshot_large_file() {
     empty
     large
     large2
-    [EOF]
     ");
 }
 
@@ -161,7 +151,6 @@ fn test_snapshot_large_file_restore() {
     Warning: 1 of those updates were skipped because there were conflicting changes in the working copy.
     Hint: Inspect the changes compared to the intended target with `jj diff --from e3eb7e819de5`.
     Discard the conflicting changes with `jj restore --from e3eb7e819de5`.
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(repo_path.join("file")).unwrap(),
@@ -175,7 +164,6 @@ fn test_snapshot_large_file_restore() {
     A file
     Working copy : kkmpptxz b75eed09 (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -284,7 +272,6 @@ fn test_materialize_and_snapshot_different_conflict_markers() {
      ------- Contents of base
      line 2
      line 3
-    [EOF]
     ");
 }
 
@@ -303,7 +290,6 @@ fn test_snapshot_invalid_ignore_pattern() {
     Caused by:
     1: Failed to parse ignore patterns from file $TEST_ENV/repo/.gitignore
     2: error parsing glob ' []': unclosed character class; missing ']'
-    [EOF]
     [exit status: 255]
     ");
 
@@ -315,7 +301,6 @@ fn test_snapshot_invalid_ignore_pattern() {
     Caused by:
     1: Invalid UTF-8 for ignore pattern in $TEST_ENV/repo/.gitignore on line #1: �
     2: invalid utf-8 sequence of 1 bytes from index 0
-    [EOF]
     [exit status: 255]
     ");
 }
@@ -409,7 +394,6 @@ fn test_conflict_marker_length_stored_in_working_copy() {
     Current operation: OperationId("6feb53603f9f7324085d2d89dca19a6dac93fef6795cfd5d57090ff803d404ab1196b45d5b97faa641f6a78302ac0fbd149f5e5a880d1fd64d6520c31beab213")
     Current tree: Merge(Conflicted([TreeId("381273b50cf73f8c81b3f1502ee89e9bbd6c1518"), TreeId("771f3d31c4588ea40a8864b2a981749888e596c2"), TreeId("f56b8223da0dab22b03b8323ced4946329aeb4e0")]))
     Normal { <executable> }           249 <timestamp> Some(MaterializedConflictData { conflict_marker_len: 11 }) "file"
-    [EOF]
     "#);
 
     // Update the conflict with more fake markers, and it should still parse
@@ -446,7 +430,6 @@ fn test_conflict_marker_length_stored_in_working_copy() {
     Parent commit: zsuskuln 7b2b03ab side-b
     Warning: There are unresolved conflicts at these paths:
     file    2-sided conflict
-    [EOF]
     ");
     insta::assert_snapshot!(test_env.run_jj_in(&repo_path, ["diff", "--git"]), @r"
     diff --git a/file b/file
@@ -464,7 +447,6 @@ fn test_conflict_marker_length_stored_in_working_copy() {
      line 3
     +>>>>>>> fake marker
      >>>>>>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
 
     // Working copy should still contain conflict marker length
@@ -473,7 +455,6 @@ fn test_conflict_marker_length_stored_in_working_copy() {
     Current operation: OperationId("205bc702428a522e0b175938a51c51b59741c854a609ba63c89de76ffda6e5eff6fcc00725328b1a91f448401769773cefcff01fac3448190d2cea4e137d2166")
     Current tree: Merge(Conflicted([TreeId("381273b50cf73f8c81b3f1502ee89e9bbd6c1518"), TreeId("771f3d31c4588ea40a8864b2a981749888e596c2"), TreeId("3329c18c95f7b7a55c278c2259e9c4ce711fae59")]))
     Normal { <executable> }           289 <timestamp> Some(MaterializedConflictData { conflict_marker_len: 11 }) "file"
-    [EOF]
     "#);
 
     // Resolve the conflict
@@ -499,7 +480,6 @@ fn test_conflict_marker_length_stored_in_working_copy() {
     Working copy : mzvwutvl 1aefd866 (no description set)
     Parent commit: rlvkpnrz ce613b49 side-a
     Parent commit: zsuskuln 7b2b03ab side-b
-    [EOF]
     ");
 
     // When the file is resolved, the conflict marker length is removed from the
@@ -509,6 +489,5 @@ fn test_conflict_marker_length_stored_in_working_copy() {
     Current operation: OperationId("2206ce3c108b1573df0841138c226bba1ab3cff900a5899ed31ac69162c7d6f30d37fb5ab43da60dba88047b8ab22d453887fff688f26dfcf04f2c99420a5563")
     Current tree: Merge(Resolved(TreeId("6120567b3cb2472d549753ed3e4b84183d52a650")))
     Normal { <executable> }           130 <timestamp> None "file"
-    [EOF]
     "#);
 }

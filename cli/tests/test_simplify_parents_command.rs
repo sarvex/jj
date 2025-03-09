@@ -35,7 +35,6 @@ fn test_simplify_parents_no_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -47,7 +46,6 @@ fn test_simplify_parents_immutable() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -63,14 +61,12 @@ fn test_simplify_parents_no_change() {
     @  b
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["simplify-parents", "-s", "@-"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -78,7 +74,6 @@ fn test_simplify_parents_no_change() {
     @  b
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -99,14 +94,12 @@ fn test_simplify_parents_no_change_diamond() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["simplify-parents", "-r", "all() ~ root()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -118,7 +111,6 @@ fn test_simplify_parents_no_change_diamond() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -139,7 +131,6 @@ fn test_simplify_parents_redundant_parent(args: &[&str]) {
         ├─╯
         ○  a
         ◆
-        [EOF]
         ");
     }
     let output = test_env.run_jj_in(&repo_path, args);
@@ -149,7 +140,6 @@ fn test_simplify_parents_redundant_parent(args: &[&str]) {
         Removed 1 edges from 1 out of 3 commits.
         Working copy now at: royxmykx 0ac2063b c | c
         Parent commit      : zsuskuln 1394f625 b | b
-        [EOF]
         ");
     }
 
@@ -160,7 +150,6 @@ fn test_simplify_parents_redundant_parent(args: &[&str]) {
         ○  b
         ○  a
         ◆
-        [EOF]
         ");
     }
 }
@@ -188,7 +177,6 @@ fn test_simplify_parents_multiple_redundant_parents() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -200,7 +188,6 @@ fn test_simplify_parents_multiple_redundant_parents() {
     Rebased 2 descendant commits
     Working copy now at: kmkuslsw 8cc01e1b f | f
     Parent commit      : znkkpsqq 040ae3a6 e | e
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -212,7 +199,6 @@ fn test_simplify_parents_multiple_redundant_parents() {
     ○  b
     ○  a
     ◆
-    [EOF]
     ");
 
     // Test with `-s`.
@@ -226,7 +212,6 @@ fn test_simplify_parents_multiple_redundant_parents() {
     Rebased 2 descendant commits
     Working copy now at: kmkuslsw 70a39dff f | f
     Parent commit      : znkkpsqq a021fee9 e | e
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -238,7 +223,6 @@ fn test_simplify_parents_multiple_redundant_parents() {
     ○  b
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -265,7 +249,6 @@ fn test_simplify_parents_no_args() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -276,7 +259,6 @@ fn test_simplify_parents_no_args() {
     Rebased 2 descendant commits
     Working copy now at: kmkuslsw 8cc01e1b f | f
     Parent commit      : znkkpsqq 040ae3a6 e | e
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -288,7 +270,6 @@ fn test_simplify_parents_no_args() {
     ○  b
     ○  a
     ◆
-    [EOF]
     ");
 
     // Test with custom `revsets.simplify-parents`.
@@ -302,7 +283,6 @@ fn test_simplify_parents_no_args() {
     Removed 1 edges from 1 out of 3 commits.
     Working copy now at: kmkuslsw 0c6b4c43 f | f
     Parent commit      : znkkpsqq 6a679611 e | e
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", "description"]);
@@ -316,6 +296,5 @@ fn test_simplify_parents_no_args() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }

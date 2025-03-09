@@ -31,17 +31,13 @@ fn test_sparse_manage_patterns() {
 
     // By default, all files are tracked
     let output = test_env.run_jj_in(&repo_path, ["sparse", "list"]);
-    insta::assert_snapshot!(output, @r"
-    .
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @".");
 
     // Can stop tracking all files
     let output = test_env.run_jj_in(&repo_path, ["sparse", "set", "--remove", "."]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 0 files, modified 0 files, removed 3 files
-    [EOF]
     ");
     // The list is now empty
     let output = test_env.run_jj_in(&repo_path, ["sparse", "list"]);
@@ -56,7 +52,6 @@ fn test_sparse_manage_patterns() {
     file1
     file2
     file3
-    [EOF]
     ");
 
     // Run commands in sub directory to ensure that patterns are parsed as
@@ -71,7 +66,6 @@ fn test_sparse_manage_patterns() {
     error: invalid value '../file2' for '--add <ADD>': Invalid component ".." in repo-relative path "../file2"
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     "#);
 
@@ -83,13 +77,11 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 2 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
     insta::assert_snapshot!(output, @r"
     file2
     file3
-    [EOF]
     ");
     assert!(!repo_path.join("file1").exists());
     assert!(repo_path.join("file2").exists());
@@ -105,13 +97,9 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 1 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
-    insta::assert_snapshot!(output, @r"
-    file1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"file1");
     assert!(repo_path.join("file1").exists());
     assert!(!repo_path.join("file2").exists());
     assert!(!repo_path.join("file3").exists());
@@ -121,13 +109,9 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 1 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
-    insta::assert_snapshot!(output, @r"
-    file2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"file2");
     assert!(!repo_path.join("file1").exists());
     assert!(repo_path.join("file2").exists());
     assert!(!repo_path.join("file3").exists());
@@ -137,13 +121,9 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 2 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
-    insta::assert_snapshot!(output, @r"
-    .
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @".");
     assert!(repo_path.join("file1").exists());
     assert!(repo_path.join("file2").exists());
     assert!(repo_path.join("file3").exists());
@@ -164,14 +144,10 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(read_patterns(), @".");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
-    insta::assert_snapshot!(output, @r"
-    file1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"file1");
 
     // Can edit with multiple files
     edit_patterns(&["file3", "file2", "file3"]);
@@ -179,14 +155,12 @@ fn test_sparse_manage_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Added 2 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(read_patterns(), @"file1");
     let output = test_env.run_jj_in(&sub_dir, ["sparse", "list"]);
     insta::assert_snapshot!(output, @r"
     file2
     file3
-    [EOF]
     ");
 }
 

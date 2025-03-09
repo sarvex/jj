@@ -35,7 +35,6 @@ fn test_templater_parse_error() {
       |             ^---
       |
       = expected <EOI>, `++`, `||`, `&&`, `==`, `!=`, `>=`, `>`, `<=`, or `<`
-    [EOF]
     [exit status: 1]
     ");
 
@@ -59,7 +58,6 @@ fn test_templater_parse_error() {
       |
       = Keyword `conflicts` doesn't exist
     Hint: Did you mean `conflict`, `conflicting`?
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(render(r#"commit_id.shorter()"#), @r"
@@ -72,7 +70,6 @@ fn test_templater_parse_error() {
       |
       = Method `shorter` doesn't exist for type `CommitOrChangeId`
     Hint: Did you mean `short`, `shortest`?
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(render(r#"oncat()"#), @r"
@@ -85,7 +82,6 @@ fn test_templater_parse_error() {
       |
       = Function `oncat` doesn't exist
     Hint: Did you mean `concat`, `socat`?
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(render(r#""".lines().map(|s| se)"#), @r#"
@@ -98,7 +94,6 @@ fn test_templater_parse_error() {
       |
       = Keyword `se` doesn't exist
     Hint: Did you mean `s`, `self`?
-    [EOF]
     [exit status: 1]
     "#);
     insta::assert_snapshot!(render(r#"format_id(commit_id)"#), @r"
@@ -118,7 +113,6 @@ fn test_templater_parse_error() {
       |
       = Method `sort` doesn't exist for type `CommitOrChangeId`
     Hint: Did you mean `short`, `shortest`?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -132,7 +126,6 @@ fn test_templater_parse_error() {
       |          ^
       |
       = Function `separate`: Expected at least 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -148,7 +141,6 @@ fn test_templater_parse_error() {
       |
       = Keyword `builtin` doesn't exist
     Hint: Did you mean `builtin_log_comfortable`, `builtin_log_compact`, `builtin_log_compact_full_description`, `builtin_log_detailed`, `builtin_log_node`, `builtin_log_node_ascii`, `builtin_log_oneline`, `builtin_op_log_comfortable`, `builtin_op_log_compact`, `builtin_op_log_node`, `builtin_op_log_node_ascii`, `builtin_op_log_oneline`?
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -169,7 +161,6 @@ fn test_template_parse_warning() {
     @  test.user
     │
     ~
-    [EOF]
     ------- stderr -------
     Warning: In template expression
      --> 2:10
@@ -178,7 +169,6 @@ fn test_template_parse_warning() {
       |          ^------^
       |
       = username() is deprecated; use email().local() instead
-    [EOF]
     ");
 }
 
@@ -191,9 +181,9 @@ fn test_templater_upper_lower() {
 
     insta::assert_snapshot!(
         render(r#"change_id.shortest(4).upper() ++ change_id.shortest(4).upper().lower()"#),
-        @"[1m[38;5;5mZ[0m[38;5;8mZZZ[1m[38;5;5mz[0m[38;5;8mzzz[39m[EOF]");
+        @"\u{1b}[1m\u{1b}[38;5;5mZ\u{1b}[0m\u{1b}[38;5;8mZZZ\u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzz\u{1b}[39m[no newline]");
     insta::assert_snapshot!(
-        render(r#""Hello".upper() ++ "Hello".lower()"#), @"HELLOhello[EOF]");
+        render(r#""Hello".upper() ++ "Hello".lower()"#), @"HELLOhello[no newline]");
 }
 
 #[test]
@@ -220,8 +210,8 @@ fn test_templater_alias() {
     "###,
     );
 
-    insta::assert_snapshot!(render("my_commit_id"), @"000000000000[EOF]");
-    insta::assert_snapshot!(render("identity(my_commit_id)"), @"000000000000[EOF]");
+    insta::assert_snapshot!(render("my_commit_id"), @"000000000000[no newline]");
+    insta::assert_snapshot!(render("identity(my_commit_id)"), @"000000000000[no newline]");
 
     insta::assert_snapshot!(render("commit_id ++ syntax_error"), @r"
     ------- stderr -------
@@ -239,7 +229,6 @@ fn test_templater_alias() {
       |     ^---
       |
       = expected <identifier>
-    [EOF]
     [exit status: 1]
     ");
 
@@ -259,7 +248,6 @@ fn test_templater_alias() {
       | ^--------^
       |
       = Keyword `unknown_id` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -297,7 +285,6 @@ fn test_templater_alias() {
       |                                   ^^
       |
       = Expected expression of type `Integer`, but actual type is `String`
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -329,7 +316,6 @@ fn test_templater_alias() {
       | ^-----^
       |
       = Alias `recurse` expanded recursively
-    [EOF]
     [exit status: 1]
     ");
 
@@ -342,7 +328,6 @@ fn test_templater_alias() {
       |          ^
       |
       = Function `identity`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(render("identity(commit_id, commit_id)"), @r"
@@ -354,7 +339,6 @@ fn test_templater_alias() {
       |          ^------------------^
       |
       = Function `identity`: Expected 1 arguments
-    [EOF]
     [exit status: 1]
     ");
 
@@ -380,7 +364,6 @@ fn test_templater_alias() {
       |          ^-----------------------^
       |
       = Expected expression of type `Boolean`, but actual type is `Template`
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -400,7 +383,6 @@ fn test_templater_alias() {
       | ^---------------^
       |
       = Expected expression of type `Integer`, but actual type is `String`
-    [EOF]
     [exit status: 1]
     ");
 
@@ -409,7 +391,6 @@ fn test_templater_alias() {
     #  test.user
     │
     ~
-    [EOF]
     ------- stderr -------
     Warning: In template expression
      --> 1:1
@@ -424,7 +405,6 @@ fn test_templater_alias() {
       |        ^------^
       |
       = username() is deprecated; use email().local() instead
-    [EOF]
     ");
 }
 
@@ -454,7 +434,7 @@ fn test_templater_alias_override() {
             r#"--config=template-aliases.'f(a)'='"arg"'"#,
         ],
     );
-    insta::assert_snapshot!(output, @"arg[EOF]");
+    insta::assert_snapshot!(output, @"arg[no newline]");
 }
 
 #[test]
@@ -474,7 +454,7 @@ fn test_templater_bad_alias_decl() {
     // Invalid declaration should be warned and ignored.
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@-", "-Tmy_commit_id"]);
     insta::assert_snapshot!(output, @r"
-    000000000000[EOF]
+    000000000000[no newline]
     ------- stderr -------
     Warning: Failed to load `template-aliases.badfn(a, a)`:  --> 1:7
       |
@@ -482,7 +462,6 @@ fn test_templater_bad_alias_decl() {
       |       ^--^
       |
       = Redefinition of function parameter
-    [EOF]
     ");
 }
 
@@ -495,10 +474,10 @@ fn test_templater_config_function() {
 
     insta::assert_snapshot!(
         render("config('user.name')"),
-        @r#""Test User"[EOF]"#);
+        @r#""Test User"[no newline]"#);
     insta::assert_snapshot!(
         render("config('user')"),
-        @r#"{ email = "test.user@example.com", name = "Test User" }[EOF]"#);
+        @r#"{ email = "test.user@example.com", name = "Test User" }[no newline]"#);
     insta::assert_snapshot!(render("config('invalid name')"), @r"
     ------- stderr -------
     Error: Failed to parse template: Failed to parse config name
@@ -515,7 +494,6 @@ fn test_templater_config_function() {
       |         ^
 
 
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(render("config('unknown')"), @r"
@@ -529,7 +507,6 @@ fn test_templater_config_function() {
       |
       = Failed to get config value
     2: Value not found for unknown
-    [EOF]
     [exit status: 1]
     ");
 }

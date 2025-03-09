@@ -39,7 +39,6 @@ fn test_parallelize_no_descendants() {
     ○  d3902619fade 2 parents: 1
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -58,7 +57,6 @@ fn test_parallelize_no_descendants() {
     │ ○  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -85,7 +83,6 @@ fn test_parallelize_with_descendants_simple() {
     ○  d3902619fade 2 parents: 1
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -106,7 +103,6 @@ fn test_parallelize_with_descendants_simple() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -140,7 +136,6 @@ fn test_parallelize_where_interior_has_non_target_children() {
     ○  d3902619fade 2 parents: 1
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -163,7 +158,6 @@ fn test_parallelize_where_interior_has_non_target_children() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -192,7 +186,6 @@ fn test_parallelize_where_root_has_non_target_children() {
     ├─╯
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
     test_env
         .run_jj_in(
@@ -211,7 +204,6 @@ fn test_parallelize_where_root_has_non_target_children() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -252,7 +244,6 @@ fn test_parallelize_with_merge_commit_child() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     // After this finishes, child-2a will have three parents: "1", "2", and "a".
@@ -275,7 +266,6 @@ fn test_parallelize_with_merge_commit_child() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -298,7 +288,6 @@ fn test_parallelize_disconnected_target_commits() {
     ○  d3902619fade 2 parents: 1
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -308,14 +297,12 @@ fn test_parallelize_disconnected_target_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @  4cd999dfaac0 3 parents: 2
     ○  d3902619fade 2 parents: 1
     ○  8b64ddff700d 1 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -358,7 +345,6 @@ fn test_parallelize_head_is_a_merge() {
     ○ │  745bea8029c1 0 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -376,7 +362,6 @@ fn test_parallelize_head_is_a_merge() {
     ○ │  745bea8029c1 0 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -412,7 +397,6 @@ fn test_parallelize_interior_target_is_a_merge() {
     ○ │  745bea8029c1 0 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -429,7 +413,6 @@ fn test_parallelize_interior_target_is_a_merge() {
     ○ │  745bea8029c1 0 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -465,7 +448,6 @@ fn test_parallelize_root_is_a_merge() {
     ○ │  ca57511e158f y parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -485,7 +467,6 @@ fn test_parallelize_root_is_a_merge() {
       ○ │  ca57511e158f y parents:
       ├─╯
       ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -509,7 +490,6 @@ fn test_parallelize_multiple_heads() {
     ├─╯
     ○  745bea8029c1 0 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -522,7 +502,6 @@ fn test_parallelize_multiple_heads() {
     │ ○  745bea8029c1 0 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -549,7 +528,6 @@ fn test_parallelize_multiple_heads_with_and_without_children() {
     ├─╯
     ○  745bea8029c1 0 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -564,7 +542,6 @@ fn test_parallelize_multiple_heads_with_and_without_children() {
     │ ○  6270540ee067 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -596,7 +573,6 @@ fn test_parallelize_multiple_roots() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     // Succeeds because the roots have the same parents.
@@ -612,7 +588,6 @@ fn test_parallelize_multiple_roots() {
     │ ○  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -652,7 +627,6 @@ fn test_parallelize_multiple_heads_with_different_children() {
     │ ○  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -679,7 +653,6 @@ fn test_parallelize_multiple_heads_with_different_children() {
     │ ○  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -718,7 +691,6 @@ fn test_parallelize_multiple_roots_with_different_parents() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     test_env
@@ -738,7 +710,6 @@ fn test_parallelize_multiple_roots_with_different_parents() {
     ○ │  8b64ddff700d 1 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 
@@ -786,7 +757,6 @@ fn test_parallelize_complex_nonlinear_target() {
     ├─╯
     ○  745bea8029c1 0 parents:
     ◆  000000000000 parents:
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -798,7 +768,6 @@ fn test_parallelize_complex_nonlinear_target() {
     Working copy now at: yostqsxw 59a216e5 (empty) 3c
     Parent commit      : rlvkpnrz 745bea80 (empty) 0
     Parent commit      : mzvwutvl cb944786 (empty) 3
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @    59a216e537c4 3c parents: 0 3
@@ -817,7 +786,6 @@ fn test_parallelize_complex_nonlinear_target() {
     │ ○  14ca4df576b3 4 parents:
     ├─╯
     ◆  000000000000 parents:
-    [EOF]
     ");
 }
 

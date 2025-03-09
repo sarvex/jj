@@ -42,7 +42,6 @@ fn test_undo_rewrite_with_child() {
     @  child
     ○  modified
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["undo", &op_id_hex])
@@ -55,7 +54,6 @@ fn test_undo_rewrite_with_child() {
     @  child
     ○  initial
     ◆
-    [EOF]
     ");
 }
 
@@ -94,7 +92,6 @@ fn test_git_push_undo() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     let pre_push_opid = test_env.current_operation_id(&repo_path);
     test_env.run_jj_in(&repo_path, ["git", "push"]).success();
@@ -107,7 +104,6 @@ fn test_git_push_undo() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin: qpvuntsm 75e78001 (empty) BB
-    [EOF]
     ");
 
     // Undo the push
@@ -123,7 +119,6 @@ fn test_git_push_undo() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     test_env.advance_test_rng_seed_to_multiple_of(100_000);
     test_env
@@ -144,7 +139,6 @@ fn test_git_push_undo() {
       + qpvuntsm?? 20b2cc4b (empty) CC
       + qpvuntsm?? 75e78001 (empty) BB
       @origin (behind by 1 commits): qpvuntsm?? 75e78001 (empty) BB
-    [EOF]
     ");
 }
 
@@ -185,7 +179,6 @@ fn test_git_push_undo_with_import() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     let pre_push_opid = test_env.current_operation_id(&repo_path);
     test_env.run_jj_in(&repo_path, ["git", "push"]).success();
@@ -198,7 +191,6 @@ fn test_git_push_undo_with_import() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin: qpvuntsm 75e78001 (empty) BB
-    [EOF]
     ");
 
     // Undo the push
@@ -214,7 +206,6 @@ fn test_git_push_undo_with_import() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
 
     // PROBLEM: inserting this import changes the outcome compared to previous test
@@ -230,7 +221,6 @@ fn test_git_push_undo_with_import() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin: qpvuntsm 75e78001 (empty) BB
-    [EOF]
     ");
     test_env.advance_test_rng_seed_to_multiple_of(100_000);
     test_env
@@ -242,7 +232,6 @@ fn test_git_push_undo_with_import() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 20b2cc4b (empty) CC
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 75e78001 (empty) BB
-    [EOF]
     ");
 }
 
@@ -286,7 +275,6 @@ fn test_git_push_undo_colocated() {
     main: qpvuntsm 75e78001 (empty) BB
       @git: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     let pre_push_opid = test_env.current_operation_id(&repo_path);
     test_env.run_jj_in(&repo_path, ["git", "push"]).success();
@@ -300,7 +288,6 @@ fn test_git_push_undo_colocated() {
     main: qpvuntsm 75e78001 (empty) BB
       @git: qpvuntsm 75e78001 (empty) BB
       @origin: qpvuntsm 75e78001 (empty) BB
-    [EOF]
     ");
 
     // Undo the push
@@ -325,7 +312,6 @@ fn test_git_push_undo_colocated() {
     main: qpvuntsm 75e78001 (empty) BB
       @git: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     test_env.advance_test_rng_seed_to_multiple_of(100_000);
     test_env
@@ -341,7 +327,6 @@ fn test_git_push_undo_colocated() {
       + qpvuntsm?? 75e78001 (empty) BB
       @git (behind by 1 commits): qpvuntsm?? 20b2cc4b (empty) CC
       @origin (behind by 1 commits): qpvuntsm?? 75e78001 (empty) BB
-    [EOF]
     ");
 }
 
@@ -372,7 +357,6 @@ fn test_git_push_undo_repo_only() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 2080bdb8 (empty) AA
       @origin: qpvuntsm 2080bdb8 (empty) AA
-    [EOF]
     ");
     test_env.advance_test_rng_seed_to_multiple_of(100_000);
     test_env
@@ -381,7 +365,6 @@ fn test_git_push_undo_repo_only() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 2080bdb8 (empty) AA
-    [EOF]
     ");
     let pre_push_opid = test_env.current_operation_id(&repo_path);
     test_env.run_jj_in(&repo_path, ["git", "push"]).success();
@@ -393,7 +376,6 @@ fn test_git_push_undo_repo_only() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 75e78001 (empty) BB
       @origin: qpvuntsm 75e78001 (empty) BB
-    [EOF]
     ");
     test_env.advance_test_rng_seed_to_multiple_of(100_000);
     test_env
@@ -404,7 +386,6 @@ fn test_git_push_undo_repo_only() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     main: qpvuntsm 20b2cc4b (empty) CC
       @origin (ahead by 1 commits, behind by 1 commits): qpvuntsm hidden 75e78001 (empty) BB
-    [EOF]
     ");
 }
 
@@ -439,7 +420,6 @@ fn test_bookmark_track_untrack_undo() {
       @origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2 (deleted)
       @origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 
     // Track/untrack can be undone so long as states can be trivially merged.
@@ -453,7 +433,6 @@ fn test_bookmark_track_untrack_undo() {
     feature1: qpvuntsm 8da1cfc8 (empty) commit
     feature1@origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2@origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -462,7 +441,6 @@ fn test_bookmark_track_untrack_undo() {
       @origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2 (deleted)
       @origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -470,7 +448,6 @@ fn test_bookmark_track_untrack_undo() {
     feature1: qpvuntsm 8da1cfc8 (empty) commit
     feature1@origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2@origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 
     test_env
@@ -480,7 +457,6 @@ fn test_bookmark_track_untrack_undo() {
     feature1: qpvuntsm 8da1cfc8 (empty) commit
       @origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2@origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -488,7 +464,6 @@ fn test_bookmark_track_untrack_undo() {
     feature1: qpvuntsm 8da1cfc8 (empty) commit
     feature1@origin: qpvuntsm 8da1cfc8 (empty) commit
     feature2@origin: qpvuntsm 8da1cfc8 (empty) commit
-    [EOF]
     ");
 }
 
@@ -509,7 +484,6 @@ fn test_shows_a_warning_when_undoing_an_undo_operation_as_bare_jj_undo() {
     Parent commit      : qpvuntsm 230dd059 (empty) (no description set)
     Hint: This action reverted an 'undo' operation. The repository is now in the same state as it was before the original 'undo'.
     Hint: If your goal is to undo multiple operations, consider using `jj op log` to see past states, and `jj op restore` to restore one of these states.
-    [EOF]
     ");
 
     // Double-undo creation of sibling
@@ -523,7 +497,6 @@ fn test_shows_a_warning_when_undoing_an_undo_operation_as_bare_jj_undo() {
     Parent commit      : qpvuntsm 230dd059 (empty) (no description set)
     Hint: This action reverted an 'undo' operation. The repository is now in the same state as it was before the original 'undo'.
     Hint: If your goal is to undo multiple operations, consider using `jj op log` to see past states, and `jj op restore` to restore one of these states.
-    [EOF]
     ");
 }
 
@@ -543,7 +516,6 @@ fn test_shows_no_warning_when_undoing_a_specific_undo_change() {
     Undid operation: 2d5b73a97567 (2001-02-03 08:05:09) undo operation 289cb69a8458456474a77cc432e8009b99f039cdcaf19ba4526753e97d70fee3fd0f410ff2b7c1d10cf0c2501702e7a85d58f9d813cdca567c377431ec4d2b97
     Working copy now at: rlvkpnrz 65b6b74e (empty) (no description set)
     Parent commit      : qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
 }
 

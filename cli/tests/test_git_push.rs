@@ -77,7 +77,6 @@ fn test_git_push_nothing(subprocess: bool) {
       @origin: xtvrqkyv d13ecdbd (empty) description 1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
     // No bookmarks to push yet
@@ -86,7 +85,6 @@ fn test_git_push_nothing(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -130,7 +128,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
     bookmark2: yostqsxw bc7610b6 (empty) foo
       @origin (behind by 1 commits): rlzusymt 8476341e (empty) description 2
     my-bookmark: yostqsxw bc7610b6 (empty) foo
-    [EOF]
     ");
     }
     // First dry-run. `bookmark1` should not get pushed.
@@ -142,7 +139,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
       Move forward bookmark bookmark2 from 8476341eb395 to bc7610b65a91
       Add bookmark my-bookmark to bc7610b65a91
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["git", "push", "--allow-new"]);
@@ -152,7 +148,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
     Changes to push to origin:
       Move forward bookmark bookmark2 from 8476341eb395 to bc7610b65a91
       Add bookmark my-bookmark to bc7610b65a91
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -163,7 +158,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
       @origin: yostqsxw bc7610b6 (empty) foo
     my-bookmark: yostqsxw bc7610b6 (empty) foo
       @origin: yostqsxw bc7610b6 (empty) foo
-    [EOF]
     ");
     }
 
@@ -188,7 +182,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
     Nothing changed.
-    [EOF]
     ");
     }
     // We can move a bookmark backwards
@@ -198,7 +191,6 @@ fn test_git_push_current_bookmark(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move backward bookmark bookmark2 from bc7610b65a91 to 8476341eb395
-    [EOF]
     ");
     }
 }
@@ -230,7 +222,6 @@ fn test_git_push_parent_bookmark(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark bookmark1 from d13ecdbda2a2 to e612d524a5c6
-    [EOF]
     ");
     }
 }
@@ -249,7 +240,6 @@ fn test_git_push_no_matching_bookmark(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -270,7 +260,6 @@ fn test_git_push_matching_bookmark_unchanged(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -319,7 +308,6 @@ fn test_git_push_other_remote_has_bookmark(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark bookmark1 from d13ecdbda2a2 to a657f1b61b94
-    [EOF]
     ");
     }
     // Since it's already pushed to origin, nothing will happen if push again
@@ -329,7 +317,6 @@ fn test_git_push_other_remote_has_bookmark(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks found in the default push revset: remote_bookmarks(remote=origin)..@
     Nothing changed.
-    [EOF]
     ");
     }
     // The bookmark was moved on the "other" remote as well (since it's actually the
@@ -349,7 +336,6 @@ fn test_git_push_other_remote_has_bookmark(subprocess: bool) {
     ------- stderr -------
     Changes to push to other:
       Add bookmark bookmark1 to a657f1b61b94
-    [EOF]
     ");
     }
 }
@@ -393,7 +379,6 @@ fn test_git_push_forward_unexpectedly_moved(subprocess: bool) {
       Move forward bookmark bookmark1 from d13ecdbda2a2 to 6750425ff51c
     Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
     Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -422,7 +407,6 @@ fn test_git_push_sideways_unexpectedly_moved(subprocess: bool) {
       @git (behind by 1 commits): qpvuntsm d13ecdbd (empty) description 1
     bookmark2: zsuskuln 8476341e (empty) description 2
       @git: zsuskuln 8476341e (empty) description 2
-    [EOF]
     ");
     }
     test_env
@@ -446,7 +430,6 @@ fn test_git_push_sideways_unexpectedly_moved(subprocess: bool) {
       @origin (ahead by 1 commits, behind by 1 commits): xtvrqkyv d13ecdbd (empty) description 1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -458,7 +441,6 @@ fn test_git_push_sideways_unexpectedly_moved(subprocess: bool) {
       Move sideways bookmark bookmark1 from d13ecdbda2a2 to 0f8bf988588e
     Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
     Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -489,7 +471,6 @@ fn test_git_push_deletion_unexpectedly_moved(subprocess: bool) {
       @git (behind by 1 commits): qpvuntsm d13ecdbd (empty) description 1
     bookmark2: zsuskuln 8476341e (empty) description 2
       @git: zsuskuln 8476341e (empty) description 2
-    [EOF]
     ");
     }
     test_env
@@ -506,7 +487,6 @@ fn test_git_push_deletion_unexpectedly_moved(subprocess: bool) {
       @origin: xtvrqkyv d13ecdbd (empty) description 1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -518,7 +498,6 @@ fn test_git_push_deletion_unexpectedly_moved(subprocess: bool) {
       Delete bookmark bookmark1 from d13ecdbda2a2
     Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
     Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -543,7 +522,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
       @git: qpvuntsm d13ecdbd (empty) description 1
     bookmark2: zsuskuln 8476341e (empty) description 2
       @git: zsuskuln 8476341e (empty) description 2
-    [EOF]
     ");
     }
     test_env
@@ -567,7 +545,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
       @origin (ahead by 1 commits, behind by 1 commits): xtvrqkyv d13ecdbd (empty) description 1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -580,7 +557,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
       Move sideways bookmark bookmark1 from d13ecdbda2a2 to 1ebe27ba04bf
     Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
     Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -594,7 +570,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
       @origin: xtvrqkyv d13ecdbd (empty) description 1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -608,7 +583,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
           Delete bookmark bookmark1 from d13ecdbda2a2
         Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
         Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-        [EOF]
         [exit status: 1]
         ");
     } else {
@@ -619,7 +593,6 @@ fn test_git_push_unexpectedly_deleted(subprocess: bool) {
         ------- stderr -------
         Changes to push to origin:
           Delete bookmark bookmark1 from d13ecdbda2a2
-        [EOF]
         ");
     }
 }
@@ -653,7 +626,6 @@ fn test_git_push_creation_unexpectedly_already_exists(subprocess: bool) {
     bookmark1: yostqsxw cb17dcdc new bookmark1
     bookmark2: rlzusymt 8476341e (empty) description 2
       @origin: rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -665,7 +637,6 @@ fn test_git_push_creation_unexpectedly_already_exists(subprocess: bool) {
       Add bookmark bookmark1 to cb17dcdc74d5
     Error: Refusing to push a bookmark that unexpectedly moved on the remote. Affected refs: refs/heads/bookmark1
     Hint: Try fetching from the remote, then make the bookmark point to where you want it to be, and push again.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -695,7 +666,6 @@ fn test_git_push_locally_created_and_rewritten(subprocess: bool) {
     Warning: Refusing to create new remote bookmark my@origin
     Hint: Use --allow-new to push new bookmark. Use --remote to specify the remote to push to.
     Nothing changed.
-    [EOF]
     ");
     }
     // Either --allow-new or git.push-new-bookmarks=true should work
@@ -706,7 +676,6 @@ fn test_git_push_locally_created_and_rewritten(subprocess: bool) {
     Changes to push to origin:
       Add bookmark my to fcc999921ce9
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(
@@ -718,7 +687,6 @@ fn test_git_push_locally_created_and_rewritten(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Add bookmark my to fcc999921ce9
-    [EOF]
     ");
     }
 
@@ -735,7 +703,6 @@ fn test_git_push_locally_created_and_rewritten(subprocess: bool) {
       @origin: rlzusymt 8476341e (empty) description 2
     my: vruxwmqv 423bb660 (empty) local 2
       @origin (ahead by 1 commits, behind by 1 commits): vruxwmqv hidden fcc99992 (empty) local 1
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["git", "push"]);
@@ -744,7 +711,6 @@ fn test_git_push_locally_created_and_rewritten(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark my from fcc999921ce9 to 423bb66069e7
-    [EOF]
     ");
     }
 }
@@ -782,7 +748,6 @@ fn test_git_push_multiple(subprocess: bool) {
     bookmark2: yqosqzyt c4a3c310 (empty) foo
       @origin (ahead by 1 commits, behind by 1 commits): rlzusymt 8476341e (empty) description 2
     my-bookmark: yqosqzyt c4a3c310 (empty) foo
-    [EOF]
     ");
     }
     // First dry-run
@@ -795,7 +760,6 @@ fn test_git_push_multiple(subprocess: bool) {
       Move sideways bookmark bookmark2 from 8476341eb395 to c4a3c3105d92
       Add bookmark my-bookmark to c4a3c3105d92
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Dry run requesting two specific bookmarks
@@ -817,7 +781,6 @@ fn test_git_push_multiple(subprocess: bool) {
       Delete bookmark bookmark1 from d13ecdbda2a2
       Add bookmark my-bookmark to c4a3c3105d92
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Dry run requesting two specific bookmarks twice
@@ -841,7 +804,6 @@ fn test_git_push_multiple(subprocess: bool) {
       Delete bookmark bookmark1 from d13ecdbda2a2
       Add bookmark my-bookmark to c4a3c3105d92
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Dry run with glob pattern
@@ -856,7 +818,6 @@ fn test_git_push_multiple(subprocess: bool) {
       Delete bookmark bookmark1 from d13ecdbda2a2
       Move sideways bookmark bookmark2 from 8476341eb395 to c4a3c3105d92
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 
@@ -866,7 +827,6 @@ fn test_git_push_multiple(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such bookmark: foo
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -878,7 +838,6 @@ fn test_git_push_multiple(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No matching bookmarks for patterns: foo, ?bookmark
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -891,7 +850,6 @@ fn test_git_push_multiple(subprocess: bool) {
       Delete bookmark bookmark1 from d13ecdbda2a2
       Move sideways bookmark bookmark2 from 8476341eb395 to c4a3c3105d92
       Add bookmark my-bookmark to c4a3c3105d92
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -900,7 +858,6 @@ fn test_git_push_multiple(subprocess: bool) {
       @origin: yqosqzyt c4a3c310 (empty) foo
     my-bookmark: yqosqzyt c4a3c310 (empty) foo
       @origin: yqosqzyt c4a3c310 (empty) foo
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["log", "-rall()"]);
@@ -913,7 +870,6 @@ fn test_git_push_multiple(subprocess: bool) {
     │ ○  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 d13ecdbd
     ├─╯  (empty) description 1
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
     }
 }
@@ -941,7 +897,6 @@ fn test_git_push_changes(subprocess: bool) {
     Creating bookmark push-yostqsxwqrlt for revision yostqsxwqrlt
     Changes to push to origin:
       Add bookmark push-yostqsxwqrlt to cf1a53a8800a
-    [EOF]
     ");
     }
     // test pushing two changes at once
@@ -955,7 +910,6 @@ fn test_git_push_changes(subprocess: bool) {
       yostqsxw 16c16966 push-yostqsxwqrlt* | bar
       yqosqzyt a050abf4 foo
     Hint: Prefix the expression with `all:` to allow any number of revisions (i.e. `all:(@|@-)`).
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -968,7 +922,6 @@ fn test_git_push_changes(subprocess: bool) {
     Changes to push to origin:
       Move sideways bookmark push-yostqsxwqrlt from cf1a53a8800a to 16c169664e9f
       Add bookmark push-yqosqzytrlsw to a050abf4ff07
-    [EOF]
     ");
     }
     // specifying the same change twice doesn't break things
@@ -979,7 +932,6 @@ fn test_git_push_changes(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark push-yostqsxwqrlt from 16c169664e9f to ef6313d50ac1
-    [EOF]
     ");
     }
 
@@ -994,7 +946,6 @@ fn test_git_push_changes(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark push-yostqsxwqrlt from ef6313d50ac1 to c1e65d3a64ce
-    [EOF]
     ");
     }
 
@@ -1019,7 +970,6 @@ fn test_git_push_changes(subprocess: bool) {
     M file
     Working copy : yostqsxw 38cb417c bar
     Parent commit: yqosqzyt a050abf4 push-yostqsxwqrlt* push-yqosqzytrlsw | foo
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(
@@ -1031,7 +981,6 @@ fn test_git_push_changes(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Move sideways bookmark push-yostqsxwqrlt from c1e65d3a64ce to 38cb417ce3a6
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["status"]);
@@ -1041,7 +990,6 @@ fn test_git_push_changes(subprocess: bool) {
     M file
     Working copy : yostqsxw 38cb417c push-yostqsxwqrlt | bar
     Parent commit: yqosqzyt a050abf4 push-yqosqzytrlsw | foo
-    [EOF]
     ");
     }
 
@@ -1061,7 +1009,6 @@ fn test_git_push_changes(subprocess: bool) {
     Creating bookmark test-yostqsxwqrlt for revision yostqsxwqrlt
     Changes to push to origin:
       Add bookmark test-yostqsxwqrlt to 38cb417ce3a6
-    [EOF]
     ");
     }
 }
@@ -1108,7 +1055,6 @@ fn test_git_push_revisions(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks point to the specified revisions: none()
     Nothing changed.
-    [EOF]
     ");
     }
     // Push a revision with no bookmarks
@@ -1118,7 +1064,6 @@ fn test_git_push_revisions(subprocess: bool) {
     ------- stderr -------
     Warning: No bookmarks point to the specified revisions: @--
     Nothing changed.
-    [EOF]
     ");
     }
     // Push a revision with a single bookmark
@@ -1132,7 +1077,6 @@ fn test_git_push_revisions(subprocess: bool) {
     Changes to push to origin:
       Add bookmark bookmark-1 to 5f432a855e59
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Push multiple revisions of which some have bookmarks
@@ -1147,7 +1091,6 @@ fn test_git_push_revisions(subprocess: bool) {
     Changes to push to origin:
       Add bookmark bookmark-1 to 5f432a855e59
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Push a revision with a multiple bookmarks
@@ -1162,7 +1105,6 @@ fn test_git_push_revisions(subprocess: bool) {
       Add bookmark bookmark-2a to 84f499037f5c
       Add bookmark bookmark-2b to 84f499037f5c
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
     // Repeating a commit doesn't result in repeated messages about the bookmark
@@ -1176,7 +1118,6 @@ fn test_git_push_revisions(subprocess: bool) {
     Changes to push to origin:
       Add bookmark bookmark-1 to 5f432a855e59
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 }
@@ -1233,7 +1174,6 @@ fn test_git_push_mixed(subprocess: bool) {
     Creating bookmark push-yqosqzytrlsw for revision yqosqzytrlsw
     Error: Refusing to create new remote bookmark bookmark-1@origin
     Hint: Use --allow-new to push new bookmark. Use --remote to specify the remote to push to.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1258,7 +1198,6 @@ fn test_git_push_mixed(subprocess: bool) {
       Add bookmark bookmark-1 to 5f432a855e59
       Add bookmark bookmark-2a to 84f499037f5c
       Add bookmark bookmark-2b to 84f499037f5c
-    [EOF]
     ");
     }
 }
@@ -1292,7 +1231,6 @@ fn test_git_push_existing_long_bookmark(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Add bookmark push-19b790168e73f7a73a98deae21e807c0 to a050abf4ff07
-    [EOF]
     ");
     }
 }
@@ -1351,7 +1289,6 @@ fn test_git_push_conflict(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit e2221a796300 since it has conflicts
     Hint: Rejected commit: yostqsxw e2221a79 my-bookmark | (conflict) third
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1382,7 +1319,6 @@ fn test_git_push_no_description(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 5b36783cd11c since it has no description
     Hint: Rejected commit: yqosqzyt 5b36783c my-bookmark | (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1440,7 +1376,6 @@ fn test_git_push_no_description_in_immutable(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 5b36783cd11c since it has no description
     Hint: Rejected commit: yqosqzyt 5b36783c imm | (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1462,7 +1397,6 @@ fn test_git_push_no_description_in_immutable(subprocess: bool) {
     Changes to push to origin:
       Add bookmark my-bookmark to ea7373507ad9
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 }
@@ -1490,7 +1424,6 @@ fn test_git_push_missing_author(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 944313939bbd since it has no author and/or committer set
     Hint: Rejected commit: vruxwmqv 94431393 missing-name | (empty) initial
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1505,7 +1438,6 @@ fn test_git_push_missing_author(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 59354714f789 since it has no author and/or committer set
     Hint: Rejected commit: kpqxywon 59354714 missing-email | (empty) initial
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1554,7 +1486,6 @@ fn test_git_push_missing_author_in_immutable(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 011f740bf8b5 since it has no author and/or committer set
     Hint: Rejected commit: yostqsxw 011f740b imm | (empty) no author email
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1576,7 +1507,6 @@ fn test_git_push_missing_author_in_immutable(subprocess: bool) {
     Changes to push to origin:
       Add bookmark my-bookmark to 68fdae89de4f
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 }
@@ -1609,7 +1539,6 @@ fn test_git_push_missing_committer(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 4fd190283d1a since it has no author and/or committer set
     Hint: Rejected commit: yqosqzyt 4fd19028 missing-name | (empty) no committer name
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1632,7 +1561,6 @@ fn test_git_push_missing_committer(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit eab97428a6ec since it has no author and/or committer set
     Hint: Rejected commit: kpqxywon eab97428 missing-email | (empty) no committer email
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1649,7 +1577,6 @@ fn test_git_push_missing_committer(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 1143ed607f54 since it has no description and it has no author and/or committer set
     Hint: Rejected commit: kpqxywon 1143ed60 missing-email | (empty) (no description set)
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1699,7 +1626,6 @@ fn test_git_push_missing_committer_in_immutable(subprocess: bool) {
     ------- stderr -------
     Error: Won't push commit 7e61dc727a8f since it has no author and/or committer set
     Hint: Rejected commit: yostqsxw 7e61dc72 imm | (empty) no committer email
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1721,7 +1647,6 @@ fn test_git_push_missing_committer_in_immutable(subprocess: bool) {
     Changes to push to origin:
       Add bookmark my-bookmark to c79f85e90b4a
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 }
@@ -1743,7 +1668,6 @@ fn test_git_push_deleted(subprocess: bool) {
     ------- stderr -------
     Changes to push to origin:
       Delete bookmark bookmark1 from d13ecdbda2a2
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["log", "-rall()"]);
@@ -1756,7 +1680,6 @@ fn test_git_push_deleted(subprocess: bool) {
     │ ○  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 d13ecdbd
     ├─╯  (empty) description 1
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["git", "push", "--deleted"]);
@@ -1764,7 +1687,6 @@ fn test_git_push_deleted(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -1809,7 +1731,6 @@ fn test_git_push_conflicting_bookmarks(subprocess: bool) {
       + yostqsxw 8e670e2d (empty) description 3
       + rlzusymt 8476341e (empty) description 2
       @origin (behind by 1 commits): rlzusymt 8476341e (empty) description 2
-    [EOF]
     ");
     }
 
@@ -1830,7 +1751,6 @@ fn test_git_push_conflicting_bookmarks(subprocess: bool) {
     Warning: Bookmark bookmark2 is conflicted
     Hint: Run `jj bookmark list` to inspect, and use `jj bookmark set` to fix it up.
     Nothing changed.
-    [EOF]
     ");
     }
 
@@ -1844,7 +1764,6 @@ fn test_git_push_conflicting_bookmarks(subprocess: bool) {
     ------- stderr -------
     Error: Bookmark bookmark2 is conflicted
     Hint: Run `jj bookmark list` to inspect, and use `jj bookmark set` to fix it up.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1859,7 +1778,6 @@ fn test_git_push_conflicting_bookmarks(subprocess: bool) {
     Hint: Run `jj bookmark list` to inspect, and use `jj bookmark set` to fix it up.
     Changes to push to origin:
       Move forward bookmark bookmark1 from d13ecdbda2a2 to 8df52121b022
-    [EOF]
     ");
     }
 
@@ -1873,7 +1791,6 @@ fn test_git_push_conflicting_bookmarks(subprocess: bool) {
     Hint: Run `jj bookmark list` to inspect, and use `jj bookmark set` to fix it up.
     Changes to push to origin:
       Move forward bookmark bookmark1 from 8df52121b022 to 345e1f64a64d
-    [EOF]
     ");
     }
 }
@@ -1899,7 +1816,6 @@ fn test_git_push_deleted_untracked(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&workspace_root, ["git", "push", "--bookmark=bookmark1"]);
@@ -1907,7 +1823,6 @@ fn test_git_push_deleted_untracked(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such bookmark: bookmark1
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1945,7 +1860,6 @@ fn test_git_push_tracked_vs_all(subprocess: bool) {
     bookmark2 (deleted)
       @origin: rlzusymt 8476341e (empty) description 2
     bookmark3: znkkpsqq 1aa4f1f2 (empty) moved bookmark2
-    [EOF]
     ");
     }
 
@@ -1958,7 +1872,6 @@ fn test_git_push_tracked_vs_all(subprocess: bool) {
     Changes to push to origin:
       Delete bookmark bookmark2 from 8476341eb395
     Dry-run requested, not pushing.
-    [EOF]
     ");
     }
 
@@ -1972,7 +1885,6 @@ fn test_git_push_tracked_vs_all(subprocess: bool) {
     bookmark1@origin: xtvrqkyv d13ecdbd (empty) description 1
     bookmark2@origin: rlzusymt 8476341e (empty) description 2
     bookmark3: znkkpsqq 1aa4f1f2 (empty) moved bookmark2
-    [EOF]
     ");
     }
 
@@ -1982,7 +1894,6 @@ fn test_git_push_tracked_vs_all(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
 
@@ -2010,7 +1921,6 @@ fn test_git_push_tracked_vs_all(subprocess: bool) {
     Hint: Run `jj bookmark track bookmark1@origin` to import the remote bookmark.
     Changes to push to origin:
       Add bookmark bookmark3 to 1aa4f1f2ef7f
-    [EOF]
     ");
     }
 }
@@ -2039,7 +1949,6 @@ fn test_git_push_moved_forward_untracked(subprocess: bool) {
     Warning: Non-tracking remote bookmark bookmark1@origin exists
     Hint: Run `jj bookmark track bookmark1@origin` to import the remote bookmark.
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -2071,7 +1980,6 @@ fn test_git_push_moved_sideways_untracked(subprocess: bool) {
     Warning: Non-tracking remote bookmark bookmark1@origin exists
     Hint: Run `jj bookmark track bookmark1@origin` to import the remote bookmark.
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -2099,7 +2007,6 @@ fn test_git_push_to_remote_named_git(subprocess: bool) {
       Add bookmark bookmark2 to 8476341eb395
     Error: Git remote named 'git' is reserved for local Git repository
     Hint: Run `jj git remote rename` to give a different name.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -2131,7 +2038,6 @@ fn test_git_push_to_remote_with_slashes(subprocess: bool) {
       Add bookmark bookmark2 to 8476341eb395
     Error: Git remotes with slashes are incompatible with jj: slash/origin
     Hint: Run `jj git remote rename` to give a different name.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -2187,7 +2093,6 @@ fn test_git_push_sign_on_push() {
     │ ○  description 1
     ├─╯
     ◆
-    [EOF]
     ");
     test_env.add_config(
         r#"
@@ -2202,7 +2107,6 @@ fn test_git_push_sign_on_push() {
     Changes to push to origin:
       Move forward bookmark bookmark2 from 8476341eb395 to 8710e91a14a1
     Dry-run requested, not pushing.
-    [EOF]
     ");
     // There should be no signed commits after performing a dry run
     let output = test_env.run_jj_in(&workspace_root, ["log", "-T", template]);
@@ -2215,7 +2119,6 @@ fn test_git_push_sign_on_push() {
     │ ○  description 1
     ├─╯
     ◆
-    [EOF]
     ");
     let output = test_env.run_jj_in(&workspace_root, ["git", "push"]);
     insta::assert_snapshot!(output, @r"
@@ -2226,7 +2129,6 @@ fn test_git_push_sign_on_push() {
       Move forward bookmark bookmark2 from 8476341eb395 to a6259c482040
     Working copy now at: kmkuslsw b5f47345 (empty) commit which should not be signed 2
     Parent commit      : kpqxywon 90df08d3 (empty) commit which should not be signed 1
-    [EOF]
     ");
     // Only commits which are being pushed should be signed
     let output = test_env.run_jj_in(&workspace_root, ["log", "-T", template]);
@@ -2241,7 +2143,6 @@ fn test_git_push_sign_on_push() {
     │ ○  description 1
     ├─╯
     ◆
-    [EOF]
     ");
 
     // Immutable commits should not be signed
@@ -2258,7 +2159,6 @@ fn test_git_push_sign_on_push() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to kpqxywon 90df08d3 bookmark3 | (empty) commit which should not be signed 1
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &workspace_root,
@@ -2267,7 +2167,6 @@ fn test_git_push_sign_on_push() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to kpqxywon 90df08d3 bookmark2* bookmark3 | (empty) commit which should not be signed 1
-    [EOF]
     ");
     test_env.add_config(r#"revset-aliases."immutable_heads()" = "bookmark3""#);
     let output = test_env.run_jj_in(&workspace_root, ["git", "push"]);
@@ -2277,7 +2176,6 @@ fn test_git_push_sign_on_push() {
     Hint: Use --allow-new to push new bookmark. Use --remote to specify the remote to push to.
     Changes to push to origin:
       Move forward bookmark bookmark2 from a6259c482040 to 90df08d3d612
-    [EOF]
     ");
     let output = test_env.run_jj_in(&workspace_root, ["log", "-T", template, "-r", "::"]);
     insta::assert_snapshot!(output, @r"
@@ -2291,7 +2189,6 @@ fn test_git_push_sign_on_push() {
     │ ○  description 1
     ├─╯
     ◆
-    [EOF]
     ");
 }
 

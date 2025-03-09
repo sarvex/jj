@@ -70,7 +70,6 @@ fn test_builtin_alias_trunk_matches_main() {
     ◆  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 main d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ");
 }
 
@@ -83,7 +82,6 @@ fn test_builtin_alias_trunk_matches_master() {
     ◆  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 master d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ");
 }
 
@@ -96,7 +94,6 @@ fn test_builtin_alias_trunk_matches_trunk() {
     ◆  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 trunk d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ");
 }
 
@@ -116,7 +113,6 @@ fn test_builtin_alias_trunk_matches_exactly_one_commit() {
     ◆  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 main d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ");
 }
 
@@ -133,7 +129,6 @@ fn test_builtin_alias_trunk_override_alias() {
     ◆  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 override-trunk d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ");
 }
 
@@ -142,10 +137,7 @@ fn test_builtin_alias_trunk_no_match() {
     let (test_env, workspace_root) = set_up("no-match-trunk");
 
     let output = test_env.run_jj_in(&workspace_root, ["log", "-r", "trunk()"]);
-    insta::assert_snapshot!(output, @r"
-    ◆  zzzzzzzz root() 00000000
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"◆  zzzzzzzz root() 00000000");
 }
 
 #[test]
@@ -153,10 +145,7 @@ fn test_builtin_alias_trunk_no_match_only_exact() {
     let (test_env, workspace_root) = set_up("maint");
 
     let output = test_env.run_jj_in(&workspace_root, ["log", "-r", "trunk()"]);
-    insta::assert_snapshot!(output, @r"
-    ◆  zzzzzzzz root() 00000000
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"◆  zzzzzzzz root() 00000000");
 }
 
 #[test]
@@ -172,11 +161,9 @@ fn test_builtin_user_redefines_builtin_immutable_heads() {
     ○  xtvrqkyv test.user@example.com 2001-02-03 08:05:08 main d13ecdbd
     │  (empty) description 1
     ~
-    [EOF]
     ------- stderr -------
     Warning: Redefining `revset-aliases.builtin_immutable_heads()` is not recommended; redefine `immutable_heads()` instead
     Warning: Redefining `revset-aliases.mutable()` is not recommended; redefine `immutable_heads()` instead
     Warning: Redefining `revset-aliases.immutable()` is not recommended; redefine `immutable_heads()` instead
-    [EOF]
     ");
 }

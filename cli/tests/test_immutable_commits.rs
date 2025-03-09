@@ -41,7 +41,6 @@ fn test_rewrite_immutable_generic() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 b84b821b
     │  a
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     // Cannot rewrite a commit in the configured set
@@ -56,7 +55,6 @@ fn test_rewrite_immutable_generic() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // Cannot rewrite an ancestor of the configured set
@@ -70,7 +68,6 @@ fn test_rewrite_immutable_generic() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 2 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // Cannot rewrite the root commit even with an empty set of immutable commits
@@ -79,7 +76,6 @@ fn test_rewrite_immutable_generic() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 
@@ -94,7 +90,6 @@ fn test_rewrite_immutable_generic() {
     Config error: Invalid `revset-aliases.immutable_heads()`
     Caused by: Revision `bookmark_that_does_not_exist` doesn't exist
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -106,14 +101,12 @@ fn test_rewrite_immutable_generic() {
     Working copy now at: kkmpptxz 72e1b68c main | b
     Parent commit      : qpvuntsm b84b821b a
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     // ... but not the root commit
     let output = test_env.run_jj_in(&repo_path, ["--ignore-immutable", "edit", "root()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 
@@ -126,7 +119,6 @@ fn test_rewrite_immutable_generic() {
     ------- stderr -------
     Working copy now at: wqnwkozp fc921593 (empty) (no description set)
     Parent commit      : kkmpptxz 72e1b68c main | b
-    [EOF]
     ");
 
     // immutable_heads() of different arity doesn't shadow the 0-ary one
@@ -135,7 +127,6 @@ fn test_rewrite_immutable_generic() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -156,7 +147,6 @@ fn test_new_wc_commit_when_wc_immutable() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: zsuskuln ef5fa85b (empty) (no description set)
     Parent commit      : kkmpptxz a164195b main | (empty) a
-    [EOF]
     ");
 }
 
@@ -174,7 +164,6 @@ fn test_immutable_heads_set_to_working_copy() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: pmmvwywv 7278b2d8 (empty) (no description set)
     Parent commit      : kkmpptxz a713ef56 (empty) a
-    [EOF]
     ");
 }
 
@@ -203,7 +192,6 @@ fn test_new_wc_commit_when_wc_immutable_multi_workspace() {
     Warning: The working-copy commit in workspace 'workspace1' became immutable, so a new commit has been created on top of it.
     Working copy now at: royxmykx 896465c4 (empty) (no description set)
     Parent commit      : kkmpptxz 7796c4df main | (empty) a
-    [EOF]
     ");
     test_env
         .run_jj_in(&workspace1_envroot, ["workspace", "update-stale"])
@@ -217,7 +205,6 @@ fn test_new_wc_commit_when_wc_immutable_multi_workspace() {
     kkmpptxz test.user@example.com 2001-02-03 08:05:09 main 7796c4df
     (empty) a
     zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -265,7 +252,6 @@ fn test_rewrite_immutable_commands() {
     ◆  kkmpptxz test.user@example.com 2001-02-03 08:05:10 72e1b68c
     │  b
     ~
-    [EOF]
     ");
 
     // abandon
@@ -279,7 +265,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // absorb
@@ -293,7 +278,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 2 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // chmod
@@ -307,7 +291,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // describe
@@ -321,7 +304,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // diffedit
@@ -335,7 +317,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // edit
@@ -349,7 +330,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // new --insert-before
@@ -363,7 +343,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // new --insert-after parent_of_main
@@ -377,7 +356,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // parallelize
@@ -391,7 +369,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 2 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // rebase -s
@@ -405,7 +382,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // rebase -b
@@ -419,7 +395,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 2 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // rebase -r
@@ -433,7 +408,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // resolve
@@ -447,7 +421,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // restore -c
@@ -461,7 +434,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // restore --into
@@ -475,7 +447,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // split
@@ -489,7 +460,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // squash -r
@@ -503,7 +473,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 4 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // squash --from
@@ -517,7 +486,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // squash --into
@@ -531,7 +499,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // sign
@@ -548,7 +515,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
     // unsign
@@ -562,7 +528,6 @@ fn test_rewrite_immutable_commands() {
           - https://jj-vcs.github.io/jj/latest/config/#set-of-immutable-commits
           - `jj help -k config`, "Set of immutable commits"
     Hint: This operation would rewrite 1 immutable commits.
-    [EOF]
     [exit status: 1]
     "#);
 }

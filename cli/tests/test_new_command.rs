@@ -34,7 +34,6 @@ fn test_new() {
     @  34f3c770f1db22ac5c58df21d587aed1a030201f a new commit
     ○  bf8753cb48b860b68386c5c8cc997e8e37122485 add a file
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Start a new change off of a specific commit (the root commit in this case).
@@ -47,7 +46,6 @@ fn test_new() {
     │ ○  bf8753cb48b860b68386c5c8cc997e8e37122485 add a file
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // --edit is a no-op
@@ -61,7 +59,6 @@ fn test_new() {
     │ ○  bf8753cb48b860b68386c5c8cc997e8e37122485 add a file
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // --edit cannot be used with --no-edit
@@ -73,7 +70,6 @@ fn test_new() {
     Usage: jj new <REVSETS>...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -107,12 +103,11 @@ fn test_new_merge() {
     ○ │  8d996e001c23e298d0d353ab455665c81bf2080c add file1
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @"a[EOF]");
+    insta::assert_snapshot!(output, @"a[no newline]");
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
-    insta::assert_snapshot!(output, @"b[EOF]");
+    insta::assert_snapshot!(output, @"b[no newline]");
 
     // Same test with `--no-edit`
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -120,7 +115,6 @@ fn test_new_merge() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created new commit znkkpsqq 496490a6 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    496490a66cebb31730c4103b7b22a1098d49af91
@@ -129,7 +123,6 @@ fn test_new_merge() {
     ○ │  8d996e001c23e298d0d353ab455665c81bf2080c add file1
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Same test with `jj new`
@@ -144,7 +137,6 @@ fn test_new_merge() {
     ○ │  8d996e001c23e298d0d353ab455665c81bf2080c add file1
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // merge with non-unique revisions
@@ -152,7 +144,6 @@ fn test_new_merge() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `3a44e` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
     // if prefixed with all:, duplicates are allowed
@@ -161,7 +152,6 @@ fn test_new_merge() {
     ------- stderr -------
     Working copy now at: nkmrtpmo ed2dc1d9 (empty) (no description set)
     Parent commit      : wqnwkozp 11402323 (empty) (no description set)
-    [EOF]
     ");
 
     // merge with root
@@ -169,7 +159,6 @@ fn test_new_merge() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The Git backend does not support creating merge commits with the root commit as one of the parents.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -191,7 +180,6 @@ fn test_new_insert_after() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     // --insert-after can be repeated; --after is an alias
@@ -205,7 +193,6 @@ fn test_new_insert_after() {
     Working copy now at: kxryzmor 1fc93fd1 (empty) G
     Parent commit      : kkmpptxz bfd4157e B | (empty) B
     Parent commit      : vruxwmqv c9257eff D | (empty) D
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○  C
@@ -220,7 +207,6 @@ fn test_new_insert_after() {
     │ ○  E
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["new", "-m", "H", "--insert-after", "D"]);
@@ -229,7 +215,6 @@ fn test_new_insert_after() {
     Rebased 3 descendant commits
     Working copy now at: uyznsvlq fcf8281b (empty) H
     Parent commit      : vruxwmqv c9257eff D | (empty) D
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○  C
@@ -245,7 +230,6 @@ fn test_new_insert_after() {
     │ ○  E
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     // --after cannot be used with revisions
@@ -257,7 +241,6 @@ fn test_new_insert_after() {
     Usage: jj new --insert-after <REVSETS> [REVSETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -279,7 +262,6 @@ fn test_new_insert_after_children() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     // Attempting to insert G after A and C errors out due to the cycle created
@@ -299,7 +281,6 @@ fn test_new_insert_after_children() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit 83376b270925 would be both an ancestor and a descendant of the new commit
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -321,7 +302,6 @@ fn test_new_insert_before() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -343,7 +323,6 @@ fn test_new_insert_before() {
     Parent commit      : kkmpptxz bfd4157e B | (empty) B
     Parent commit      : vruxwmqv c9257eff D | (empty) D
     Parent commit      : znkkpsqq 41a89ffc E | (empty) E
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○  F
@@ -358,7 +337,6 @@ fn test_new_insert_before() {
     ○ │  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     // --before cannot be used with revisions
@@ -370,7 +348,6 @@ fn test_new_insert_before() {
     Usage: jj new --insert-before <REVSETS> [REVSETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -392,7 +369,6 @@ fn test_new_insert_before_root_successors() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -412,7 +388,6 @@ fn test_new_insert_before_root_successors() {
     Rebased 5 descendant commits
     Working copy now at: kxryzmor 36541977 (empty) G
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○    F
@@ -426,7 +401,6 @@ fn test_new_insert_before_root_successors() {
     @ │  G
     ├─╯
     ◆  root
-    [EOF]
     ");
 }
 
@@ -449,7 +423,6 @@ fn test_new_insert_before_no_loop() {
     │ ○  5ef24e4bf2be A
     ├─╯
     ◆  000000000000 root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -467,7 +440,6 @@ fn test_new_insert_before_no_loop() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit bfd4157e6ea4 would be both an ancestor and a descendant of the new commit
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -489,7 +461,6 @@ fn test_new_insert_before_no_root_merge() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -507,7 +478,6 @@ fn test_new_insert_before_no_root_merge() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The Git backend does not support creating merge commits with the root commit as one of the parents.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -529,14 +499,12 @@ fn test_new_insert_before_root() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["new", "-m", "G", "--insert-before", "root()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -558,7 +526,6 @@ fn test_new_insert_after_before() {
     │ ○  A
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -570,7 +537,6 @@ fn test_new_insert_after_before() {
     Rebased 1 descendant commits
     Working copy now at: kxryzmor 78a97058 (empty) G
     Parent commit      : mzvwutvl 83376b27 C | (empty) C
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○      F
@@ -584,7 +550,6 @@ fn test_new_insert_after_before() {
     ○ │  D
     ├─╯
     ◆  root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -596,7 +561,6 @@ fn test_new_insert_after_before() {
     Rebased 4 descendant commits
     Working copy now at: uyznsvlq fcf8281b (empty) H
     Parent commit      : vruxwmqv c9257eff D | (empty) D
-    [EOF]
     ");
     insta::assert_snapshot!(get_short_log_output(&test_env, &repo_path), @r"
     ○      F
@@ -613,7 +577,6 @@ fn test_new_insert_after_before() {
     │ ○  E
     ├─╯
     ◆  root
-    [EOF]
     ");
 }
 
@@ -636,7 +599,6 @@ fn test_new_insert_after_before_no_loop() {
     │ ○  5ef24e4bf2be A
     ├─╯
     ◆  000000000000 root
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -654,7 +616,6 @@ fn test_new_insert_after_before_no_loop() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit 83376b270925 would be both an ancestor and a descendant of the new commit
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -700,7 +661,6 @@ fn test_new_conflicting_bookmarks() {
       kkmpptxz 66c6502d foo?? | (empty) two
       qpvuntsm 876f4b7e foo?? | (empty) one
     Hint: Set which revision the bookmark points to with `jj bookmark set foo -r <REVISION>`.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -729,7 +689,6 @@ fn test_new_conflicting_change_ids() {
       qpvuntsm?? 66c6502d (empty) two
       qpvuntsm?? 876f4b7e (empty) one
     Hint: Some of these commits have the same change id. Abandon one of them with `jj abandon -r <REVISION>`.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -751,7 +710,6 @@ fn test_new_error_revision_does_not_exist() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `this` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 }

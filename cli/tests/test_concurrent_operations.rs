@@ -38,7 +38,6 @@ fn test_concurrent_operation_divergence() {
     ------- stderr -------
     Error: The "@" expression resolved to more than one operation
     Hint: Try specifying one of the operations by ID: 0162305507cc, d74dff64472e
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -51,7 +50,6 @@ fn test_concurrent_operation_divergence() {
     ○  eac759b9ab75 test-username@host.example.com 2001-02-03 04:05:07.000 +07:00 - 2001-02-03 04:05:07.000 +07:00
     │  add workspace 'default'
     ○  000000000000 root()
-    [EOF]
     ");
 
     // We should be informed about the concurrent modification
@@ -61,10 +59,8 @@ fn test_concurrent_operation_divergence() {
     │ ○  message 2
     ├─╯
     ◆
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
-    [EOF]
     ");
 }
 
@@ -89,7 +85,6 @@ fn test_concurrent_operations_auto_rebase() {
     ○  eac759b9ab75 test-username@host.example.com 2001-02-03 04:05:07.000 +07:00 - 2001-02-03 04:05:07.000 +07:00
     │  add workspace 'default'
     ○  000000000000 root()
-    [EOF]
     ");
     let op_id_hex = output.stdout.raw()[3..15].to_string();
 
@@ -109,11 +104,9 @@ fn test_concurrent_operations_auto_rebase() {
     ○  db141860e12c2d5591c56fde4fc99caf71cec418 new child
     @  07c3641e495cce57ea4ca789123b52f421c57aa2 rewritten
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
     Rebased 1 descendant commits onto commits rewritten by other operation
-    [EOF]
     ");
 }
 
@@ -152,10 +145,8 @@ fn test_concurrent_operations_wc_modified() {
     ├─╯
     ○  2ff7ae858a3a11837fdf9d1a76be295ef53f1bb3 initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -166,7 +157,6 @@ fn test_concurrent_operations_wc_modified() {
     @@ -1,1 +1,1 @@
     -contents
     +modified
-    [EOF]
     ");
 
     // The working copy should be committed after merging the operations
@@ -182,7 +172,6 @@ fn test_concurrent_operations_wc_modified() {
     ○  snapshot working copy
     ○  add workspace 'default'
     ○
-    [EOF]
     ");
 }
 
@@ -226,8 +215,6 @@ fn test_concurrent_snapshot_wc_reloadable() {
     ○  eac759b9ab75793fd3da96e60939fb48f2cd2b2a9c1f13ffe723cf620f3005b8d3e7e923634a07ea39513e4f2f360c87b9ad5d331cf90d7a844864b83b72eba1
     │  add workspace 'default'
     ○  00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-
-    [EOF]
     ");
     let op_log_lines = output.stdout.raw().lines().collect_vec();
     let current_op_id = op_log_lines[0].split_once("  ").unwrap().1;
@@ -246,7 +233,6 @@ fn test_concurrent_snapshot_wc_reloadable() {
     ------- stderr -------
     Working copy now at: kkmpptxz 1795621b new child2
     Parent commit      : rlvkpnrz 86f54245 new child1
-    [EOF]
     ");
 
     // Since the repo can be reloaded before snapshotting, "child2" should be
@@ -261,7 +247,6 @@ fn test_concurrent_snapshot_wc_reloadable() {
     ○  84f07f6bca2ffeddac84a8b09f60c6b81112375c initial
     │  A base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 

@@ -65,7 +65,6 @@ fn test_gitignores() {
     A .gitignore
     A file0
     A file3
-    [EOF]
     ");
 }
 
@@ -93,15 +92,9 @@ fn test_gitignores_relative_excludes_file_path() {
     // to the cwd.
     std::fs::create_dir(workspace_root.join("sub")).unwrap();
     let output = test_env.run_jj_in(&workspace_root.join("sub"), ["diff", "-s"]);
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    A ../not-ignored
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"A ../not-ignored");
     let output = test_env.run_jj_in(".", ["-Rrepo", "diff", "-s"]);
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    A repo/not-ignored
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"A repo/not-ignored");
 }
 
 #[test]
@@ -144,7 +137,6 @@ fn test_gitignores_ignored_file_in_target_commit() {
     Warning: 1 of those updates were skipped because there were conflicting changes in the working copy.
     Hint: Inspect the changes compared to the intended target with `jj diff --from 5ada929e5d2e`.
     Discard the conflicting changes with `jj restore --from 5ada929e5d2e`.
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &workspace_root,
@@ -158,6 +150,5 @@ fn test_gitignores_ignored_file_in_target_commit() {
     @@ -1,1 +1,1 @@
     -committed contents
     +contents in working copy
-    [EOF]
     ");
 }

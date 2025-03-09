@@ -109,10 +109,7 @@ fn test_git_fetch_with_default_config(subprocess: bool) {
 
     test_env.run_jj_in(&repo_path, ["git", "fetch"]).success();
     insta::allow_duplicates! {
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    origin@origin: qmyrypzk ab8b299e message
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"origin@origin: qmyrypzk ab8b299e message");
     }
 }
 
@@ -133,7 +130,6 @@ fn test_git_fetch_default_remote(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     origin: qmyrypzk ab8b299e message
       @origin: qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 }
@@ -156,14 +152,12 @@ fn test_git_fetch_single_remote(subprocess: bool) {
     ------- stderr -------
     Hint: Fetching from the only existing remote: rem1
     bookmark: rem1@rem1 [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     rem1: ppspxspk 4acd0343 message
       @rem1: ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -187,7 +181,6 @@ fn test_git_fetch_single_remote_all_remotes_flag(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     rem1: ppspxspk 4acd0343 message
       @rem1: ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -211,7 +204,6 @@ fn test_git_fetch_single_remote_from_arg(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     rem1: ppspxspk 4acd0343 message
       @rem1: ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -234,7 +226,6 @@ fn test_git_fetch_single_remote_from_config(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     rem1: ppspxspk 4acd0343 message
       @rem1: ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -264,7 +255,6 @@ fn test_git_fetch_multiple_remotes(subprocess: bool) {
       @rem1: ppspxspk 4acd0343 message
     rem2: pzqqpnpo 44c57802 message
       @rem2: pzqqpnpo 44c57802 message
-    [EOF]
     ");
     }
 }
@@ -287,7 +277,6 @@ fn test_git_fetch_with_glob(subprocess: bool) {
     ------- stderr -------
     bookmark: rem1@rem1 [new] untracked
     bookmark: rem2@rem2 [new] untracked
-    [EOF]
     ");
     }
 }
@@ -317,7 +306,6 @@ fn test_git_fetch_with_glob_and_exact_match(subprocess: bool) {
     bookmark: origin@origin [new] untracked
     bookmark: rem1@rem1     [new] untracked
     bookmark: rem2@rem2     [new] untracked
-    [EOF]
     ");
     }
 }
@@ -342,7 +330,6 @@ fn test_git_fetch_with_glob_from_config(subprocess: bool) {
     ------- stderr -------
     bookmark: rem1@rem1 [new] untracked
     bookmark: rem2@rem2 [new] untracked
-    [EOF]
     ");
     }
 }
@@ -363,7 +350,6 @@ fn test_git_fetch_with_glob_with_no_matching_remotes(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No matching git remotes for patterns: rem*
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -403,7 +389,6 @@ fn test_git_fetch_all_remotes(subprocess: bool) {
       @rem1: ppspxspk 4acd0343 message
     rem2: pzqqpnpo 44c57802 message
       @rem2: pzqqpnpo 44c57802 message
-    [EOF]
     ");
     }
 }
@@ -429,7 +414,6 @@ fn test_git_fetch_multiple_remotes_from_config(subprocess: bool) {
       @rem1: ppspxspk 4acd0343 message
     rem2: pzqqpnpo 44c57802 message
       @rem2: pzqqpnpo 44c57802 message
-    [EOF]
     ");
     }
 }
@@ -453,7 +437,6 @@ fn test_git_fetch_nonexistent_remote(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No git remote named 'rem2'
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -480,7 +463,6 @@ fn test_git_fetch_nonexistent_remote_from_config(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No git remote named 'rem2'
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -516,7 +498,6 @@ fn test_git_fetch_from_remote_named_git(subprocess: bool) {
     ------- stderr -------
     Error: Git remote named 'git' is reserved for local Git repository
     Hint: Run `jj git remote rename` to give a different name.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -538,7 +519,6 @@ fn test_git_fetch_from_remote_named_git(subprocess: bool) {
     Error: Failed to import refs from underlying Git repo
     Caused by: Git remote named 'git' is reserved for local Git repository
     Hint: Run `jj git remote rename` to give different name.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -553,10 +533,8 @@ fn test_git_fetch_from_remote_named_git(subprocess: bool) {
     git: vkponlun 400c483d message
       @bar: vkponlun 400c483d message
       @git: vkponlun 400c483d message
-    [EOF]
     ------- stderr -------
     Done importing changes from the underlying Git repo.
-    [EOF]
     ");
     }
 }
@@ -587,7 +565,6 @@ fn test_git_fetch_from_remote_with_slashes(subprocess: bool) {
     ------- stderr -------
     Error: Git remotes with slashes are incompatible with jj: slash/origin
     Hint: Run `jj git remote rename` to give a different name.
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -609,7 +586,6 @@ fn test_git_fetch_prune_before_updating_tips(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     origin: qmyrypzk ab8b299e message
       @origin: qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -631,7 +607,6 @@ fn test_git_fetch_prune_before_updating_tips(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     origin/subname: qmyrypzk ab8b299e message
       @origin: qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 }
@@ -654,10 +629,7 @@ fn test_git_fetch_conflicting_bookmarks(subprocess: bool) {
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "rem1"])
         .success();
     insta::allow_duplicates! {
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    rem1: kkmpptxz fcdbbd73 (empty) (no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"rem1: kkmpptxz fcdbbd73 (empty) (no description set)");
     }
 
     test_env
@@ -673,7 +645,6 @@ fn test_git_fetch_conflicting_bookmarks(subprocess: bool) {
       + kkmpptxz fcdbbd73 (empty) (no description set)
       + ppspxspk 4acd0343 message
       @rem1 (behind by 1 commits): ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -706,7 +677,6 @@ fn test_git_fetch_conflicting_bookmarks_colocated(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     rem1: zsuskuln f652c321 (empty) (no description set)
       @git: zsuskuln f652c321 (empty) (no description set)
-    [EOF]
     ");
     }
 
@@ -725,7 +695,6 @@ fn test_git_fetch_conflicting_bookmarks_colocated(subprocess: bool) {
       + ppspxspk 4acd0343 message
       @git (behind by 1 commits): zsuskuln f652c321 (empty) (no description set)
       @rem1 (behind by 1 commits): ppspxspk 4acd0343 message
-    [EOF]
     ");
     }
 }
@@ -782,7 +751,6 @@ fn test_git_fetch_all(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let target_jj_repo_path = test_env.env_root().join("target");
@@ -799,7 +767,6 @@ fn test_git_fetch_all(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -808,7 +775,6 @@ fn test_git_fetch_all(subprocess: bool) {
     insta::assert_snapshot!(get_log_output(&test_env, &target_jj_repo_path), @r#"
     @  230dd059e1b0 ""
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -822,7 +788,6 @@ fn test_git_fetch_all(subprocess: bool) {
     bookmark: a2@origin     [new] tracked
     bookmark: b@origin      [new] tracked
     bookmark: trunk1@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -835,7 +800,6 @@ fn test_git_fetch_all(subprocess: bool) {
       @origin: lnxrmsmo 8cc4df9d b
     trunk1: qzywppkx 9929b494 trunk1
       @origin: qzywppkx 9929b494 trunk1
-    [EOF]
     ");
         }
     insta::allow_duplicates! {
@@ -849,7 +813,6 @@ fn test_git_fetch_all(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -867,7 +830,6 @@ fn test_git_fetch_all(subprocess: bool) {
     @  e7525a4649e3 "trunk2" trunk2
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // Change a bookmark in the source repo as well, so that it becomes conflicted.
@@ -890,7 +852,6 @@ fn test_git_fetch_all(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -903,7 +864,6 @@ fn test_git_fetch_all(subprocess: bool) {
       @origin (ahead by 1 commits, behind by 1 commits): lnxrmsmo hidden 8cc4df9d b
     trunk1: qzywppkx 9929b494 trunk1
       @origin: qzywppkx 9929b494 trunk1
-    [EOF]
     ");
     }
     let output = test_env.run_jj_in(&target_jj_repo_path, ["git", "fetch"]);
@@ -915,7 +875,6 @@ fn test_git_fetch_all(subprocess: bool) {
     bookmark: b@origin      [updated] tracked
     bookmark: trunk2@origin [new] tracked
     Abandoned 2 commits that are no longer reachable.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -933,7 +892,6 @@ fn test_git_fetch_all(subprocess: bool) {
       @origin: qzywppkx 9929b494 trunk1
     trunk2: lzqpwqnx e7525a46 trunk2
       @origin: lzqpwqnx e7525a46 trunk2
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -950,7 +908,6 @@ fn test_git_fetch_all(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 }
@@ -974,7 +931,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let target_jj_repo_path = test_env.env_root().join("target");
@@ -991,7 +947,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1004,7 +959,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Invalid branch pattern provided. When fetching, branch names and globs may not contain the characters `:`, `^`, `?`, `[`, `]`
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1014,7 +968,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     ------- stderr -------
     Error: Branch names may not include `*`.
     Hint: Prefix the pattern with `glob:` to expand `*` as a glob
-    [EOF]
     [exit status: 1]
     ");
     }
@@ -1024,7 +977,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     insta::assert_snapshot!(get_log_output(&test_env, &target_jj_repo_path), @r#"
     @  230dd059e1b0 ""
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // Fetch one bookmark...
@@ -1033,7 +985,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: b@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1043,7 +994,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // ...check what the intermediate state looks like...
@@ -1051,7 +1001,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &target_jj_repo_path), @r"
     b: lnxrmsmo 8cc4df9d b
       @origin: lnxrmsmo 8cc4df9d b
-    [EOF]
     ");
     }
     // ...then fetch two others with a glob.
@@ -1064,7 +1013,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     ------- stderr -------
     bookmark: a1@origin [new] tracked
     bookmark: a2@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1078,7 +1026,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // Fetching the same bookmark again
@@ -1087,7 +1034,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1101,7 +1047,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1119,7 +1064,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     @  2f34a0e70741 "trunk2" trunk2
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // Change a bookmark in the source repo as well, so that it becomes conflicted.
@@ -1142,7 +1086,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     let output = test_env.run_jj_in(
@@ -1155,7 +1098,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     bookmark: a1@origin [updated] tracked
     bookmark: b@origin  [updated] tracked
     Abandoned 1 commits that are no longer reachable.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1172,7 +1114,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1188,7 +1129,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
       + lnxrmsmo e9445259 new_descr_for_b_to_create_conflict
       + rruvkzpm 96c8ad25 b
       @origin (behind by 1 commits): rruvkzpm 96c8ad25 b
-    [EOF]
     ");
     }
     // Now, let's fetch a2 and double-check that fetching a1 and b again doesn't do
@@ -1202,7 +1142,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     ------- stderr -------
     bookmark: a2@origin [updated] tracked
     Abandoned 1 commits that are no longer reachable.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1219,7 +1158,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -1233,7 +1171,6 @@ fn test_git_fetch_some_of_many_bookmarks(subprocess: bool) {
       + lnxrmsmo e9445259 new_descr_for_b_to_create_conflict
       + rruvkzpm 96c8ad25 b
       @origin (behind by 1 commits): rruvkzpm 96c8ad25 b
-    [EOF]
     ");
     }
 }
@@ -1260,7 +1197,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
     ------- stderr -------
     Warning: No branch matching `noexist` found on any specified/configured remote
     Nothing changed.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1280,7 +1216,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
     Warning: No branch matching `noexist1` found on any specified/configured remote
     Warning: No branch matching `noexist2` found on any specified/configured remote
     Nothing changed.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1293,14 +1228,12 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: origin@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     origin: qmyrypzk ab8b299e message
       @origin: qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -1319,7 +1252,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
     bookmark: rem1@rem1 [new] tracked
     bookmark: rem2@rem2 [new] tracked
     bookmark: rem3@rem3 [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1332,7 +1264,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
       @rem2: pzqqpnpo 44c57802 message
     rem3: wrzwlmys 45a3faef message
       @rem3: wrzwlmys 45a3faef message
-    [EOF]
     ")
     }
 
@@ -1348,7 +1279,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
     ------- stderr -------
     Warning: No branch matching `notexist` found on any specified/configured remote
     Nothing changed.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1361,7 +1291,6 @@ fn test_git_fetch_bookmarks_some_missing(subprocess: bool) {
       @rem2: pzqqpnpo 44c57802 message
     rem3: wrzwlmys 45a3faef message
       @rem3: wrzwlmys 45a3faef message
-    [EOF]
     ");
     }
 }
@@ -1390,7 +1319,6 @@ fn test_git_fetch_bookmarks_missing_with_subprocess_localized_message() {
     ------- stderr -------
     Warning: No branch matching `unknown` found on any specified/configured remote
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -1414,7 +1342,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let target_jj_repo_path = test_env.env_root().join("target");
@@ -1431,7 +1358,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1445,7 +1371,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     ------- stderr -------
     bookmark: a1@origin [new] tracked
     bookmark: b@origin  [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1457,7 +1382,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     let output = test_env.run_jj_in(&target_jj_repo_path, ["undo"]);
@@ -1465,7 +1389,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Undid operation: 4bd67fb242bc (2001-02-03 08:05:18) fetch from git remote(s) origin
-    [EOF]
     ");
     }
     // The undo works as expected
@@ -1473,7 +1396,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     insta::assert_snapshot!(get_log_output(&test_env, &target_jj_repo_path), @r#"
     @  230dd059e1b0 ""
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     // Now try to fetch just one bookmark
@@ -1482,7 +1404,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: b@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1492,7 +1413,6 @@ fn test_git_fetch_undo(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 }
@@ -1517,7 +1437,6 @@ fn test_fetch_undo_what(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let repo_path = test_env.env_root().join("target");
@@ -1534,7 +1453,6 @@ fn test_fetch_undo_what(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1551,7 +1469,6 @@ fn test_fetch_undo_what(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: b@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1561,14 +1478,12 @@ fn test_fetch_undo_what(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     b: lnxrmsmo 8cc4df9d b
       @origin: lnxrmsmo 8cc4df9d b
-    [EOF]
     ");
     }
 
@@ -1582,14 +1497,12 @@ fn test_fetch_undo_what(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Restored to operation: eac759b9ab75 (2001-02-03 08:05:07) add workspace 'default'
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     b (deleted)
       @origin: lnxrmsmo hidden 8cc4df9d b
-    [EOF]
     ");
     }
 
@@ -1603,7 +1516,6 @@ fn test_fetch_undo_what(subprocess: bool) {
     b (deleted)
       @origin: lnxrmsmo hidden 8cc4df9d b
     newbookmark: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
     }
     // Restoring just the remote-tracking state will not affect `newbookmark`, but
@@ -1622,14 +1534,10 @@ fn test_fetch_undo_what(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Restored to operation: eac759b9ab75 (2001-02-03 08:05:07) add workspace 'default'
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    newbookmark: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"newbookmark: qpvuntsm 230dd059 (empty) (no description set)");
     }
 }
 
@@ -1649,10 +1557,7 @@ fn test_git_fetch_remove_fetch(subprocess: bool) {
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "origin"])
         .success();
     insta::allow_duplicates! {
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    origin: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"origin: qpvuntsm 230dd059 (empty) (no description set)");
     }
 
     test_env.run_jj_in(&repo_path, ["git", "fetch"]).success();
@@ -1662,7 +1567,6 @@ fn test_git_fetch_remove_fetch(subprocess: bool) {
       + qpvuntsm 230dd059 (empty) (no description set)
       + qmyrypzk ab8b299e message
       @origin (behind by 1 commits): qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -1674,7 +1578,6 @@ fn test_git_fetch_remove_fetch(subprocess: bool) {
     origin (conflicted):
       + qpvuntsm 230dd059 (empty) (no description set)
       + qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -1688,7 +1591,6 @@ fn test_git_fetch_remove_fetch(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: origin@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1697,7 +1599,6 @@ fn test_git_fetch_remove_fetch(subprocess: bool) {
       + qpvuntsm 230dd059 (empty) (no description set)
       + qmyrypzk ab8b299e message
       @origin (behind by 1 commits): qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 }
@@ -1718,10 +1619,7 @@ fn test_git_fetch_rename_fetch(subprocess: bool) {
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "origin"])
         .success();
     insta::allow_duplicates! {
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    origin: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"origin: qpvuntsm 230dd059 (empty) (no description set)");
     }
 
     test_env.run_jj_in(&repo_path, ["git", "fetch"]).success();
@@ -1731,7 +1629,6 @@ fn test_git_fetch_rename_fetch(subprocess: bool) {
       + qpvuntsm 230dd059 (empty) (no description set)
       + qmyrypzk ab8b299e message
       @origin (behind by 1 commits): qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -1747,7 +1644,6 @@ fn test_git_fetch_rename_fetch(subprocess: bool) {
       + qpvuntsm 230dd059 (empty) (no description set)
       + qmyrypzk ab8b299e message
       @upstream (behind by 1 commits): qmyrypzk ab8b299e message
-    [EOF]
     ");
     }
 
@@ -1757,7 +1653,6 @@ fn test_git_fetch_rename_fetch(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
 }
@@ -1780,7 +1675,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let target_jj_repo_path = test_env.env_root().join("target");
@@ -1797,7 +1691,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1810,7 +1703,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     bookmark: a2@origin     [new] tracked
     bookmark: b@origin      [new] tracked
     bookmark: trunk1@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1824,7 +1716,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1842,7 +1733,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1856,7 +1746,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1867,7 +1756,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     ------- stderr -------
     bookmark: a2@origin [deleted] untracked
     Abandoned 1 commits that are no longer reachable.
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1879,7 +1767,6 @@ fn test_git_fetch_removed_bookmark(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 }
@@ -1902,7 +1789,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     ------- stderr -------
     Fetching into new repo in "$TEST_ENV/target"
     Nothing changed.
-    [EOF]
     "#);
     }
     let target_jj_repo_path = test_env.env_root().join("target");
@@ -1919,7 +1805,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     ├─╯
     ○  9929b494c411 "trunk1" trunk1
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1932,7 +1817,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     bookmark: a2@origin     [new] tracked
     bookmark: b@origin      [new] tracked
     bookmark: trunk1@origin [new] tracked
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1946,7 +1830,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     │ ○  9929b494c411 "trunk1" trunk1
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 
@@ -1974,7 +1857,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     bookmark: trunk1@origin [deleted] untracked
     Abandoned 1 commits that are no longer reachable.
     Warning: No branch matching `master` found on any specified/configured remote
-    [EOF]
     ");
     }
     insta::allow_duplicates! {
@@ -1986,7 +1868,6 @@ fn test_git_fetch_removed_parent_bookmark(subprocess: bool) {
     │ ○  9929b494c411 "trunk1"
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
 }
@@ -2030,7 +1911,6 @@ fn test_git_fetch_remote_only_bookmark(subprocess: bool) {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qomsplrm ebeb70d8 message
       @origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
     }
 
@@ -2053,7 +1933,6 @@ fn test_git_fetch_remote_only_bookmark(subprocess: bool) {
     │ ◆  ebeb70d8c5f9 "message" feature1 feature2@origin
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -2061,7 +1940,6 @@ fn test_git_fetch_remote_only_bookmark(subprocess: bool) {
     feature1: qomsplrm ebeb70d8 message
       @origin: qomsplrm ebeb70d8 message
     feature2@origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
     }
 }
@@ -2103,7 +1981,6 @@ fn test_git_fetch_preserve_commits_across_repos(subprocess: bool) {
     │ ○  16ec9ef2877a "message" feature
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -2113,7 +1990,6 @@ fn test_git_fetch_preserve_commits_across_repos(subprocess: bool) {
     upstream: zkvzklqn bcd7cd77 message
       @fork: zkvzklqn bcd7cd77 message
       @upstream: zkvzklqn bcd7cd77 message
-    [EOF]
     ");
     }
 
@@ -2169,7 +2045,6 @@ fn test_git_fetch_preserve_commits_across_repos(subprocess: bool) {
     │ ○  bcd7cd779791 "message" upstream@fork
     ├─╯
     ◆  000000000000 ""
-    [EOF]
     "#);
     }
     insta::allow_duplicates! {
@@ -2177,7 +2052,6 @@ fn test_git_fetch_preserve_commits_across_repos(subprocess: bool) {
     upstream: trrkvuqr f3e9250b merge
       @fork (behind by 2 commits): zkvzklqn bcd7cd77 message
       @upstream: trrkvuqr f3e9250b merge
-    [EOF]
     ");
     }
 }

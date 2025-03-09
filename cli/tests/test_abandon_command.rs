@@ -40,7 +40,6 @@ fn test_basics() {
     ○ │  [rlv] a
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["abandon", "--retain-bookmarks", "d"]);
@@ -52,7 +51,6 @@ fn test_basics() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : royxmykx fe2e8e8b c d | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    [znk] e
@@ -63,7 +61,6 @@ fn test_basics() {
     ○ │  [rlv] a
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -78,7 +75,6 @@ fn test_basics() {
     Parent commit      : rlvkpnrz 2443ea76 a e?? | a
     Parent commit      : vruxwmqv b7c62f28 d e?? | d
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    [nkm]
@@ -90,7 +86,6 @@ fn test_basics() {
     ○ │  [rlv] a e??
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -105,7 +100,6 @@ fn test_basics() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : royxmykx fe2e8e8b c | c
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    [xtn]
@@ -116,7 +110,6 @@ fn test_basics() {
     ○ │  [rlv] a
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     // Test abandoning the same commit twice directly
@@ -126,7 +119,6 @@ fn test_basics() {
     ------- stderr -------
     Abandoned commit zsuskuln 1394f625 b | b
     Deleted bookmarks: b
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    [znk] e
@@ -136,7 +128,6 @@ fn test_basics() {
     ○ │  [rlv] a
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     // Test abandoning the same commit twice indirectly
@@ -152,7 +143,6 @@ fn test_basics() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : royxmykx fe2e8e8b c | c
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    [xlz]
@@ -163,14 +153,12 @@ fn test_basics() {
     ○ │  [rlv] a
     ├─╯
     ◆  [zzz]
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["abandon", "none()"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     No revisions to abandon.
-    [EOF]
     ");
 }
 
@@ -201,7 +189,6 @@ fn test_bug_2600() {
     ○  [zsu] base
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -217,7 +204,6 @@ fn test_bug_2600() {
     Working copy now at: znkkpsqq 86e31bec c | c
     Parent commit      : vruxwmqv fd6eb121 b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // Commits "a" and "b" should both have "nottherootcommit" as parent, and "b"
     // should keep "a" as second parent.
@@ -229,7 +215,6 @@ fn test_bug_2600() {
     ├─╯
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
 
     test_env
@@ -244,7 +229,6 @@ fn test_bug_2600() {
     Working copy now at: znkkpsqq 683b9435 c | c
     Parent commit      : vruxwmqv c10cb7b4 b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // Commit "b" should have "base" as parent. It should not have two parent
     // pointers to that commit even though it was a merge commit before we abandoned
@@ -255,7 +239,6 @@ fn test_bug_2600() {
     ○  [zsu] base
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
 
     test_env
@@ -271,7 +254,6 @@ fn test_bug_2600() {
     Parent commit      : zsuskuln 73c929fc base | base
     Parent commit      : royxmykx 98f3b9ba a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // Commit "c" should inherit the parents from the abndoned commit "b".
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -282,7 +264,6 @@ fn test_bug_2600() {
     ○  [zsu] base
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
 
     test_env
@@ -298,7 +279,6 @@ fn test_bug_2600() {
     ○  [zsu] base
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["abandon", "--retain-bookmarks", "a", "b"]);
     insta::assert_snapshot!(output, @r"
@@ -310,7 +290,6 @@ fn test_bug_2600() {
     Working copy now at: znkkpsqq 84fac1f8 c | c
     Parent commit      : zsuskuln 73c929fc a b base | base
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     // Commit "c" should have "base" as parent. As when we abandoned "a", it should
     // not have two parent pointers to the same commit.
@@ -319,13 +298,9 @@ fn test_bug_2600() {
     ○  [zsu] a b base
     ○  [rlv] nottherootcommit
     ◆  [zzz]
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "list", "b"]);
-    insta::assert_snapshot!(output, @r"
-    b: zsuskuln 73c929fc base
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b: zsuskuln 73c929fc base");
 }
 
 #[test]
@@ -349,7 +324,6 @@ fn test_bug_2600_rootcommit_special_case() {
     ├─╯
     ○  [rlv] base
     ◆  [zzz]
-    [EOF]
     ");
 
     // Now, the test
@@ -357,7 +331,6 @@ fn test_bug_2600_rootcommit_special_case() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The Git backend does not support creating merge commits with the root commit as one of the parents.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -374,7 +347,6 @@ fn test_double_abandon() {
     test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r", "a"]), @r"
     rlvkpnrz test.user@example.com 2001-02-03 08:05:09 a 2443ea76
     a
-    [EOF]
     ");
 
     let commit_id = test_env
@@ -394,14 +366,12 @@ fn test_double_abandon() {
     Working copy now at: royxmykx f37b4afd (empty) (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["abandon", &commit_id]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Abandoned commit rlvkpnrz hidden 2443ea76 a
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -425,7 +395,6 @@ fn test_abandon_restore_descendants() {
     Rebased 1 descendant commits (while preserving their content) onto parents of abandoned commits
     Working copy now at: kkmpptxz a734deb0 (no description set)
     Parent commit      : qpvuntsm 485d52a9 (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -436,7 +405,6 @@ fn test_abandon_restore_descendants() {
     @@ -1,1 +1,1 @@
     -foo
     +baz
-    [EOF]
     ");
 }
 

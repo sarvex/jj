@@ -27,7 +27,6 @@ fn test_log_with_empty_revision() {
     error: a value is required for '--revisions <REVSETS>' but none was supplied
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -61,7 +60,6 @@ fn test_log_with_no_template() {
     - description_placeholder
     - email_placeholder
     - name_placeholder
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -86,7 +84,6 @@ fn test_log_with_or_without_diff() {
     @  a new commit
     ○  add a file
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "description", "-p"]);
@@ -99,14 +96,12 @@ fn test_log_with_or_without_diff() {
     │  Added regular file file1:
     │          1: foo
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "description", "--no-graph"]);
     insta::assert_snapshot!(output, @r"
     a new commit
     add a file
-    [EOF]
     ");
 
     // `-p` for default diff output, `-s` for summary
@@ -122,7 +117,6 @@ fn test_log_with_or_without_diff() {
     │  Added regular file file1:
     │          1: foo
     ◆
-    [EOF]
     ");
 
     // `-s` for summary, `--git` for git diff (which implies `-p`)
@@ -147,7 +141,6 @@ fn test_log_with_or_without_diff() {
     │  @@ -0,0 +1,1 @@
     │  +foo
     ◆
-    [EOF]
     ");
 
     // `-p` enables default "summary" output, so `-s` is noop
@@ -168,7 +161,6 @@ fn test_log_with_or_without_diff() {
     ○  add a file
     │  A file1
     ◆
-    [EOF]
     ");
 
     // `-p` enables default "color-words" diff output, so `--color-words` is noop
@@ -185,7 +177,6 @@ fn test_log_with_or_without_diff() {
     │  Added regular file file1:
     │          1: foo
     ◆
-    [EOF]
     ");
 
     // `--git` enables git diff, so `-p` is noop
@@ -210,7 +201,6 @@ fn test_log_with_or_without_diff() {
     +++ b/file1
     @@ -0,0 +1,1 @@
     +foo
-    [EOF]
     ");
 
     // Cannot use both `--git` and `--color-words`
@@ -233,7 +223,6 @@ fn test_log_with_or_without_diff() {
     Usage: jj log --template <TEMPLATE> --no-graph --patch --git [FILESETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -245,7 +234,6 @@ fn test_log_with_or_without_diff() {
     ○  add a file
     │  A file1
     ◆
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "description", "--no-graph", "-s"]);
     insta::assert_snapshot!(output, @r"
@@ -253,7 +241,6 @@ fn test_log_with_or_without_diff() {
     M file1
     add a file
     A file1
-    [EOF]
     ");
 
     // `--git` implies `-p`, with or without graph
@@ -267,7 +254,6 @@ fn test_log_with_or_without_diff() {
        @@ -1,1 +1,2 @@
         foo
        +bar
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -282,7 +268,6 @@ fn test_log_with_or_without_diff() {
     @@ -1,1 +1,2 @@
      foo
     +bar
-    [EOF]
     ");
 
     // `--color-words` implies `-p`, with or without graph
@@ -295,7 +280,6 @@ fn test_log_with_or_without_diff() {
     │  Modified regular file file1:
     ~     1    1: foo
                2: bar
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -314,7 +298,6 @@ fn test_log_with_or_without_diff() {
     Modified regular file file1:
        1    1: foo
             2: bar
-    [EOF]
     ");
 }
 
@@ -386,7 +369,7 @@ fn test_log_shortest_accessors() {
         .success();
     insta::assert_snapshot!(
         render("original", r#"format_id(change_id) ++ " " ++ format_id(commit_id)"#),
-        @"q[pvuntsmwlqt] e[0e22b9fae75][EOF]");
+        @"q[pvuntsmwlqt] e[0e22b9fae75][no newline]");
 
     // Create a chain of 10 commits
     for i in 1..10 {
@@ -404,7 +387,7 @@ fn test_log_shortest_accessors() {
 
     insta::assert_snapshot!(
         render("original", r#"format_id(change_id) ++ " " ++ format_id(commit_id)"#),
-        @"qpv[untsmwlqt] e0[e22b9fae75][EOF]");
+        @"qpv[untsmwlqt] e0[e22b9fae75][no newline]");
 
     insta::assert_snapshot!(
         render("::@", r#"change_id.shortest() ++ " " ++ commit_id.shortest() ++ "\n""#), @r"
@@ -419,7 +402,6 @@ fn test_log_shortest_accessors() {
     mz 1b
     qpv e0
     zzz 00
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -435,7 +417,6 @@ fn test_log_shortest_accessors() {
     mz[vwutvlkqwt] 1b[7b715afc3f]
     qpv[untsmwlqt] e0[e22b9fae75]
     zzz[zzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
 
     // Can get shorter prefixes in configured revset
@@ -453,7 +434,6 @@ fn test_log_shortest_accessors() {
     mz[vwutvlkqwt] 1b[7b715afc3f]
     qpv[untsmwlqt] e0[e22b9fae75]
     zzz[zzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
 
     // Can disable short prefixes by setting to empty string
@@ -471,7 +451,6 @@ fn test_log_shortest_accessors() {
     mz[vwutvlkqwt] 1b[7b715afc3f]
     qpv[untsmwlqt] e0[e22b9fae75]
     zzz[zzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
 }
 
@@ -497,7 +476,6 @@ fn test_log_bad_short_prefixes() {
       |
       = expected <strict_identifier> or <expression>
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -507,7 +485,6 @@ fn test_log_bad_short_prefixes() {
     insta::assert_snapshot!(output, @r"
     @  2
     ◆  0
-    [EOF]
     ------- stderr -------
     Warning: In template expression
      --> 1:11
@@ -518,7 +495,6 @@ fn test_log_bad_short_prefixes() {
       = Failed to load short-prefixes index
     Failed to resolve short-prefixes disambiguation revset
     Revision `missing` doesn't exist
-    [EOF]
     ");
 
     // Error on resolution of short prefixes
@@ -528,7 +504,6 @@ fn test_log_bad_short_prefixes() {
     ------- stderr -------
     Error: Failed to resolve short-prefixes disambiguation revset
     Caused by: Revision `missing` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -566,7 +541,6 @@ fn test_log_prefix_highlight_styled() {
     @  Change qpvuntsmwlqt initial e0e22b9fae75 original
     │
     ~
-    [EOF]
     ");
 
     // Create a chain of 10 commits
@@ -588,7 +562,6 @@ fn test_log_prefix_highlight_styled() {
     ○  Change qpvuntsmwlqt initial e0e22b9fae75 original
     │
     ~
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -601,20 +574,7 @@ fn test_log_prefix_highlight_styled() {
             &prefix_format(Some(12)),
         ],
     );
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  Change [1m[38;5;5mwq[0m[38;5;8mnwkozpkust[39m commit9 [1m[38;5;4med[0m[38;5;8me204633421[39m
-    ○  Change [1m[38;5;5mkm[0m[38;5;8mkuslswpqwq[39m commit8 [1m[38;5;4mef3[0m[38;5;8md013266cd[39m
-    ○  Change [1m[38;5;5mkp[0m[38;5;8mqxywonksrl[39m commit7 [1m[38;5;4maf[0m[38;5;8m95b841712d[39m
-    ○  Change [1m[38;5;5mzn[0m[38;5;8mkkpsqqskkl[39m commit6 [1m[38;5;4m23[0m[38;5;8mc1103d3427[39m
-    ○  Change [1m[38;5;5myo[0m[38;5;8mstqsxwqrlt[39m commit5 [1m[38;5;4mb87[0m[38;5;8maa9b24921[39m
-    ○  Change [1m[38;5;5mvr[0m[38;5;8muxwmqvtpmx[39m commit4 [1m[38;5;4m1e[0m[38;5;8ma31a205ce9[39m
-    ○  Change [1m[38;5;5myq[0m[38;5;8mosqzytrlsw[39m commit3 [1m[38;5;4m34[0m[38;5;8mbefb94f4eb[39m
-    ○  Change [1m[38;5;5mro[0m[38;5;8myxmykxtrkr[39m commit2 [1m[38;5;4mcc[0m[38;5;8m0c127948ef[39m
-    ○  Change [1m[38;5;5mmz[0m[38;5;8mvwutvlkqwt[39m commit1 [1m[38;5;4m1b[0m[38;5;8m7b715afc3f[39m
-    ○  Change [1m[38;5;5mqpv[0m[38;5;8muntsmwlqt[39m initial [1m[38;5;4me0[0m[38;5;8me22b9fae75[39m [38;5;5moriginal[39m
-    [1m[38;5;14m◆[0m  Change [1m[38;5;5mzzz[0m[38;5;8mzzzzzzzzz[39m [1m[38;5;4m00[0m[38;5;8m0000000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mwq\u{1b}[0m\u{1b}[38;5;8mnwkozpkust\u{1b}[39m commit9 \u{1b}[1m\u{1b}[38;5;4med\u{1b}[0m\u{1b}[38;5;8me204633421\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkm\u{1b}[0m\u{1b}[38;5;8mkuslswpqwq\u{1b}[39m commit8 \u{1b}[1m\u{1b}[38;5;4mef3\u{1b}[0m\u{1b}[38;5;8md013266cd\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkp\u{1b}[0m\u{1b}[38;5;8mqxywonksrl\u{1b}[39m commit7 \u{1b}[1m\u{1b}[38;5;4maf\u{1b}[0m\u{1b}[38;5;8m95b841712d\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mzn\u{1b}[0m\u{1b}[38;5;8mkkpsqqskkl\u{1b}[39m commit6 \u{1b}[1m\u{1b}[38;5;4m23\u{1b}[0m\u{1b}[38;5;8mc1103d3427\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5myo\u{1b}[0m\u{1b}[38;5;8mstqsxwqrlt\u{1b}[39m commit5 \u{1b}[1m\u{1b}[38;5;4mb87\u{1b}[0m\u{1b}[38;5;8maa9b24921\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mvr\u{1b}[0m\u{1b}[38;5;8muxwmqvtpmx\u{1b}[39m commit4 \u{1b}[1m\u{1b}[38;5;4m1e\u{1b}[0m\u{1b}[38;5;8ma31a205ce9\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5myq\u{1b}[0m\u{1b}[38;5;8mosqzytrlsw\u{1b}[39m commit3 \u{1b}[1m\u{1b}[38;5;4m34\u{1b}[0m\u{1b}[38;5;8mbefb94f4eb\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mro\u{1b}[0m\u{1b}[38;5;8myxmykxtrkr\u{1b}[39m commit2 \u{1b}[1m\u{1b}[38;5;4mcc\u{1b}[0m\u{1b}[38;5;8m0c127948ef\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mmz\u{1b}[0m\u{1b}[38;5;8mvwutvlkqwt\u{1b}[39m commit1 \u{1b}[1m\u{1b}[38;5;4m1b\u{1b}[0m\u{1b}[38;5;8m7b715afc3f\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mqpv\u{1b}[0m\u{1b}[38;5;8muntsmwlqt\u{1b}[39m initial \u{1b}[1m\u{1b}[38;5;4me0\u{1b}[0m\u{1b}[38;5;8me22b9fae75\u{1b}[39m \u{1b}[38;5;5moriginal\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mzzz\u{1b}[0m\u{1b}[38;5;8mzzzzzzzzz\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m00\u{1b}[0m\u{1b}[38;5;8m0000000000\u{1b}[39m");
     let output = test_env.run_jj_in(
         &repo_path,
         [
@@ -626,20 +586,7 @@ fn test_log_prefix_highlight_styled() {
             &prefix_format(Some(3)),
         ],
     );
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  Change [1m[38;5;5mwq[0m[38;5;8mn[39m commit9 [1m[38;5;4med[0m[38;5;8me[39m
-    ○  Change [1m[38;5;5mkm[0m[38;5;8mk[39m commit8 [1m[38;5;4mef3[0m
-    ○  Change [1m[38;5;5mkp[0m[38;5;8mq[39m commit7 [1m[38;5;4maf[0m[38;5;8m9[39m
-    ○  Change [1m[38;5;5mzn[0m[38;5;8mk[39m commit6 [1m[38;5;4m23[0m[38;5;8mc[39m
-    ○  Change [1m[38;5;5myo[0m[38;5;8ms[39m commit5 [1m[38;5;4mb87[0m
-    ○  Change [1m[38;5;5mvr[0m[38;5;8mu[39m commit4 [1m[38;5;4m1e[0m[38;5;8ma[39m
-    ○  Change [1m[38;5;5myq[0m[38;5;8mo[39m commit3 [1m[38;5;4m34[0m[38;5;8mb[39m
-    ○  Change [1m[38;5;5mro[0m[38;5;8my[39m commit2 [1m[38;5;4mcc[0m[38;5;8m0[39m
-    ○  Change [1m[38;5;5mmz[0m[38;5;8mv[39m commit1 [1m[38;5;4m1b[0m[38;5;8m7[39m
-    ○  Change [1m[38;5;5mqpv[0m initial [1m[38;5;4me0[0m[38;5;8me[39m [38;5;5moriginal[39m
-    [1m[38;5;14m◆[0m  Change [1m[38;5;5mzzz[0m [1m[38;5;4m00[0m[38;5;8m0[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mwq\u{1b}[0m\u{1b}[38;5;8mn\u{1b}[39m commit9 \u{1b}[1m\u{1b}[38;5;4med\u{1b}[0m\u{1b}[38;5;8me\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkm\u{1b}[0m\u{1b}[38;5;8mk\u{1b}[39m commit8 \u{1b}[1m\u{1b}[38;5;4mef3\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkp\u{1b}[0m\u{1b}[38;5;8mq\u{1b}[39m commit7 \u{1b}[1m\u{1b}[38;5;4maf\u{1b}[0m\u{1b}[38;5;8m9\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mzn\u{1b}[0m\u{1b}[38;5;8mk\u{1b}[39m commit6 \u{1b}[1m\u{1b}[38;5;4m23\u{1b}[0m\u{1b}[38;5;8mc\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5myo\u{1b}[0m\u{1b}[38;5;8ms\u{1b}[39m commit5 \u{1b}[1m\u{1b}[38;5;4mb87\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mvr\u{1b}[0m\u{1b}[38;5;8mu\u{1b}[39m commit4 \u{1b}[1m\u{1b}[38;5;4m1e\u{1b}[0m\u{1b}[38;5;8ma\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5myq\u{1b}[0m\u{1b}[38;5;8mo\u{1b}[39m commit3 \u{1b}[1m\u{1b}[38;5;4m34\u{1b}[0m\u{1b}[38;5;8mb\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mro\u{1b}[0m\u{1b}[38;5;8my\u{1b}[39m commit2 \u{1b}[1m\u{1b}[38;5;4mcc\u{1b}[0m\u{1b}[38;5;8m0\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mmz\u{1b}[0m\u{1b}[38;5;8mv\u{1b}[39m commit1 \u{1b}[1m\u{1b}[38;5;4m1b\u{1b}[0m\u{1b}[38;5;8m7\u{1b}[39m\n○  Change \u{1b}[1m\u{1b}[38;5;5mqpv\u{1b}[0m initial \u{1b}[1m\u{1b}[38;5;4me0\u{1b}[0m\u{1b}[38;5;8me\u{1b}[39m \u{1b}[38;5;5moriginal\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mzzz\u{1b}[0m \u{1b}[1m\u{1b}[38;5;4m00\u{1b}[0m\u{1b}[38;5;8m0\u{1b}[39m");
     let output = test_env.run_jj_in(
         &repo_path,
         [
@@ -651,20 +598,7 @@ fn test_log_prefix_highlight_styled() {
             &prefix_format(None),
         ],
     );
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  Change [1m[38;5;5mwq[0m commit9 [1m[38;5;4med[0m
-    ○  Change [1m[38;5;5mkm[0m commit8 [1m[38;5;4mef3[0m
-    ○  Change [1m[38;5;5mkp[0m commit7 [1m[38;5;4maf[0m
-    ○  Change [1m[38;5;5mzn[0m commit6 [1m[38;5;4m23[0m
-    ○  Change [1m[38;5;5myo[0m commit5 [1m[38;5;4mb87[0m
-    ○  Change [1m[38;5;5mvr[0m commit4 [1m[38;5;4m1e[0m
-    ○  Change [1m[38;5;5myq[0m commit3 [1m[38;5;4m34[0m
-    ○  Change [1m[38;5;5mro[0m commit2 [1m[38;5;4mcc[0m
-    ○  Change [1m[38;5;5mmz[0m commit1 [1m[38;5;4m1b[0m
-    ○  Change [1m[38;5;5mqpv[0m initial [1m[38;5;4me0[0m [38;5;5moriginal[39m
-    [1m[38;5;14m◆[0m  Change [1m[38;5;5mzzz[0m [1m[38;5;4m00[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mwq\u{1b}[0m commit9 \u{1b}[1m\u{1b}[38;5;4med\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkm\u{1b}[0m commit8 \u{1b}[1m\u{1b}[38;5;4mef3\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mkp\u{1b}[0m commit7 \u{1b}[1m\u{1b}[38;5;4maf\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mzn\u{1b}[0m commit6 \u{1b}[1m\u{1b}[38;5;4m23\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5myo\u{1b}[0m commit5 \u{1b}[1m\u{1b}[38;5;4mb87\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mvr\u{1b}[0m commit4 \u{1b}[1m\u{1b}[38;5;4m1e\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5myq\u{1b}[0m commit3 \u{1b}[1m\u{1b}[38;5;4m34\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mro\u{1b}[0m commit2 \u{1b}[1m\u{1b}[38;5;4mcc\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mmz\u{1b}[0m commit1 \u{1b}[1m\u{1b}[38;5;4m1b\u{1b}[0m\n○  Change \u{1b}[1m\u{1b}[38;5;5mqpv\u{1b}[0m initial \u{1b}[1m\u{1b}[38;5;4me0\u{1b}[0m \u{1b}[38;5;5moriginal\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  Change \u{1b}[1m\u{1b}[38;5;5mzzz\u{1b}[0m \u{1b}[1m\u{1b}[38;5;4m00\u{1b}[0m");
 }
 
 #[test]
@@ -702,7 +636,6 @@ fn test_log_prefix_highlight_counts_hidden_commits() {
         test_env.run_jj_in(&repo_path, ["log", "-r", "all()", "-T", prefix_format]), @r"
     @  Change q[pvuntsmwlqt] initial e0[e22b9fae75] original
     ◆  Change z[zzzzzzzzzzz] 0[00000000000]
-    [EOF]
     ");
 
     // Create 2^7 hidden commits
@@ -725,13 +658,11 @@ fn test_log_prefix_highlight_counts_hidden_commits() {
     │ ○  Change qpv[untsmwlqt] initial e0e[22b9fae75] original
     ├─╯
     ◆  Change zzz[zzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["log", "-r", "4", "-T", prefix_format]), @r"
     ------- stderr -------
     Error: Commit ID prefix `4` is ambiguous
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(
@@ -739,7 +670,6 @@ fn test_log_prefix_highlight_counts_hidden_commits() {
     @  Change wq[nwkozpkust] 44[4c3c5066d3]
     │
     ~
-    [EOF]
     ");
 }
 
@@ -754,25 +684,21 @@ fn test_log_short_shortest_length_parameter() {
         render(r#"commit_id.short(0) ++ "|" ++ commit_id.shortest(0)"#), @r"
     @  |2
     ◆  |0
-    [EOF]
     ");
     insta::assert_snapshot!(
         render(r#"commit_id.short(-0) ++ "|" ++ commit_id.shortest(-0)"#), @r"
     @  |2
     ◆  |0
-    [EOF]
     ");
     insta::assert_snapshot!(
         render(r#"commit_id.short(-100) ++ "|" ++ commit_id.shortest(-100)"#), @r"
     @  <Error: out of range integral type conversion attempted>|<Error: out of range integral type conversion attempted>
     ◆  <Error: out of range integral type conversion attempted>|<Error: out of range integral type conversion attempted>
-    [EOF]
     ");
     insta::assert_snapshot!(
         render(r#"commit_id.short(100) ++ "|" ++ commit_id.shortest(100)"#), @r"
     @  230dd059e1b059aefc0da06a2e5a7dbf22362f22|230dd059e1b059aefc0da06a2e5a7dbf22362f22
     ◆  0000000000000000000000000000000000000000|0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -787,7 +713,6 @@ fn test_log_author_format() {
     @  qpvuntsm test.user@example.com 2001-02-03 08:05:07 230dd059
     │  (empty) (no description set)
     ~
-    [EOF]
     ");
 
     let decl = "template-aliases.'format_short_signature(signature)'";
@@ -804,7 +729,6 @@ fn test_log_author_format() {
     @  qpvuntsm test.user 2001-02-03 08:05:07 230dd059
     │  (empty) (no description set)
     ~
-    [EOF]
     ");
 }
 
@@ -824,7 +748,6 @@ fn test_log_divergence() {
     insta::assert_snapshot!(output, @r"
     @  description 1
     ◆
-    [EOF]
     ");
 
     // Create divergence
@@ -840,10 +763,8 @@ fn test_log_divergence() {
     │ ○  description 2 !divergence!
     ├─╯
     ◆
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
-    [EOF]
     ");
 }
 
@@ -865,7 +786,6 @@ fn test_log_reversed() {
     ◆
     ○  first
     @  second
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -875,7 +795,6 @@ fn test_log_reversed() {
     insta::assert_snapshot!(output, @r"
     first
     second
-    [EOF]
     ");
 }
 
@@ -901,7 +820,6 @@ fn test_log_filtered_by_path() {
     ○  first
     │
     ~
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "description", "file2"]);
@@ -909,7 +827,6 @@ fn test_log_filtered_by_path() {
     @  second
     │
     ~
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "description", "-s", "file1"]);
@@ -919,7 +836,6 @@ fn test_log_filtered_by_path() {
     ○  first
     │  A file1
     ~
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -929,7 +845,6 @@ fn test_log_filtered_by_path() {
     insta::assert_snapshot!(output, @r"
     second
     A file2
-    [EOF]
     ");
 
     // empty revisions are filtered out by "all()" fileset.
@@ -941,7 +856,6 @@ fn test_log_filtered_by_path() {
     ○  first
     │  A file1
     ~
-    [EOF]
     ");
 
     // "root:<path>" is resolved relative to the workspace root.
@@ -962,7 +876,6 @@ fn test_log_filtered_by_path() {
     ○  first
     │  A repo/file1
     ~
-    [EOF]
     ");
 
     // files() revset doesn't filter the diff.
@@ -981,7 +894,6 @@ fn test_log_filtered_by_path() {
     second
     M file1
     A file2
-    [EOF]
     ");
 }
 
@@ -1015,7 +927,6 @@ fn test_log_limit() {
     │ ○  b
     ○ │  c
     ├─╯
-    [EOF]
     ");
 
     // Applied on sorted DAG
@@ -1024,7 +935,6 @@ fn test_log_limit() {
     @    d
     ├─╮
     │ ○  b
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -1034,7 +944,6 @@ fn test_log_limit() {
     insta::assert_snapshot!(output, @r"
     d
     c
-    [EOF]
     ");
 
     // Applied on reversed DAG: Because the node "a" is omitted, "b" and "c" are
@@ -1048,7 +957,6 @@ fn test_log_limit() {
     │ ○  b
     ├─╯
     @  d
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -1065,7 +973,6 @@ fn test_log_limit() {
     b
     c
     d
-    [EOF]
     ");
 
     // Applied on filtered commits
@@ -1077,7 +984,6 @@ fn test_log_limit() {
     ○  c
     │
     ~
-    [EOF]
     ");
 }
 
@@ -1095,7 +1001,6 @@ fn test_log_warn_path_might_be_revset() {
     @
     │
     ~
-    [EOF]
     ");
 
     // Warn for `jj log .` specifically, for former Mercurial users.
@@ -1104,10 +1009,8 @@ fn test_log_warn_path_might_be_revset() {
     @
     │
     ~
-    [EOF]
     ------- stderr -------
     Warning: The argument "." is being interpreted as a fileset expression, but this is often not useful because all non-empty commits touch '.'. If you meant to show the working copy commit, pass -r '@' instead.
-    [EOF]
     "#);
 
     // ...but checking `jj log .` makes sense in a subdirectory.
@@ -1121,7 +1024,6 @@ fn test_log_warn_path_might_be_revset() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Warning: The argument "@" is being interpreted as a fileset expression. To specify a revset, pass -r "@" instead.
-    [EOF]
     "#);
 
     // Warn when there's no path with the provided name.
@@ -1129,7 +1031,6 @@ fn test_log_warn_path_might_be_revset() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Warning: The argument "file2" is being interpreted as a fileset expression. To specify a revset, pass -r "file2" instead.
-    [EOF]
     "#);
 
     // If an explicit revision is provided, then suppress the warning.
@@ -1154,10 +1055,7 @@ fn test_default_revset() {
     // Log should only contain one line (for the root commit), and not show the
     // commit created above.
     insta::assert_snapshot!(
-        test_env.run_jj_in(&repo_path, ["log", "-T", "commit_id"]), @r"
-    ◆  0000000000000000000000000000000000000000
-    [EOF]
-    ");
+        test_env.run_jj_in(&repo_path, ["log", "-T", "commit_id"]), @"◆  0000000000000000000000000000000000000000");
 
     // The default revset is not used if a path is specified
     insta::assert_snapshot!(
@@ -1165,7 +1063,6 @@ fn test_default_revset() {
     @  add a file
     │
     ~
-    [EOF]
     ");
 }
 
@@ -1190,10 +1087,7 @@ fn test_default_revset_per_repo() {
     // Log should only contain one line (for the root commit), and not show the
     // commit created above.
     insta::assert_snapshot!(
-        test_env.run_jj_in(&repo_path, ["log", "-T", "commit_id"]), @r"
-    ◆  0000000000000000000000000000000000000000
-    [EOF]
-    ");
+        test_env.run_jj_in(&repo_path, ["log", "-T", "commit_id"]), @"◆  0000000000000000000000000000000000000000");
 }
 
 #[test]
@@ -1218,7 +1112,6 @@ fn test_multiple_revsets() {
     ○  foo
     │
     ~
-    [EOF]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["log", "-T", "bookmarks", "-rfoo", "-rbar", "-rbaz"]), @r"
@@ -1227,14 +1120,12 @@ fn test_multiple_revsets() {
     ○  foo
     │
     ~
-    [EOF]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["log", "-T", "bookmarks", "-rfoo", "-rfoo"]), @r"
     ○  foo
     │
     ~
-    [EOF]
     ");
 }
 
@@ -1271,26 +1162,11 @@ fn test_graph_template_color() {
     │  second line
     │  third line
     ◆
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["--color=always", "log", "-T", template]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[38;5;2msingle line[0m
-    ○  [38;5;1mfirst line[39m
-    │  [38;5;1msecond line[39m
-    │  [38;5;1mthird line[39m
-    [1m[38;5;14m◆[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;2msingle line\u{1b}[0m\n○  \u{1b}[38;5;1mfirst line\u{1b}[39m\n│  \u{1b}[38;5;1msecond line\u{1b}[39m\n│  \u{1b}[38;5;1mthird line\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m");
     let output = test_env.run_jj_in(&repo_path, ["--color=debug", "log", "-T", template]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m<<node working_copy::@>>[0m  [1m[38;5;2m<<log working_copy description::single line>>[0m
-    <<node::○>>  [38;5;1m<<log description::first line>>[39m
-    │  [38;5;1m<<log description::second line>>[39m
-    │  [38;5;1m<<log description::third line>>[39m
-    [1m[38;5;14m<<node immutable::◆>>[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m<<node working_copy::@>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;2m<<log working_copy description::single line>>\u{1b}[0m\n<<node::○>>  \u{1b}[38;5;1m<<log description::first line>>\u{1b}[39m\n│  \u{1b}[38;5;1m<<log description::second line>>\u{1b}[39m\n│  \u{1b}[38;5;1m<<log description::third line>>\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m<<node immutable::◆>>\u{1b}[0m");
 }
 
 #[test]
@@ -1342,7 +1218,6 @@ fn test_graph_styles() {
     ○  main bookmark 1
     ○  initial
     ◆
-    [EOF]
     ");
 
     // ASCII style
@@ -1360,7 +1235,6 @@ fn test_graph_styles() {
     o  main bookmark 1
     o  initial
     +
-    [EOF]
     ");
 
     // Large ASCII style
@@ -1380,7 +1254,6 @@ fn test_graph_styles() {
     o  main bookmark 1
     o  initial
     +
-    [EOF]
     ");
 
     // Curved style
@@ -1398,7 +1271,6 @@ fn test_graph_styles() {
     ○  main bookmark 1
     ○  initial
     ◆
-    [EOF]
     ");
 
     // Square style
@@ -1416,7 +1288,6 @@ fn test_graph_styles() {
     ○  main bookmark 1
     ○  initial
     ◆
-    [EOF]
     ");
 
     // Invalid style name
@@ -1427,7 +1298,6 @@ fn test_graph_styles() {
     Caused by: unknown variant `unknown`, expected one of `ascii`, `ascii-large`, `curved`, `square`
 
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -1465,33 +1335,24 @@ fn test_log_word_wrap() {
     @  mzvwutvl test.user@example.com 2001-02-03 08:05:11 f3efbd00
     │  (empty) merge
     ~
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["log", "-r@"], 40, true), @r"
     @  mzvwutvl test.user@example.com
     │  2001-02-03 08:05:11 f3efbd00
     ~  (empty) merge
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["log", "--no-graph", "-r@"], 40, false), @r"
     mzvwutvl test.user@example.com 2001-02-03 08:05:11 f3efbd00
     (empty) merge
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["log", "--no-graph", "-r@"], 40, true), @r"
     mzvwutvl test.user@example.com
     2001-02-03 08:05:11 f3efbd00
     (empty) merge
-    [EOF]
     ");
 
     // Color labels should be preserved
-    insta::assert_snapshot!(render(&["log", "-r@", "--color=always"], 40, true), @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mm[38;5;8mzvwutvl[39m [38;5;3mtest.user@example.com[39m[0m
-    │  [1m[38;5;14m2001-02-03 08:05:11[39m [38;5;12mf[38;5;8m3efbd00[39m[0m
-    ~  [1m[38;5;10m(empty)[39m merge[0m
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(&["log", "-r@", "--color=always"], 40, true), @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mm\u{1b}[38;5;8mzvwutvl\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;14m2001-02-03 08:05:11\u{1b}[39m \u{1b}[38;5;12mf\u{1b}[38;5;8m3efbd00\u{1b}[39m\u{1b}[0m\n~  \u{1b}[1m\u{1b}[38;5;10m(empty)\u{1b}[39m merge\u{1b}[0m");
 
     // Graph width should be subtracted from the term width
     let template = r#""0 1 2 3 4 5 6 7 8 9""#;
@@ -1514,7 +1375,6 @@ fn test_log_word_wrap() {
     ◆  0 1 2 3
        4 5 6 7
        8 9
-    [EOF]
     ");
 
     // Shouldn't panic with $COLUMNS < graph_width
@@ -1526,7 +1386,6 @@ fn test_log_word_wrap() {
        f3efbd00
        (empty)
        merge
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["log", "-r@"], 1, true), @r"
     @  mzvwutvl
@@ -1536,7 +1395,6 @@ fn test_log_word_wrap() {
        f3efbd00
        (empty)
        merge
-    [EOF]
     ");
 }
 
@@ -1568,7 +1426,6 @@ fn test_log_diff_stat_width() {
     1 file changed, 100 insertions(+), 0 deletions(-)
     zzzzzzzz root() 00000000
     0 files changed, 0 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 
     // Graph width should be subtracted
@@ -1583,7 +1440,6 @@ fn test_log_diff_stat_width() {
     │    1 file changed, 100 insertions(+), 0 deletions(-)
     ◆  zzzzzzzz root() 00000000
        0 files changed, 0 insertions(+), 0 deletions(-)
-    [EOF]
     ");
 }
 
@@ -1644,7 +1500,6 @@ fn test_elided() {
     ○  initial
     │
     ◆
-    [EOF]
     ");
 
     // Elide some commits from each side of the merge. It's unclear that a revision
@@ -1660,7 +1515,6 @@ fn test_elided() {
     ○  initial
     │
     ~
-    [EOF]
     ");
 
     // Elide shared commits. It's unclear that a revision was skipped on the right
@@ -1671,7 +1525,6 @@ fn test_elided() {
     ╷ ○  main bookmark 1
     ╭─╯
     ◆
-    [EOF]
     ");
 
     // Now test the same thing with synthetic nodes for elided commits
@@ -1691,7 +1544,6 @@ fn test_elided() {
     ○  initial
     │
     ~
-    [EOF]
     ");
 
     // Elide shared commits. To keep the implementation simple, it still gets
@@ -1705,7 +1557,6 @@ fn test_elided() {
     │ ~  (elided revisions)
     ├─╯
     ◆
-    [EOF]
     ");
 }
 
@@ -1771,7 +1622,6 @@ fn test_log_with_custom_symbols() {
     ┝  initial
     │
     ┴
-    [EOF]
     ");
 
     // Simple test with showing default and elided nodes, ascii style.
@@ -1795,7 +1645,6 @@ fn test_log_with_custom_symbols() {
     *  initial
     |
     ^
-    [EOF]
     ");
 }
 
@@ -1827,6 +1676,5 @@ fn test_log_full_description_template() {
     │  <full description>
     │
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }

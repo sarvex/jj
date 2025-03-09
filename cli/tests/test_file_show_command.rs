@@ -28,17 +28,11 @@ fn test_show() {
 
     // Can print the contents of a file in a commit
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"a");
 
     // Defaults to printing the working-copy version
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1"]);
-    insta::assert_snapshot!(output, @r"
-    b
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"b");
 
     // Can print a file in a subdirectory
     let subdir_file = if cfg!(unix) {
@@ -47,43 +41,33 @@ fn test_show() {
         "dir\\file2"
     };
     let output = test_env.run_jj_in(&repo_path, ["file", "show", subdir_file]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
 
     // Error if the path doesn't exist
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "nonexistent"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such path: nonexistent
-    [EOF]
     [exit status: 1]
     ");
 
     // Can print files under the specified directory
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "dir"]);
-    insta::assert_snapshot!(output, @r"
-    c
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"c");
 
     // Can print multiple files
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "."]);
     insta::assert_snapshot!(output, @r"
     c
     b
-    [EOF]
     ");
 
     // Unmatched paths should generate warnings
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file1", "non-existent"]);
     insta::assert_snapshot!(output, @r"
     b
-    [EOF]
     ------- stderr -------
     Warning: No matching entries for paths: non-existent
-    [EOF]
     ");
 
     // Can print a conflict
@@ -101,7 +85,6 @@ fn test_show() {
     +++++++ Contents of side #2
     c
     >>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
 }
 
@@ -122,9 +105,7 @@ fn test_show_symlink() {
     insta::assert_snapshot!(output, @r"
     c
     a
-    [EOF]
     ------- stderr -------
     Warning: Path 'symlink1' exists but is not a file
-    [EOF]
     ");
 }

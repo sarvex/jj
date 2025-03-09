@@ -54,7 +54,6 @@ fn test_git_colocated() {
     @  c3a12656d5027825bc69f40e11dc0bb381d7c277
     ○  97358f54806c7cd005ed5ade68a779595efbae7e master git_head() initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(
         git_repo.head_id().unwrap().to_string(),
@@ -68,7 +67,6 @@ fn test_git_colocated() {
     @  59642000f061cf23eb37ab6eecce428afe7824da
     ○  97358f54806c7cd005ed5ade68a779595efbae7e master git_head() initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(
         git_repo.head_id().unwrap().to_string(),
@@ -82,7 +80,6 @@ fn test_git_colocated() {
     ○  59642000f061cf23eb37ab6eecce428afe7824da git_head()
     ○  97358f54806c7cd005ed5ade68a779595efbae7e master initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_detached());
     insta::assert_snapshot!(
@@ -132,7 +129,6 @@ fn test_git_colocated_unborn_bookmark() {
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_root), @r"
     @  230dd059e1b059aefc0da06a2e5a7dbf22362f22
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Stage some change, and check out root. This shouldn't clobber the HEAD.
@@ -143,7 +139,6 @@ fn test_git_colocated_unborn_bookmark() {
     Working copy now at: kkmpptxz fcdbbd73 (empty) (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_unborn());
     assert_eq!(
@@ -155,7 +150,6 @@ fn test_git_colocated_unborn_bookmark() {
     │ ○  993600f1189571af5bbeb492cf657dc7d0fde48a
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     // Staged change shouldn't persist.
     checkout_index();
@@ -163,7 +157,6 @@ fn test_git_colocated_unborn_bookmark() {
     The working copy has no changes.
     Working copy : kkmpptxz fcdbbd73 (empty) (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     // Stage some change, and create new HEAD. This shouldn't move the default
@@ -174,7 +167,6 @@ fn test_git_colocated_unborn_bookmark() {
     ------- stderr -------
     Working copy now at: royxmykx 0e146103 (empty) (no description set)
     Parent commit      : kkmpptxz e3e01407 (no description set)
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_detached());
     insta::assert_snapshot!(
@@ -187,7 +179,6 @@ fn test_git_colocated_unborn_bookmark() {
     │ ○  993600f1189571af5bbeb492cf657dc7d0fde48a
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     // Staged change shouldn't persist.
     checkout_index();
@@ -195,7 +186,6 @@ fn test_git_colocated_unborn_bookmark() {
     The working copy has no changes.
     Working copy : royxmykx 0e146103 (empty) (no description set)
     Parent commit: kkmpptxz e3e01407 (no description set)
-    [EOF]
     ");
 
     // Assign the default bookmark. The bookmark is no longer "unborn".
@@ -212,7 +202,6 @@ fn test_git_colocated_unborn_bookmark() {
     Working copy now at: znkkpsqq 10dd328b (empty) (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_unborn());
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_root), @r"
@@ -223,7 +212,6 @@ fn test_git_colocated_unborn_bookmark() {
     │ ○  993600f1189571af5bbeb492cf657dc7d0fde48a
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     // Staged change shouldn't persist.
     checkout_index();
@@ -231,7 +219,6 @@ fn test_git_colocated_unborn_bookmark() {
     The working copy has no changes.
     Working copy : znkkpsqq 10dd328b (empty) (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     // New snapshot and commit can be created after the HEAD got unset.
@@ -241,7 +228,6 @@ fn test_git_colocated_unborn_bookmark() {
     ------- stderr -------
     Working copy now at: wqnwkozp 101e2723 (empty) (no description set)
     Parent commit      : znkkpsqq fc8af934 (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_root), @r"
     @  101e272377a9daff75358f10dbd078df922fe68c
@@ -252,7 +238,6 @@ fn test_git_colocated_unborn_bookmark() {
     │ ○  993600f1189571af5bbeb492cf657dc7d0fde48a
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -276,7 +261,6 @@ fn test_git_colocated_export_bookmarks_on_snapshot() {
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_root), @r"
     @  b15ef4cdd277d2c63cce6d67c1916f53a36141f7 foo
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // The bookmark gets updated when we modify the working copy, and it should get
@@ -285,7 +269,6 @@ fn test_git_colocated_export_bookmarks_on_snapshot() {
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_root), @r"
     @  4d2c49a8f8e2f1ba61f48ba79e5f4a5faa6512cf foo
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(git_repo
         .find_reference("refs/heads/foo")
@@ -342,7 +325,6 @@ fn test_git_colocated_rebase_on_import() {
     @  15b1d70c5e33b5d2b18383292b85324d5153ffed
     ○  47fe984daf66f7bf3ebf31b9cb3513c995afb857 master git_head() add a file
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Abandoned 1 commits that are no longer reachable.
     Rebased 1 descendant commits off of commits rewritten from git
@@ -350,7 +332,6 @@ fn test_git_colocated_rebase_on_import() {
     Parent commit      : qpvuntsm 47fe984d master | add a file
     Added 0 files, modified 1 files, removed 0 files
     Done importing changes from the underlying Git repo.
-    [EOF]
     ");
 }
 
@@ -374,7 +355,6 @@ fn test_git_colocated_bookmarks() {
     ├─╯
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Create a bookmark in jj. It should be exported to Git even though it points
@@ -415,13 +395,11 @@ fn test_git_colocated_bookmarks() {
     ├─╯
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Abandoned 1 commits that are no longer reachable.
     Working copy now at: yqosqzyt 096dc80d (empty) (no description set)
     Parent commit      : qpvuntsm 230dd059 (empty) (no description set)
     Done importing changes from the underlying Git repo.
-    [EOF]
     ");
 }
 
@@ -441,12 +419,10 @@ fn test_git_colocated_bookmark_forget() {
     @  65b6b74e08973b88d38404430f119c8c79465250 foo
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &workspace_root), @r"
     foo: rlvkpnrz 65b6b74e (empty) (no description set)
       @git: rlvkpnrz 65b6b74e (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -457,7 +433,6 @@ fn test_git_colocated_bookmark_forget() {
     ------- stderr -------
     Forgot 1 local bookmarks.
     Forgot 1 remote bookmarks.
-    [EOF]
     ");
     // A forgotten bookmark is deleted in the git repo. For a detailed demo
     // explaining this, see `test_bookmark_forget_export` in
@@ -479,14 +454,12 @@ fn test_git_colocated_bookmark_at_root() {
     Created 1 bookmarks pointing to zzzzzzzz 00000000 foo | (empty) (no description set)
     Warning: Failed to export some bookmarks:
       foo: Ref cannot point to the root commit in Git
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "move", "foo", "--to=@"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -504,7 +477,6 @@ fn test_git_colocated_bookmark_at_root() {
     Moved 1 bookmarks to zzzzzzzz 00000000 foo* | (empty) (no description set)
     Warning: Failed to export some bookmarks:
       foo: Ref cannot point to the root commit in Git
-    [EOF]
     ");
 }
 
@@ -529,7 +501,6 @@ fn test_git_colocated_conflicting_git_refs() {
         Hint: Git doesn't allow a branch name that looks like a parent directory of
         another (e.g. `foo` and `foo/bar`). Try to rename the bookmarks that failed to
         export or their "parent" bookmarks.
-        [EOF]
         "#);
     });
 }
@@ -575,7 +546,6 @@ fn test_git_colocated_checkout_non_empty_working_copy() {
     ------- stderr -------
     Working copy now at: kkmpptxz acea3383 (empty) new
     Parent commit      : slsumksp 97358f54 master | initial
-    [EOF]
     ");
 
     assert_eq!(
@@ -589,7 +559,6 @@ fn test_git_colocated_checkout_non_empty_working_copy() {
     ├─╯
     ○  97358f54806c7cd005ed5ade68a779595efbae7e master git_head() initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -635,7 +604,6 @@ fn test_git_colocated_fetch_deleted_or_moved_bookmark() {
     ├─╯
     ◆  a7e4cec4256b7995129b9d1e1bda7e1df6e60678 A git_head() A
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     test_env
@@ -651,7 +619,6 @@ fn test_git_colocated_fetch_deleted_or_moved_bookmark() {
     bookmark: B_to_delete@origin [deleted] untracked
     bookmark: C_to_move@origin   [updated] tracked
     Abandoned 2 commits that are no longer reachable.
-    [EOF]
     ");
     // "original C" and "B_to_delete" are abandoned, as the corresponding bookmarks
     // were deleted or moved on the remote (#864)
@@ -661,7 +628,6 @@ fn test_git_colocated_fetch_deleted_or_moved_bookmark() {
     ├─╯
     ◆  a7e4cec4256b7995129b9d1e1bda7e1df6e60678 A git_head() A
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -700,18 +666,15 @@ fn test_git_colocated_rebase_dirty_working_copy() {
     Warning: These bookmarks have conflicts:
       feature
     Hint: Use `jj bookmark list` to see details. Use `jj bookmark set <name> -r <rev>` to resolve.
-    [EOF]
     ------- stderr -------
     Warning: Failed to export some bookmarks:
       feature: Modified ref had been deleted in Git
     Done importing changes from the underlying Git repo.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  6bad94b10401f5fafc8a91064661224650d10d1b feature??
     ○  3230d52258f6de7e9afbd10da8d64503cc7cdca5 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // The working-copy content shouldn't be lost.
@@ -753,7 +716,6 @@ fn test_git_colocated_external_checkout() {
     │ ○  a7e4cec4256b7995129b9d1e1bda7e1df6e60678 master A
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Check out another bookmark by external command
@@ -767,10 +729,8 @@ fn test_git_colocated_external_checkout() {
     │ ○  eccedddfa5152d99fc8ddd1081b375387a8a382a B
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Reset the working copy parent to the new Git HEAD.
-    [EOF]
     ");
 
     // Edit non-head commit
@@ -787,7 +747,6 @@ fn test_git_colocated_external_checkout() {
     │ ○  a7e4cec4256b7995129b9d1e1bda7e1df6e60678 master A
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Check out another bookmark by external command
@@ -802,10 +761,8 @@ fn test_git_colocated_external_checkout() {
     │ ○  eccedddfa5152d99fc8ddd1081b375387a8a382a B
     ├─╯
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ------- stderr -------
     Reset the working copy parent to the new Git HEAD.
-    [EOF]
     ");
 }
 
@@ -823,7 +780,6 @@ fn test_git_colocated_squash_undo() {
     @  rlvkpnrzqnoo 9670380ac379
     ○  qpvuntsmwlqt a7e4cec4256b A git_head()
     ◆  zzzzzzzzzzzz 000000000000
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["squash"]).success();
@@ -831,7 +787,6 @@ fn test_git_colocated_squash_undo() {
     @  zsuskulnrvyr 6ee662324e5a
     ○  qpvuntsmwlqt 13ab6b96d82e A git_head()
     ◆  zzzzzzzzzzzz 000000000000
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
     // TODO: There should be no divergence here; 2f376ea1478c should be hidden
@@ -840,7 +795,6 @@ fn test_git_colocated_squash_undo() {
     @  rlvkpnrzqnoo 9670380ac379
     ○  qpvuntsmwlqt a7e4cec4256b A git_head()
     ◆  zzzzzzzzzzzz 000000000000
-    [EOF]
     ");
 }
 
@@ -863,7 +817,6 @@ fn test_git_colocated_undo_head_move() {
     @  65b6b74e08973b88d38404430f119c8c79465250
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // HEAD should be unset
@@ -872,7 +825,6 @@ fn test_git_colocated_undo_head_move() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  230dd059e1b059aefc0da06a2e5a7dbf22362f22
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Create commit on non-root commit
@@ -883,7 +835,6 @@ fn test_git_colocated_undo_head_move() {
     ○  eb08b363bb5ef8ee549314260488980d7bbe8f63 git_head()
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_detached());
     insta::assert_snapshot!(
@@ -897,7 +848,6 @@ fn test_git_colocated_undo_head_move() {
     Undid operation: b50ec983d1c1 (2001-02-03 08:05:13) new empty commit
     Working copy now at: royxmykx eb08b363 (empty) (no description set)
     Parent commit      : qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
     assert!(git_repo.head().unwrap().is_detached());
     insta::assert_snapshot!(
@@ -907,7 +857,6 @@ fn test_git_colocated_undo_head_move() {
     @  eb08b363bb5ef8ee549314260488980d7bbe8f63
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -942,7 +891,6 @@ fn test_git_colocated_update_index_preserves_timestamps() {
     ○  563dbc583c0d82eb10c40d3f3276183ea28a0fa7 commit2 git_head()
     ○  3c270b473dd871b20d196316eb038f078f80c219 commit1
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_index_state(&repo_path), @r"
@@ -972,7 +920,6 @@ fn test_git_colocated_update_index_preserves_timestamps() {
     @  563dbc583c0d82eb10c40d3f3276183ea28a0fa7 commit2
     ○  3c270b473dd871b20d196316eb038f078f80c219 commit1 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Index should contain stat for unchanged file still.
@@ -991,7 +938,6 @@ fn test_git_colocated_update_index_preserves_timestamps() {
     ├─╯
     ○  3c270b473dd871b20d196316eb038f078f80c219 commit1 git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Index should contain stat for unchanged file still.
@@ -1057,7 +1003,6 @@ fn test_git_colocated_update_index_merge_conflict() {
     ├─╯
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Conflict should be added in index with correct blob IDs. The stat for
@@ -1082,7 +1027,6 @@ fn test_git_colocated_update_index_merge_conflict() {
     ├─╯
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Index should be the same after `jj new`.
@@ -1133,7 +1077,6 @@ fn test_git_colocated_update_index_rebase_conflict() {
     ├─╯
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base git_head()
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_index_state(&repo_path), @r"
@@ -1159,7 +1102,6 @@ fn test_git_colocated_update_index_rebase_conflict() {
     ○  df62ad35fc873e89ade730fa9a407cd5cfa5e6ba right git_head()
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Index should contain files from parent commit, so there should be no conflict
@@ -1178,7 +1120,6 @@ fn test_git_colocated_update_index_rebase_conflict() {
     ○  df62ad35fc873e89ade730fa9a407cd5cfa5e6ba right
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Now the working copy commit's parent is conflicted, so the index should have
@@ -1257,7 +1198,6 @@ fn test_git_colocated_update_index_3_sided_conflict() {
     ├─╯
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // We can't add conflicts with more than 2 sides to the index, so we add a dummy
@@ -1284,7 +1224,6 @@ fn test_git_colocated_update_index_3_sided_conflict() {
     ├─╯
     ○  14b3ff6c73a234ab2a26fc559512e0f056a46bd9 base
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
 
     // Index should be the same after `jj new`.
@@ -1438,7 +1377,6 @@ fn test_git_colocated_unreachable_commits() {
     @  9ff88424a06a94d04738847733e68e510b906345
     ○  cd740e230992f334de13a0bd0b35709b3f7a89af master git_head() initial
     ◆  0000000000000000000000000000000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(
         git_repo.head_id().unwrap().to_string(),
@@ -1450,7 +1388,6 @@ fn test_git_colocated_unreachable_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `b23bb53bdce25f0e03ff9e484eadb77626256041` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 }

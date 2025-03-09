@@ -42,22 +42,11 @@ fn test_evolog_with_or_without_diff() {
     │  my description
     ○  rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:08 2b023b5f
        (empty) my description
-    [EOF]
     ");
 
     // Color
     let output = test_env.run_jj_in(&repo_path, ["--color=always", "evolog"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mr[38;5;8mlvkpnrz[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:10[39m [38;5;12m6[38;5;8m6b42ad3[39m[0m
-    │  [1mmy description[0m
-    [1m[38;5;1m×[0m  [1m[39mr[0m[38;5;8mlvkpnrz[39m hidden [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:09[39m [1m[38;5;4m07[0m[38;5;8mb18245[39m [38;5;1mconflict[39m
-    │  my description
-    ○  [1m[39mr[0m[38;5;8mlvkpnrz[39m hidden [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:09[39m [1m[38;5;4m06[0m[38;5;8m8224a7[39m
-    │  my description
-    ○  [1m[39mr[0m[38;5;8mlvkpnrz[39m hidden [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:08[39m [1m[38;5;4m2b[0m[38;5;8m023b5f[39m
-       [38;5;2m(empty)[39m my description
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mr\u{1b}[38;5;8mlvkpnrz\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:10\u{1b}[39m \u{1b}[38;5;12m6\u{1b}[38;5;8m6b42ad3\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1mmy description\u{1b}[0m\n\u{1b}[1m\u{1b}[38;5;1m×\u{1b}[0m  \u{1b}[1m\u{1b}[39mr\u{1b}[0m\u{1b}[38;5;8mlvkpnrz\u{1b}[39m hidden \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:09\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m07\u{1b}[0m\u{1b}[38;5;8mb18245\u{1b}[39m \u{1b}[38;5;1mconflict\u{1b}[39m\n│  my description\n○  \u{1b}[1m\u{1b}[39mr\u{1b}[0m\u{1b}[38;5;8mlvkpnrz\u{1b}[39m hidden \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:09\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m06\u{1b}[0m\u{1b}[38;5;8m8224a7\u{1b}[39m\n│  my description\n○  \u{1b}[1m\u{1b}[39mr\u{1b}[0m\u{1b}[38;5;8mlvkpnrz\u{1b}[39m hidden \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2b\u{1b}[0m\u{1b}[38;5;8m023b5f\u{1b}[39m\n   \u{1b}[38;5;2m(empty)\u{1b}[39m my description");
 
     // There should be no diff caused by the rebase because it was a pure rebase
     // (even even though it resulted in a conflict).
@@ -84,7 +73,6 @@ fn test_evolog_with_or_without_diff() {
     │          1: foo
     ○  rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:08 2b023b5f
        (empty) my description
-    [EOF]
     ");
 
     // Test `--limit`
@@ -94,7 +82,6 @@ fn test_evolog_with_or_without_diff() {
     │  my description
     ×  rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:09 07b18245 conflict
     │  my description
-    [EOF]
     ");
 
     // Test `--no-graph`
@@ -108,7 +95,6 @@ fn test_evolog_with_or_without_diff() {
     my description
     rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:08 2b023b5f
     (empty) my description
-    [EOF]
     ");
 
     // Test `--git` format, and that it implies `-p`
@@ -149,7 +135,6 @@ fn test_evolog_with_or_without_diff() {
     +foo
     rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:08 2b023b5f
     (empty) my description
-    [EOF]
     ");
 }
 
@@ -182,7 +167,6 @@ fn test_evolog_with_custom_symbols() {
     │  my description
     ┝  rlvkpnrz hidden test.user@example.com 2001-02-03 08:05:08 2b023b5f
        (empty) my description
-    [EOF]
     ");
 }
 
@@ -211,7 +195,6 @@ fn test_evolog_word_wrap() {
     │  (empty) first
     ○  qpvuntsm hidden test.user@example.com 2001-02-03 08:05:07 230dd059
        (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["evolog"], 40, true), @r"
     @  qpvuntsm test.user@example.com
@@ -220,14 +203,12 @@ fn test_evolog_word_wrap() {
     ○  qpvuntsm hidden test.user@example.com
        2001-02-03 08:05:07 230dd059
        (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["evolog", "--no-graph"], 40, false), @r"
     qpvuntsm test.user@example.com 2001-02-03 08:05:08 fa15625b
     (empty) first
     qpvuntsm hidden test.user@example.com 2001-02-03 08:05:07 230dd059
     (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(render(&["evolog", "--no-graph"], 40, true), @r"
     qpvuntsm test.user@example.com
@@ -236,7 +217,6 @@ fn test_evolog_word_wrap() {
     qpvuntsm hidden test.user@example.com
     2001-02-03 08:05:07 230dd059
     (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -348,7 +328,6 @@ fn test_evolog_squash() {
     │  (empty) first
     ○  qpvuntsm hidden test.user@example.com 2001-02-03 08:05:07 230dd059
        (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -381,7 +360,6 @@ fn test_evolog_with_no_template() {
     - description_placeholder
     - email_placeholder
     - name_placeholder
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -411,7 +389,6 @@ fn test_evolog_reversed_no_graph() {
     (empty) b
     qpvuntsm test.user@example.com 2001-02-03 08:05:10 5cb22a87
     (empty) c
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -423,7 +400,6 @@ fn test_evolog_reversed_no_graph() {
     (empty) b
     qpvuntsm test.user@example.com 2001-02-03 08:05:10 5cb22a87
     (empty) c
-    [EOF]
     ");
 }
 
@@ -481,7 +457,6 @@ fn test_evolog_reverse_with_graph() {
     ├─╯  (empty) e
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:13 a177c2f2
        (empty) c+d+e
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -495,6 +470,5 @@ fn test_evolog_reverse_with_graph() {
     ├─╯  (empty) e
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:13 a177c2f2
        (empty) c+d+e
-    [EOF]
     ");
 }

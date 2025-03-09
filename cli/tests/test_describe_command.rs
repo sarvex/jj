@@ -34,7 +34,6 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 95979928 (empty) description from CLI
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     // Set the same description using `-m` flag, but with explicit newline
@@ -42,7 +41,6 @@ fn test_describe() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     // Check that the text file gets initialized with the current description and
@@ -52,7 +50,6 @@ fn test_describe() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
@@ -68,7 +65,6 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 94fcb906 (empty) description from editor
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     // Lines in editor starting with "JJ: " are ignored
@@ -82,7 +78,6 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 7a348923 (empty) description among comment
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     // Multi-line description
@@ -92,7 +87,6 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 749361b5 (empty) line1
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@", "-Tdescription"]);
     insta::assert_snapshot!(output, @r"
@@ -100,7 +94,6 @@ fn test_describe() {
     line2
 
     line4
-    [EOF]
     ");
 
     // Multi-line description again with CRLF, which should make no changes
@@ -109,7 +102,6 @@ fn test_describe() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     // Multi-line description starting with newlines
@@ -119,13 +111,11 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm dc44dbee (empty) line1
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@", "-Tdescription"]);
     insta::assert_snapshot!(output, @r"
     line1
     line2
-    [EOF]
     ");
 
     // Clear description
@@ -134,14 +124,12 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 6296963b (empty) (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     std::fs::write(&edit_script, "write\n").unwrap();
     let output = test_env.run_jj_in(&repo_path, ["describe"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     // Fails if the editor fails
@@ -159,7 +147,6 @@ fn test_describe() {
         Error: Failed to edit description
         Caused by: Editor '<redacted>' exited with exit status: 1
         Hint: Edited description is left in $TEST_ENV/repo/.jj/repo/editor-<redacted>.jjdescription
-        [EOF]
         [exit status: 1]
         ");
     });
@@ -184,14 +171,12 @@ fn test_describe() {
     ------- stderr -------
     Working copy now at: qpvuntsm 10fa2dc7 (empty) description from editor
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@", "-Tdescription"]);
     insta::assert_snapshot!(output, @r"
     description from editor
 
     content of message from editor
-    [EOF]
     ");
 }
 
@@ -213,7 +198,6 @@ fn test_describe_editor_env() {
     Error: Failed to edit description
     Caused by:
     1: Failed to run editor 'this-editor-does-not-exist'
-    [EOF]
     [exit status: 1]
     ");
 
@@ -230,7 +214,6 @@ fn test_describe_editor_env() {
     Error: Failed to edit description
     Caused by:
     1: Failed to run editor 'bad-editor-from-visual-env'
-    [EOF]
     [exit status: 1]
     ");
 
@@ -247,7 +230,6 @@ fn test_describe_editor_env() {
     Error: Failed to edit description
     Caused by:
     1: Failed to run editor 'bad-editor-from-config'
-    [EOF]
     [exit status: 1]
     ");
 
@@ -263,7 +245,6 @@ fn test_describe_editor_env() {
     Error: Failed to edit description
     Caused by:
     1: Failed to run editor 'bad-jj-editor-from-jj-editor-env'
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -284,7 +265,6 @@ fn test_describe_multiple_commits() {
     ○  65b6b74e0897
     ○  230dd059e1b0
     ◆  000000000000
-    [EOF]
     ");
 
     // Set the description of multiple commits using `-m` flag
@@ -298,14 +278,12 @@ fn test_describe_multiple_commits() {
     Rebased 1 descendant commits
     Working copy now at: kkmpptxz 41659b84 (empty) description from CLI
     Parent commit      : rlvkpnrz 8d650510 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  41659b846096 description from CLI
     ○  8d650510daad
     ○  a42f5755e688 description from CLI
     ◆  000000000000
-    [EOF]
     ");
 
     // Check that the text file gets initialized with the current description of
@@ -316,7 +294,6 @@ fn test_describe_multiple_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
@@ -362,7 +339,6 @@ fn test_describe_multiple_commits() {
     Updated 2 commits
     Working copy now at: kkmpptxz f203494a (empty) description from editor of @
     Parent commit      : rlvkpnrz 0d76a92c (empty) description from editor of @-
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f203494a4507 description from editor of @
@@ -373,7 +349,6 @@ fn test_describe_multiple_commits() {
     │  further commit message of @-
     ○  a42f5755e688 description from CLI
     ◆  000000000000
-    [EOF]
     ");
 
     // Fails if the edited message has a commit with multiple descriptions
@@ -404,7 +379,6 @@ fn test_describe_multiple_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The following commits were found in the edited message multiple times: 0d76a92ca7cc
-    [EOF]
     [exit status: 1]
     ");
 
@@ -434,7 +408,6 @@ fn test_describe_multiple_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The following commits were not being edited, but were found in the edited message: 000000000000
-    [EOF]
     [exit status: 1]
     ");
 
@@ -456,7 +429,6 @@ fn test_describe_multiple_commits() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The description for the following commits were not found in the edited message: 0d76a92ca7cc
-    [EOF]
     [exit status: 1]
     ");
 
@@ -479,7 +451,6 @@ fn test_describe_multiple_commits() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Error: Found the following line without a commit header: "description from editor of @-"
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -498,7 +469,6 @@ fn test_describe_multiple_commits() {
         Error: Failed to edit description
         Caused by: Editor '<redacted>' exited with exit status: 1
         Hint: Edited description is left in $TEST_ENV/repo/.jj/repo/editor-<redacted>.jjdescription
-        [EOF]
         [exit status: 1]
         ");
     });
@@ -529,7 +499,6 @@ fn test_describe_multiple_commits() {
     Rebased 1 descendant commits
     Working copy now at: kkmpptxz 1d7701ee (empty) description from editor of @
     Parent commit      : rlvkpnrz 5389926e (empty) description from editor for @-
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  1d7701eec9bc description from editor of @
@@ -538,7 +507,6 @@ fn test_describe_multiple_commits() {
     ○  5389926ebed6 description from editor for @-
     ○  eaa8547ae37a description from editor for @--
     ◆  000000000000
-    [EOF]
     ");
 }
 
@@ -563,7 +531,6 @@ fn test_multiple_message_args() {
     ------- stderr -------
     Working copy now at: qpvuntsm 99a36a50 (empty) First Paragraph from CLI
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@", "-Tdescription"]);
@@ -571,7 +538,6 @@ fn test_multiple_message_args() {
     First Paragraph from CLI
 
     Second Paragraph from CLI
-    [EOF]
     ");
 
     // Set the same description, with existing newlines
@@ -588,7 +554,6 @@ fn test_multiple_message_args() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 
     // Use an empty -m flag between paragraphs to insert an extra blank line
@@ -608,7 +573,6 @@ fn test_multiple_message_args() {
     ------- stderr -------
     Working copy now at: qpvuntsm 01ac40b3 (empty) First Paragraph from CLI
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "--no-graph", "-r@", "-Tdescription"]);
@@ -617,7 +581,6 @@ fn test_multiple_message_args() {
 
 
     Second Paragraph from CLI
-    [EOF]
     ");
 }
 
@@ -637,7 +600,6 @@ fn test_describe_default_description() {
     ------- stderr -------
     Working copy now at: qpvuntsm 573b6df5 TESTED=TODO
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -700,7 +662,6 @@ fn test_describe_author() {
     ○  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     │  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     ~
-    [EOF]
     ");
 
     // Change the author for the latest commit (the committer is always reset)
@@ -724,7 +685,6 @@ fn test_describe_author() {
     ○  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     │  Test User test.user@example.com 2001-02-03 04:05:07.000 +07:00
     ~
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -760,7 +720,6 @@ fn test_describe_author() {
     ○  Super Seeder super.seeder@example.com 2001-02-03 04:05:14.000 +07:00
     │  Test User test.user@example.com 2001-02-03 04:05:14.000 +07:00
     ~
-    [EOF]
     ");
 
     // Reset the author for the latest commit (the committer is always reset)
@@ -786,7 +745,6 @@ fn test_describe_author() {
     ○  Super Seeder super.seeder@example.com 2001-02-03 04:05:14.000 +07:00
     │  Test User test.user@example.com 2001-02-03 04:05:14.000 +07:00
     ~
-    [EOF]
     ");
 
     // Reset the author for multiple commits (the committer is always reset)
@@ -813,7 +771,6 @@ fn test_describe_author() {
     ○  Ove Ridder ove.ridder@example.com 2001-02-03 04:05:18.000 +07:00
     │  Ove Ridder ove.ridder@example.com 2001-02-03 04:05:18.000 +07:00
     ~
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -874,7 +831,6 @@ fn test_describe_with_edit_and_message_args_opens_editor() {
     ------- stderr -------
     Working copy now at: qpvuntsm 61ece7a9 (empty) message from command line
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -901,7 +857,6 @@ fn test_describe_change_with_existing_message_with_edit_and_message_args_opens_e
     ------- stderr -------
     Working copy now at: qpvuntsm de694560 (empty) new message
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor")).unwrap(), @r#"
@@ -925,7 +880,6 @@ fn test_edit_cannot_be_used_with_no_edit() {
     Usage: jj describe --no-edit [REVSETS]...
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }

@@ -52,12 +52,10 @@ fn test_bookmark_multiple_names() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 2 bookmarks pointing to qpvuntsm 230dd059 bar foo | (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar foo 230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -65,26 +63,22 @@ fn test_bookmark_multiple_names() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 2 bookmarks to zsuskuln 8bb159bc bar foo | (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar foo 8bb159bc30a9
     ○   230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "delete", "foo", "bar", "foo"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Deleted 2 bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   8bb159bc30a9
     ○   230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
 
     // Hint should be omitted if -r is specified
@@ -92,7 +86,6 @@ fn test_bookmark_multiple_names() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 2 bookmarks pointing to qpvuntsm 230dd059 bar foo | (empty) (no description set)
-    [EOF]
     ");
 
     // Create and move with explicit -r
@@ -101,7 +94,6 @@ fn test_bookmark_multiple_names() {
     ------- stderr -------
     Created 1 bookmarks pointing to zsuskuln 8bb159bc bar baz | (empty) (no description set)
     Moved 1 bookmarks to zsuskuln 8bb159bc bar baz | (empty) (no description set)
-    [EOF]
     ");
 
     // Noop changes should not be included in the stats
@@ -109,7 +101,6 @@ fn test_bookmark_multiple_names() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to zsuskuln 8bb159bc bar baz foo | (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -123,7 +114,6 @@ fn test_bookmark_at_root() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to zzzzzzzz 00000000 fred | (empty) (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["git", "export"]);
     insta::assert_snapshot!(output, @r"
@@ -131,7 +121,6 @@ fn test_bookmark_at_root() {
     Nothing changed.
     Warning: Failed to export some bookmarks:
       fred: Ref cannot point to the root commit in Git
-    [EOF]
     ");
 }
 
@@ -149,12 +138,11 @@ fn test_bookmark_bad_name() {
     For more information, try '--help'.
     Caused by:  --> 1:1
       |
-    1 | 
+    1 | [EOL]
       | ^---
       |
       = expected <identifier>, <string_literal>, or <raw_string_literal>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for how to quote symbols.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -171,7 +159,6 @@ fn test_bookmark_bad_name() {
       |
       = Expected non-empty string
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for how to quote symbols.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -183,12 +170,11 @@ fn test_bookmark_bad_name() {
     For more information, try '--help'.
     Caused by:  --> 1:1
       |
-    1 | 
+    1 | [EOL]
       | ^---
       |
       = expected <identifier>, <string_literal>, or <raw_string_literal>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for how to quote symbols.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -206,7 +192,6 @@ fn test_bookmark_bad_name() {
       |
       = expected <identifier>, <string_literal>, or <raw_string_literal>
     Hint: See https://jj-vcs.github.io/jj/latest/revsets/ or use `jj help -k revsets` for how to quote symbols.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -223,7 +208,6 @@ fn test_bookmark_bad_name() {
       |
       = expected <EOI>
     Hint: Looks like remote bookmark. Run `jj bookmark track foo@bar` to track it.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -232,7 +216,6 @@ fn test_bookmark_bad_name() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to qpvuntsm 230dd059 foo@bar | (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -256,7 +239,6 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such bookmark: foo
-    [EOF]
     [exit status: 1]
     ");
 
@@ -264,7 +246,6 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -273,7 +254,6 @@ fn test_bookmark_move() {
     ------- stderr -------
     Error: Bookmark already exists: foo
     Hint: Use `jj bookmark set` to update it.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -281,7 +261,6 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to mzvwutvl 167f90e7 foo | (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "set", "-r@-", "foo"]);
@@ -289,7 +268,6 @@ fn test_bookmark_move() {
     ------- stderr -------
     Error: Refusing to move bookmark backwards or sideways: foo
     Hint: Use --allow-backwards to allow it.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -300,14 +278,12 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "move", "foo", "--to=@"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to mzvwutvl 167f90e7 foo | (empty) (no description set)
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "move", "--to=@-", "foo"]);
@@ -315,7 +291,6 @@ fn test_bookmark_move() {
     ------- stderr -------
     Error: Refusing to move bookmark backwards or sideways: foo
     Hint: Use --allow-backwards to allow it.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -326,7 +301,6 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 
     // Delete bookmark locally, but is still tracking remote
@@ -342,7 +316,6 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     foo (deleted)
       @origin: qpvuntsm 1eb845f3 (empty) commit
-    [EOF]
     ");
 
     // Deleted tracking bookmark name should still be allocated
@@ -351,7 +324,6 @@ fn test_bookmark_move() {
     ------- stderr -------
     Error: Tracked remote bookmarks exist for deleted bookmark: foo
     Hint: Use `jj bookmark set` to recreate the local bookmark. Run `jj bookmark untrack 'glob:foo@*'` to disassociate them.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -360,12 +332,10 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to mzvwutvl 66d48752 foo* | (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     foo: mzvwutvl 66d48752 (empty) (no description set)
       @origin (behind by 1 commits): qpvuntsm 1eb845f3 (empty) commit
-    [EOF]
     ");
 
     // Untracked remote bookmark shouldn't block creation of local bookmark
@@ -379,12 +349,10 @@ fn test_bookmark_move() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to mzvwutvl 66d48752 foo | (empty) (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     foo: mzvwutvl 66d48752 (empty) (no description set)
     foo@origin: qpvuntsm 1eb845f3 (empty) commit
-    [EOF]
     ");
 }
 
@@ -415,7 +383,6 @@ fn test_bookmark_move_matching() {
     │ ○  a1 a2 230dd059e1b0
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 
     // The default could be considered "--from=all() glob:*", but is disabled
@@ -428,7 +395,6 @@ fn test_bookmark_move_matching() {
     Usage: jj bookmark move --to <REVSET> <--from <REVSETS>|NAMES>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -437,7 +403,6 @@ fn test_bookmark_move_matching() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     No bookmarks to update.
-    [EOF]
     ");
 
     // No matching bookmarks within the source revisions
@@ -448,7 +413,6 @@ fn test_bookmark_move_matching() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No matching bookmarks for patterns: a?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -457,7 +421,6 @@ fn test_bookmark_move_matching() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     No bookmarks to update.
-    [EOF]
     ");
 
     // Move from multiple revisions
@@ -466,7 +429,6 @@ fn test_bookmark_move_matching() {
     ------- stderr -------
     Moved 2 bookmarks to vruxwmqv a2781dd9 b1 c1 | (empty) head2
     Hint: Specify bookmark by name to update just one of the bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  b1 c1 a2781dd9ee37
@@ -476,7 +438,6 @@ fn test_bookmark_move_matching() {
     │ ○  a1 a2 230dd059e1b0
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -486,7 +447,6 @@ fn test_bookmark_move_matching() {
     ------- stderr -------
     Error: Refusing to move bookmark backwards or sideways: a1
     Hint: Use --allow-backwards to allow it.
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -497,7 +457,6 @@ fn test_bookmark_move_matching() {
     │ ○  a1 a2 230dd059e1b0
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 
     // Select by revision and name
@@ -508,7 +467,6 @@ fn test_bookmark_move_matching() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to kkmpptxz 6b5e840e a1 | (empty) head1
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   a2781dd9ee37
@@ -518,7 +476,6 @@ fn test_bookmark_move_matching() {
     │ ○  a2 230dd059e1b0
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 }
 
@@ -572,10 +529,8 @@ fn test_bookmark_move_conflicting() {
     │ ○  B0 foo??
     ├─╯
     ◆
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
-    [EOF]
     ");
 
     // Can't move the bookmark to C0 since it's sibling.
@@ -584,7 +539,6 @@ fn test_bookmark_move_conflicting() {
     ------- stderr -------
     Error: Refusing to move bookmark backwards or sideways: foo
     Hint: Use --allow-backwards to allow it.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -594,7 +548,6 @@ fn test_bookmark_move_conflicting() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Moved 1 bookmarks to mzvwutvl 9328d344 foo | (empty) A1
-    [EOF]
     ");
     insta::assert_snapshot!(get_log(), @r"
     @  A1 foo
@@ -604,7 +557,6 @@ fn test_bookmark_move_conflicting() {
     │ ○  B0
     ├─╯
     ◆
-    [EOF]
     ");
 }
 
@@ -628,7 +580,6 @@ fn test_bookmark_rename() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such bookmark: bnoexist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -652,7 +603,6 @@ fn test_bookmark_rename() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Bookmark already exists: bexist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -671,14 +621,12 @@ fn test_bookmark_rename() {
     ------- stderr -------
     Warning: Tracked remote bookmarks for bookmark bremote were not renamed.
     Hint: To rename the bookmark on the remote, you can `jj git push --bookmark bremote` first (to delete it on the remote), and then `jj git push --bookmark bremote2`. `jj git push --all` would also be sufficient.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "rename", "bremote2", "bremote"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Warning: Tracked remote bookmarks for bookmark bremote exist.
     Hint: Run `jj bookmark untrack 'glob:bremote@*'` to disassociate them.
-    [EOF]
     ");
 }
 
@@ -724,25 +672,21 @@ fn test_bookmark_forget_glob() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 foo-1 foo-3 foo-4 230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "forget", "glob:foo-[1-3]"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Forgot 2 local bookmarks.
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "forget", "glob:foo-[1-3]"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Forgot 2 local bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 foo-4 230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
 
     // Forgetting a bookmark via both explicit name and glob pattern, or with
@@ -754,12 +698,10 @@ fn test_bookmark_forget_glob() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Forgot 1 local bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 230dd059e1b0
     ◆   000000000000
-    [EOF]
     ");
 
     // Malformed glob
@@ -769,7 +711,6 @@ fn test_bookmark_forget_glob() {
     error: invalid value 'glob:foo-[1-3' for '<NAMES>...': Pattern syntax error near position 4: invalid range pattern
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -781,7 +722,6 @@ fn test_bookmark_forget_glob() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No matching bookmarks for patterns: baz*, boom*
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -832,25 +772,21 @@ fn test_bookmark_delete_glob() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 foo-1 foo-3 foo-4 312a98d6f27b
     ◆   000000000000
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "delete", "glob:foo-[1-3]"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Deleted 2 bookmarks.
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
     let output = test_env.run_jj_in(&repo_path, ["bookmark", "delete", "glob:foo-[1-3]"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Deleted 2 bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 foo-1@origin foo-3@origin foo-4 312a98d6f27b
     ◆   000000000000
-    [EOF]
     ");
 
     // We get an error if none of the globs match live bookmarks. Unlike `jj
@@ -859,7 +795,6 @@ fn test_bookmark_delete_glob() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No matching bookmarks for patterns: foo-[1-3]
-    [EOF]
     [exit status: 1]
     ");
 
@@ -872,12 +807,10 @@ fn test_bookmark_delete_glob() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Deleted 1 bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  bar-2 foo-1@origin foo-3@origin foo-4@origin 312a98d6f27b
     ◆   000000000000
-    [EOF]
     ");
 
     // The deleted bookmarks are still there
@@ -890,7 +823,6 @@ fn test_bookmark_delete_glob() {
       @origin: qpvuntsm 312a98d6 (empty) commit
     foo-4 (deleted)
       @origin: qpvuntsm 312a98d6 (empty) commit
-    [EOF]
     ");
 
     // Malformed glob
@@ -900,7 +832,6 @@ fn test_bookmark_delete_glob() {
     error: invalid value 'glob:foo-[1-3' for '<NAMES>...': Pattern syntax error near position 4: invalid range pattern
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -912,7 +843,6 @@ fn test_bookmark_delete_glob() {
 
     For more information, try '--help'.
     Hint: Try prefixing with one of `exact:`, `glob:`, `regex:`, or `substring:`
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -936,10 +866,8 @@ fn test_bookmark_delete_export() {
     insta::assert_snapshot!(output, @r"
     foo (deleted)
       @git: rlvkpnrz 65b6b74e (empty) (no description set)
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be deleted from the underlying Git repo on the next `jj git export`.
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["git", "export"]).success();
@@ -956,10 +884,7 @@ fn test_bookmark_forget_export() {
     test_env
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "foo"])
         .success();
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    foo: rlvkpnrz 65b6b74e (empty) (no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"foo: rlvkpnrz 65b6b74e (empty) (no description set)");
 
     // Exporting the bookmark to git creates a local-git tracking bookmark
     let output = test_env.run_jj_in(&repo_path, ["git", "export"]);
@@ -972,7 +897,6 @@ fn test_bookmark_forget_export() {
     ------- stderr -------
     Forgot 1 local bookmarks.
     Forgot 1 remote bookmarks.
-    [EOF]
     ");
     // Forgetting a bookmark with --include-remotes deletes local and
     // remote-tracking bookmarks including the corresponding git-tracking bookmark.
@@ -981,7 +905,6 @@ fn test_bookmark_forget_export() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `foo` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1032,7 +955,6 @@ fn test_bookmark_forget_fetched_bookmark() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qomsplrm ebeb70d8 message
       @origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
 
     // TEST 1: with export-import
@@ -1059,7 +981,6 @@ fn test_bookmark_forget_fetched_bookmark() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"");
 
@@ -1068,12 +989,10 @@ fn test_bookmark_forget_fetched_bookmark() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: feature1@origin [new] tracked
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qomsplrm ebeb70d8 message
       @origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
 
     // TEST 2: No export/import (otherwise the same as test 1)
@@ -1089,12 +1008,10 @@ fn test_bookmark_forget_fetched_bookmark() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: feature1@origin [new] tracked
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qomsplrm ebeb70d8 message
       @origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
 
     // TEST 3: fetch bookmark that was moved & forgotten with --include-remotes
@@ -1115,7 +1032,6 @@ fn test_bookmark_forget_fetched_bookmark() {
     ------- stderr -------
     Forgot 1 local bookmarks.
     Forgot 1 remote bookmarks.
-    [EOF]
     ");
 
     // Fetching a moved bookmark does not create a conflict
@@ -1123,33 +1039,24 @@ fn test_bookmark_forget_fetched_bookmark() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     bookmark: feature1@origin [new] tracked
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: tyvxnvqr 9175cb32 (empty) another message
       @origin: tyvxnvqr 9175cb32 (empty) another message
-    [EOF]
     ");
 
     // TEST 4: If `--include-remotes` isn't used, remote bookmarks are untracked
     test_env
         .run_jj_in(&repo_path, ["bookmark", "forget", "feature1"])
         .success();
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    feature1@origin: tyvxnvqr 9175cb32 (empty) another message
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"feature1@origin: tyvxnvqr 9175cb32 (empty) another message");
     // There should be no output here since the remote bookmark wasn't forgotten
     let output = test_env.run_jj_in(&repo_path, ["git", "fetch", "--remote=origin"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
-    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
-    feature1@origin: tyvxnvqr 9175cb32 (empty) another message
-    [EOF]
-    ");
+    insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @"feature1@origin: tyvxnvqr 9175cb32 (empty) another message");
 }
 
 #[test]
@@ -1191,7 +1098,6 @@ fn test_bookmark_forget_deleted_or_nonexistent_bookmark() {
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1 (deleted)
       @origin: qomsplrm ebeb70d8 message
-    [EOF]
     ");
 
     // ============ End of test setup ============
@@ -1210,7 +1116,6 @@ fn test_bookmark_forget_deleted_or_nonexistent_bookmark() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: No such bookmark: i_do_not_exist
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -1250,20 +1155,17 @@ fn test_bookmark_track_untrack() {
     bookmark: feature1@origin [new] untracked
     bookmark: feature2@origin [new] untracked
     bookmark: main@origin     [new] untracked
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1@origin: qxxqrkql bd843888 commit 1
     feature2@origin: qxxqrkql bd843888 commit 1
     main@origin: qxxqrkql bd843888 commit 1
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   230dd059e1b0
     │ ◆  feature1@origin feature2@origin main@origin bd843888ee66
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 
     // Track new bookmark. Local bookmark should be created.
@@ -1279,7 +1181,6 @@ fn test_bookmark_track_untrack() {
     feature2@origin: qxxqrkql bd843888 commit 1
     main: qxxqrkql bd843888 commit 1
       @origin: qxxqrkql bd843888 commit 1
-    [EOF]
     ");
 
     // Track existing bookmark. Local bookmark should result in conflict.
@@ -1298,7 +1199,6 @@ fn test_bookmark_track_untrack() {
       @origin (behind by 1 commits): qxxqrkql bd843888 commit 1
     main: qxxqrkql bd843888 commit 1
       @origin: qxxqrkql bd843888 commit 1
-    [EOF]
     ");
 
     // Untrack existing and locally-deleted bookmarks. Bookmark targets should be
@@ -1318,14 +1218,12 @@ fn test_bookmark_track_untrack() {
     feature2@origin: qxxqrkql bd843888 commit 1
     main: qxxqrkql bd843888 commit 1
       @origin: qxxqrkql bd843888 commit 1
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   230dd059e1b0
     │ ◆  feature1 feature1@origin feature2@origin main bd843888ee66
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 
     // Fetch new commit. Only tracking bookmark "main" should be merged.
@@ -1345,7 +1243,6 @@ fn test_bookmark_track_untrack() {
     bookmark: feature1@origin [updated] untracked
     bookmark: feature2@origin [updated] untracked
     bookmark: main@origin     [updated] tracked
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qxxqrkql bd843888 commit 1
@@ -1353,7 +1250,6 @@ fn test_bookmark_track_untrack() {
     feature2@origin: psynomvr 48ec79a4 commit 2
     main: psynomvr 48ec79a4 commit 2
       @origin: psynomvr 48ec79a4 commit 2
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   230dd059e1b0
@@ -1362,7 +1258,6 @@ fn test_bookmark_track_untrack() {
     │ ○  feature1 bd843888ee66
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 
     // Fetch new commit with auto tracking. Tracking bookmark "main" and new
@@ -1387,7 +1282,6 @@ fn test_bookmark_track_untrack() {
     bookmark: feature3@origin [new] tracked
     bookmark: main@origin     [updated] tracked
     Abandoned 1 commits that are no longer reachable.
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: qxxqrkql bd843888 commit 1
@@ -1397,7 +1291,6 @@ fn test_bookmark_track_untrack() {
       @origin: yumopmsr d8cd3e02 commit 3
     main: yumopmsr d8cd3e02 commit 3
       @origin: yumopmsr d8cd3e02 commit 3
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @   230dd059e1b0
@@ -1406,7 +1299,6 @@ fn test_bookmark_track_untrack() {
     │ ○  feature1 bd843888ee66
     ├─╯
     ◆   000000000000
-    [EOF]
     ");
 }
 
@@ -1450,7 +1342,6 @@ fn test_bookmark_track_conflict() {
       + qpvuntsm?? e802c4f8 (empty) b
       + qpvuntsm?? 427890ea (empty) a
       @origin (behind by 1 commits): qpvuntsm?? 427890ea (empty) a
-    [EOF]
     ");
 }
 
@@ -1485,7 +1376,6 @@ fn test_bookmark_track_untrack_patterns() {
     ------- stderr -------
     bookmark: feature1@origin [new] untracked
     bookmark: feature2@origin [new] untracked
-    [EOF]
     ");
 
     // Track local bookmark
@@ -1498,7 +1388,6 @@ fn test_bookmark_track_untrack_patterns() {
     error: invalid value 'main' for '<BOOKMARK@REMOTE>...': remote bookmark must be specified in bookmark@remote form
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -1507,21 +1396,18 @@ fn test_bookmark_track_untrack_patterns() {
         test_env.run_jj_in(&repo_path, ["bookmark", "track", "main@origin"]), @r"
     ------- stderr -------
     Error: No such remote bookmark: main@origin
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["bookmark", "untrack", "main@origin"]), @r"
     ------- stderr -------
     Error: No such remote bookmark: main@origin
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(
         test_env.run_jj_in(&repo_path, ["bookmark", "track", "glob:maine@*"]), @r"
     ------- stderr -------
     Error: No matching remote bookmarks for patterns: maine@*
-    [EOF]
     [exit status: 1]
     ");
     insta::assert_snapshot!(
@@ -1531,7 +1417,6 @@ fn test_bookmark_track_untrack_patterns() {
         ), @r"
     ------- stderr -------
     Error: No matching remote bookmarks for patterns: main@origin, main@o*
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1544,7 +1429,6 @@ fn test_bookmark_track_untrack_patterns() {
     ------- stderr -------
     Warning: Remote bookmark already tracked: feature1@origin
     Nothing changed.
-    [EOF]
     ");
 
     // Untrack non-tracking bookmark
@@ -1553,7 +1437,6 @@ fn test_bookmark_track_untrack_patterns() {
     ------- stderr -------
     Warning: Remote bookmark not tracked yet: feature2@origin
     Nothing changed.
-    [EOF]
     ");
 
     // Untrack Git-tracking bookmark
@@ -1563,7 +1446,6 @@ fn test_bookmark_track_untrack_patterns() {
     ------- stderr -------
     Warning: Git-tracking bookmark cannot be untracked: main@git
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: yrnqsqlx 41e7a49d commit
@@ -1572,7 +1454,6 @@ fn test_bookmark_track_untrack_patterns() {
     feature2@origin: yrnqsqlx 41e7a49d commit
     main: qpvuntsm 230dd059 (empty) (no description set)
       @git: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
 
     // Untrack by pattern
@@ -1583,7 +1464,6 @@ fn test_bookmark_track_untrack_patterns() {
     Warning: Remote bookmark not tracked yet: feature2@origin
     Warning: Git-tracking bookmark cannot be untracked: main@git
     Stopped tracking 1 remote bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: yrnqsqlx 41e7a49d commit
@@ -1592,7 +1472,6 @@ fn test_bookmark_track_untrack_patterns() {
     feature2@origin: yrnqsqlx 41e7a49d commit
     main: qpvuntsm 230dd059 (empty) (no description set)
       @git: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
 
     // Track by pattern
@@ -1600,7 +1479,6 @@ fn test_bookmark_track_untrack_patterns() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Started tracking 2 remote bookmarks.
-    [EOF]
     ");
     insta::assert_snapshot!(get_bookmark_output(&test_env, &repo_path), @r"
     feature1: yrnqsqlx 41e7a49d commit
@@ -1610,7 +1488,6 @@ fn test_bookmark_track_untrack_patterns() {
       @origin: yrnqsqlx 41e7a49d commit
     main: qpvuntsm 230dd059 (empty) (no description set)
       @git: qpvuntsm 230dd059 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -1693,10 +1570,8 @@ fn test_bookmark_list() {
     remote-sync: zwtyzrop c761c7ea (empty) remote-sync
     remote-unsync: wqnwkozp 4e887f78 (empty) local-only
       @origin (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&local_path, ["bookmark", "list", "--all-remotes"]);
@@ -1709,10 +1584,8 @@ fn test_bookmark_list() {
     remote-unsync: wqnwkozp 4e887f78 (empty) local-only
       @origin (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
     remote-untrack@origin: vmortlor 71a16b05 (empty) remote-untrack
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let template = r#"
@@ -1814,10 +1687,8 @@ fn test_bookmark_list() {
     tracking_present: false
     tracking_ahead_count: <Error: Not a tracked remote ref>
     tracking_behind_count: <Error: Not a tracked remote ref>
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 }
 
@@ -1885,7 +1756,6 @@ fn test_bookmark_list_filtered() {
     │ ○  911e912015fb remote-keep
     ├─╯
     ◆  000000000000
-    [EOF]
     ");
 
     // All bookmarks are listed by default.
@@ -1897,10 +1767,8 @@ fn test_bookmark_list_filtered() {
     remote-keep: nlwprzpn 911e9120 (empty) remote-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let query = |args: &[&str]| {
@@ -1918,7 +1786,6 @@ fn test_bookmark_list_filtered() {
     remote-keep: nlwprzpn 911e9120 (empty) remote-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
 
     // Exclude remote-only bookmarks. "remote-rewrite@origin" is included since
@@ -1928,19 +1795,16 @@ fn test_bookmark_list_filtered() {
     remote-keep: nlwprzpn 911e9120 (empty) remote-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
 
     // Select bookmarks by name.
     insta::assert_snapshot!(query(&["remote-rewrite"]), @r"
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
     insta::assert_snapshot!(query(&["-rbookmarks(remote-rewrite)"]), @r"
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
 
     // Select bookmarks by name, combined with --all-remotes
@@ -1949,13 +1813,11 @@ fn test_bookmark_list_filtered() {
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @git: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
     insta::assert_snapshot!(query(&["--all-remotes", "-rbookmarks(remote-rewrite)"]), @r"
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @git: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
 
     // Select bookmarks with --remote
@@ -1966,10 +1828,8 @@ fn test_bookmark_list_filtered() {
       @origin: nlwprzpn 911e9120 (empty) remote-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
     insta::assert_snapshot!(query(&["--remote", "glob:gi?"]), @r"
     local-keep: kpqxywon c7b4c09c (empty) local-keep
@@ -1978,7 +1838,6 @@ fn test_bookmark_list_filtered() {
       @git: nlwprzpn 911e9120 (empty) remote-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @git: xyxluytn e31634b6 (empty) rewritten
-    [EOF]
     ");
     insta::assert_snapshot!(query(&["--remote", "origin", "--remote", "git"]), @r"
     local-keep: kpqxywon c7b4c09c (empty) local-keep
@@ -1991,27 +1850,22 @@ fn test_bookmark_list_filtered() {
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @git: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     // Can select deleted bookmark by name pattern, but not by revset.
     insta::assert_snapshot!(query(&["remote-delete"]), @r"
     remote-delete (deleted)
       @origin: yxusvupt dad5f298 (empty) remote-delete
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
     insta::assert_snapshot!(query(&["-rbookmarks(remote-delete)"]), @"");
     insta::assert_snapshot!(query(&["-rremote-delete"]), @r"
     ------- stderr -------
     Error: Revision `remote-delete` doesn't exist
     Hint: Did you mean `remote-delete@origin`, `remote-keep`, `remote-rewrite`, `remote-rewrite@origin`?
-    [EOF]
     [exit status: 1]
     ");
 
@@ -2021,24 +1875,18 @@ fn test_bookmark_list_filtered() {
     remote-delete (deleted)
       @origin: yxusvupt dad5f298 (empty) remote-delete
     remote-keep: nlwprzpn 911e9120 (empty) remote-keep
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     // Unmatched name pattern shouldn't be an error. A warning can be added later.
-    insta::assert_snapshot!(query(&["local-keep", "glob:push-*"]), @r"
-    local-keep: kpqxywon c7b4c09c (empty) local-keep
-    [EOF]
-    ");
+    insta::assert_snapshot!(query(&["local-keep", "glob:push-*"]), @"local-keep: kpqxywon c7b4c09c (empty) local-keep");
 
     // Name pattern and revset are OR-ed.
     insta::assert_snapshot!(query(&["local-keep", "-rbookmarks(remote-rewrite)"]), @r"
     local-keep: kpqxywon c7b4c09c (empty) local-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @origin (ahead by 1 commits, behind by 1 commits): xyxluytn hidden 3e9a5af6 (empty) remote-rewrite
-    [EOF]
     ");
 
     // … but still filtered by --remote
@@ -2052,7 +1900,6 @@ fn test_bookmark_list_filtered() {
       @git: kpqxywon c7b4c09c (empty) local-keep
     remote-rewrite: xyxluytn e31634b6 (empty) rewritten
       @git: xyxluytn e31634b6 (empty) rewritten
-    [EOF]
     ");
 }
 
@@ -2121,7 +1968,6 @@ fn test_bookmark_list_much_remote_divergence() {
     local-only: zkyosouw 4ab3f751 (empty) local-only
     remote-unsync: zkyosouw 4ab3f751 (empty) local-only
       @origin (ahead by at least 10 commits, behind by at least 10 commits): lxyktnks 19582022 (empty) remote-unsync
-    [EOF]
     ");
 }
 
@@ -2271,10 +2117,8 @@ fn test_bookmark_list_tracked() {
     upstream-sync: lolpmnqw 32fa6da0 (empty) upstream-sync
       @git: lolpmnqw 32fa6da0 (empty) upstream-sync
       @upstream: lolpmnqw 32fa6da0 (empty) upstream-sync
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&local_path, ["bookmark", "list", "--tracked"]);
@@ -2288,10 +2132,8 @@ fn test_bookmark_list_tracked() {
       @upstream (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
     upstream-sync: lolpmnqw 32fa6da0 (empty) upstream-sync
       @upstream: lolpmnqw 32fa6da0 (empty) upstream-sync
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -2305,10 +2147,8 @@ fn test_bookmark_list_tracked() {
       @origin: zwtyzrop c761c7ea (empty) remote-sync
     remote-unsync: nmzmmopx e1da745b (empty) local-only
       @origin (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
-    [EOF]
     ------- stderr -------
     Hint: Bookmarks marked as deleted will be *deleted permanently* on the remote on the next `jj git push`. Use `jj bookmark forget` to prevent this.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -2319,7 +2159,6 @@ fn test_bookmark_list_tracked() {
     remote-unsync: nmzmmopx e1da745b (empty) local-only
       @origin (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
       @upstream (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -2342,7 +2181,6 @@ fn test_bookmark_list_tracked() {
     insta::assert_snapshot!(output, @r"
     remote-unsync: nmzmmopx e1da745b (empty) local-only
       @origin (ahead by 1 commits, behind by 1 commits): qpsqxpyq 38ef8af7 (empty) remote-unsync
-    [EOF]
     ");
 }
 
@@ -2387,13 +2225,11 @@ fn test_bookmark_list_conflicted() {
     foo (conflicted):
       + rlvkpnrz d8d5f980 (empty) a
       + kkmpptxz 06a973bc (empty) b
-    [EOF]
     ");
     insta::assert_snapshot!(test_env.run_jj_in(&repo_path, ["bookmark", "list", "--conflicted"]), @r"
     foo (conflicted):
       + rlvkpnrz d8d5f980 (empty) a
       + kkmpptxz 06a973bc (empty) b
-    [EOF]
     ");
 }
 
@@ -2408,7 +2244,6 @@ fn test_bookmark_create_with_default_target_revision() {
     ------- stderr -------
     Warning: Target revision was not specified, defaulting to the working copy (-r@). In the near future it will be required to explicitly specify target revision.
     Created 1 bookmarks pointing to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -2423,7 +2258,6 @@ fn test_bookmark_set_with_default_target_revision() {
     ------- stderr -------
     Warning: Target revision was not specified, defaulting to the working copy (--revision=@). In the near future it will be required to explicitly specify target revision.
     Created 1 bookmarks pointing to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -2447,7 +2281,6 @@ fn test_bookmark_move_with_default_target_revision() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created 1 bookmarks pointing to qpvuntsm 230dd059 foo | (empty) (no description set)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -2456,7 +2289,6 @@ fn test_bookmark_move_with_default_target_revision() {
     ------- stderr -------
     Warning: Target revision was not specified, defaulting to the working copy (--to=@). In the near future it will be required to explicitly specify it.
     Moved 1 bookmarks to zsuskuln 8bb159bc foo | (empty) (no description set)
-    [EOF]
     ");
 }
 

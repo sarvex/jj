@@ -47,7 +47,6 @@ fn test_diffedit() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("instrs")).unwrap(), @r"
@@ -62,7 +61,6 @@ fn test_diffedit() {
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Try again with ui.diff-instructions=false
@@ -74,13 +72,11 @@ fn test_diffedit() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Try again with --tool=<name>
@@ -100,13 +96,11 @@ fn test_diffedit() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Nothing happens if the diff-editor exits with an error
@@ -116,14 +110,12 @@ fn test_diffedit() {
     ------- stderr -------
     Error: Failed to edit diff
     Caused by: Tool exited with exit status: 1 (run with --debug to see the exact invocation)
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Can edit changes to individual files
@@ -135,13 +127,9 @@ fn test_diffedit() {
     Working copy now at: kkmpptxz cbc7a725 (no description set)
     Parent commit      : rlvkpnrz a72506cd (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
-    insta::assert_snapshot!(output, @r"
-    D file1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"D file1");
 
     // Changes to a commit are propagated to descendants
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -154,7 +142,6 @@ fn test_diffedit() {
     Working copy now at: kkmpptxz 59ef1b95 (no description set)
     Parent commit      : rlvkpnrz d4eef3fc (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let contents = String::from_utf8(std::fs::read(repo_path.join("file3")).unwrap()).unwrap();
     insta::assert_snapshot!(contents, @"modified");
@@ -173,13 +160,11 @@ fn test_diffedit() {
     Working copy now at: kkmpptxz 5b585bd1 (no description set)
     Parent commit      : rlvkpnrz a72506cd (no description set)
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     D file2
-    [EOF]
     ");
 }
 
@@ -206,13 +191,11 @@ fn test_diffedit_new_file() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     A file2
-    [EOF]
     ");
 
     // Creating `file1` on the right side is noticed by `jj diffedit`
@@ -224,13 +207,11 @@ fn test_diffedit_new_file() {
     Working copy now at: rlvkpnrz b0376e2b (no description set)
     Parent commit      : qpvuntsm b739eb46 (no description set)
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     M file1
     A file2
-    [EOF]
     ");
 
     // Creating a file that wasn't on either side is ignored by diffedit.
@@ -245,13 +226,11 @@ fn test_diffedit_new_file() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     A file2
-    [EOF]
     ");
 }
 
@@ -366,7 +345,6 @@ fn test_diffedit_external_tool_conflict_marker_style() {
     file    2-sided conflict
     Existing conflicts were resolved or abandoned from these commits:
       mzvwutvl hidden a813239f (conflict) (no description set)
-    [EOF]
     ");
     // Conflicts should render using "snapshot" format in diff editor
     insta::assert_snapshot!(
@@ -444,7 +422,6 @@ fn test_diffedit_external_tool_conflict_marker_style() {
     Parent commit: zsuskuln 8b3de837 side-b
     Warning: There are unresolved conflicts at these paths:
     file    2-sided conflict
-    [EOF]
     ");
 }
 
@@ -484,13 +461,11 @@ fn test_diffedit_3pane() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
     // Nothing happens if we make no changes, `config_with_right_as_after` version
     let output = test_env.run_jj_in(
@@ -500,13 +475,11 @@ fn test_diffedit_3pane() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // Can edit changes to individual files
@@ -521,13 +494,9 @@ fn test_diffedit_3pane() {
     Working copy now at: kkmpptxz ed8aada3 (no description set)
     Parent commit      : rlvkpnrz a72506cd (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
-    insta::assert_snapshot!(output, @r"
-    D file1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"D file1");
 
     // Can write something new to `file1`
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -542,13 +511,11 @@ fn test_diffedit_3pane() {
     Working copy now at: kkmpptxz 7c19e689 (no description set)
     Parent commit      : rlvkpnrz a72506cd (no description set)
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     M file1
     M file2
-    [EOF]
     ");
 
     // But nothing happens if we modify the right side
@@ -561,13 +528,11 @@ fn test_diffedit_3pane() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
-    [EOF]
     ");
 
     // TODO: test with edit_script of "reset file2". This fails on right side
@@ -604,7 +569,6 @@ fn test_diffedit_merge() {
     insta::assert_snapshot!(output, @r"
     M file1
     A file3
-    [EOF]
     ");
 
     let edit_script = test_env.set_up_fake_diff_editor();
@@ -625,13 +589,11 @@ fn test_diffedit_merge() {
     Added 0 files, modified 0 files, removed 1 files
     Warning: There are unresolved conflicts at these paths:
     file2    2-sided conflict
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@-"]);
     insta::assert_snapshot!(output, @r"
     D file1
     A file3
-    [EOF]
     ");
     assert!(!repo_path.join("file1").exists());
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "file2"]);
@@ -643,7 +605,6 @@ fn test_diffedit_merge() {
     +++++++ Contents of side #2
     b
     >>>>>>> Conflict 1 of 1 ends
-    [EOF]
     ");
 }
 
@@ -667,14 +628,12 @@ fn test_diffedit_old_restore_interactive_tests() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     D file1
     M file2
     C {file2 => file3}
-    [EOF]
     ");
 
     // Nothing happens if the diff-editor exits with an error
@@ -684,7 +643,6 @@ fn test_diffedit_old_restore_interactive_tests() {
     ------- stderr -------
     Error: Failed to edit diff
     Caused by: Tool exited with exit status: 1 (run with --debug to see the exact invocation)
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
@@ -692,7 +650,6 @@ fn test_diffedit_old_restore_interactive_tests() {
     D file1
     M file2
     C {file2 => file3}
-    [EOF]
     ");
 
     // Can restore changes to individual files
@@ -704,13 +661,9 @@ fn test_diffedit_old_restore_interactive_tests() {
     Working copy now at: rlvkpnrz 69811eda (no description set)
     Parent commit      : qpvuntsm fc687cb8 (no description set)
     Added 0 files, modified 1 files, removed 1 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
-    insta::assert_snapshot!(output, @r"
-    D file1
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"D file1");
 
     // Can make unrelated edits
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -722,7 +675,6 @@ fn test_diffedit_old_restore_interactive_tests() {
     Working copy now at: rlvkpnrz 2b76a42e (no description set)
     Parent commit      : qpvuntsm fc687cb8 (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output, @r"
@@ -747,7 +699,6 @@ fn test_diffedit_old_restore_interactive_tests() {
     +++ b/file3
     @@ -0,0 +1,1 @@
     +unrelated
-    [EOF]
     ");
 }
 
@@ -777,7 +728,6 @@ fn test_diffedit_restore_descendants() {
     Rebased 1 descendant commits (while preserving their content)
     Working copy now at: kkmpptxz 321d1cd1 (no description set)
     Parent commit      : rlvkpnrz 62b8c2ce (no description set)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output, @r#"
@@ -788,6 +738,5 @@ fn test_diffedit_restore_descendants() {
     @@ -1,1 +1,1 @@
     -println!("bar");
     +println!("baz");
-    [EOF]
     "#);
 }

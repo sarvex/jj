@@ -48,7 +48,6 @@ fn test_diff() {
     Access denied to modified-secret: No access
     Modified regular file z-last:
        1    1: foobar
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--summary"]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
@@ -58,7 +57,6 @@ fn test_diff() {
     M dir/secret
     M modified-secret
     M z-last
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--types"]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
@@ -68,7 +66,6 @@ fn test_diff() {
     FF dir/secret
     FF modified-secret
     FF z-last
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--stat"]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
@@ -79,7 +76,6 @@ fn test_diff() {
     modified-secret           | 0
     z-last                    | 2 +-
     6 files changed, 3 insertions(+), 4 deletions(-)
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "--git"]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
@@ -90,11 +86,9 @@ fn test_diff() {
     @@ -1,1 +1,1 @@
     -foo
     +bar
-    [EOF]
     ------- stderr -------
     Error: Access denied to added-secret
     Caused by: No access
-    [EOF]
     [exit status: 1]
     ");
 
@@ -119,16 +113,13 @@ fn test_file_list_show() {
     a-first
     secret
     z-last
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["file", "show", "."]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
     foo
     baz
-    [EOF]
     ------- stderr -------
     Warning: Path 'secret' exists but access is denied: No access
-    [EOF]
     ");
 }

@@ -40,7 +40,6 @@ fn test_log_parents() {
     │  P: 1 0000000000000000000000000000000000000000
     ◆  0000000000000000000000000000000000000000
        P: 0
-    [EOF]
     ");
 
     // List<Commit> can be filtered
@@ -54,17 +53,11 @@ fn test_log_parents() {
     ├─╯
     ○  P:
     ◆  P:
-    [EOF]
     ");
 
     let template = r#"parents.map(|c| c.commit_id().shortest(4))"#;
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", template, "-r@", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[38;5;4m4[0m[38;5;8mdb4[39m [1m[38;5;4m2[0m[38;5;8m30d[39m
-    │
-    ~
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;4m4\u{1b}[0m\u{1b}[38;5;8mdb4\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30d\u{1b}[39m\n│\n~");
 
     // Commit object isn't printable
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "parents"]);
@@ -77,7 +70,6 @@ fn test_log_parents() {
       | ^-----^
       |
       = Expected expression of type `Template`, but actual type is `List<Commit>`
-    [EOF]
     [exit status: 1]
     ");
 
@@ -93,7 +85,6 @@ fn test_log_parents() {
       |                             ^^
       |
       = Function `commit_id`: Expected 0 arguments
-    [EOF]
     [exit status: 1]
     "#);
 }
@@ -116,7 +107,6 @@ fn test_log_author_timestamp() {
     @  2001-02-03 04:05:09.000 +07:00
     ○  2001-02-03 04:05:08.000 +07:00
     ◆  1970-01-01 00:00:00.000 +00:00
-    [EOF]
     ");
 }
 
@@ -154,7 +144,6 @@ fn test_log_author_timestamp_utc() {
     insta::assert_snapshot!(output, @r"
     @  2001-02-02 21:05:07.000 +00:00
     ◆  1970-01-01 00:00:00.000 +00:00
-    [EOF]
     ");
 }
 
@@ -170,14 +159,12 @@ fn test_log_author_timestamp_local() {
     insta::assert_snapshot!(output, @r"
     @  2001-02-03 08:05:07.000 +11:00
     ◆  1970-01-01 11:00:00.000 +11:00
-    [EOF]
     ");
     test_env.add_env_var("TZ", "UTC+10:00");
     let output = test_env.run_jj_in(&repo_path, ["log", "-T", "author.timestamp().local()"]);
     insta::assert_snapshot!(output, @r"
     @  2001-02-03 08:05:07.000 +11:00
     ◆  1970-01-01 11:00:00.000 +11:00
-    [EOF]
     ");
 }
 
@@ -203,7 +190,6 @@ fn test_log_author_timestamp_after_before() {
     insta::assert_snapshot!(output, @r"
     2001-02-03 04:05:08.000 +07:00 : (after 1969) (after 1975) (before now)
     1970-01-01 00:00:00.000 +00:00 : (after 1969) (before 1975) (before now)
-    [EOF]
     ");
 
     // Should display error with invalid date.
@@ -220,7 +206,6 @@ fn test_log_author_timestamp_after_before() {
       |
       = Invalid date pattern
     2: expected week day or month name
-    [EOF]
     [exit status: 1]
     "#);
 }
@@ -253,7 +238,6 @@ fn test_mine_is_true_when_author_is_user() {
     @  johndoe@example.com
     ○  mine
     ◆  (no email set)
-    [EOF]
     ");
 }
 
@@ -282,30 +266,15 @@ fn test_log_default() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 aa2015d7
     │  add a file
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     // Color
     let output = test_env.run_jj_in(&repo_path, ["log", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mk[38;5;8mkmpptxz[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:09[39m [38;5;13mmy-bookmark[39m [38;5;12mb[38;5;8mac9ff9e[39m[0m
-    │  [1m[38;5;10m(empty)[39m description 1[0m
-    ○  [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:08[39m [1m[38;5;4ma[0m[38;5;8ma2015d7[39m
-    │  add a file
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mk\u{1b}[38;5;8mkmpptxz\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:09\u{1b}[39m \u{1b}[38;5;13mmy-bookmark\u{1b}[39m \u{1b}[38;5;12mb\u{1b}[38;5;8mac9ff9e\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;10m(empty)\u{1b}[39m description 1\u{1b}[0m\n○  \u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4ma\u{1b}[0m\u{1b}[38;5;8ma2015d7\u{1b}[39m\n│  add a file\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 
     // Color without graph
     let output = test_env.run_jj_in(&repo_path, ["log", "--color=always", "--no-graph"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;13mk[38;5;8mkmpptxz[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:09[39m [38;5;13mmy-bookmark[39m [38;5;12mb[38;5;8mac9ff9e[39m[0m
-    [1m[38;5;10m(empty)[39m description 1[0m
-    [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:08[39m [1m[38;5;4ma[0m[38;5;8ma2015d7[39m
-    add a file
-    [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;13mk\u{1b}[38;5;8mkmpptxz\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:09\u{1b}[39m \u{1b}[38;5;13mmy-bookmark\u{1b}[39m \u{1b}[38;5;12mb\u{1b}[38;5;8mac9ff9e\u{1b}[39m\u{1b}[0m\n\u{1b}[1m\u{1b}[38;5;10m(empty)\u{1b}[39m description 1\u{1b}[0m\n\u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4ma\u{1b}[0m\u{1b}[38;5;8ma2015d7\u{1b}[39m\nadd a file\n\u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 }
 
 #[test]
@@ -318,10 +287,7 @@ fn test_log_default_without_working_copy() {
         .run_jj_in(&repo_path, ["workspace", "forget"])
         .success();
     let output = test_env.run_jj_in(&repo_path, ["log"]);
-    insta::assert_snapshot!(output, @r"
-    ◆  zzzzzzzz root() 00000000
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"◆  zzzzzzzz root() 00000000");
 }
 
 #[test]
@@ -346,7 +312,6 @@ fn test_log_builtin_templates() {
     rlvkpnrz (no email set) 2001-02-03 08:05:08 my-bookmark dc315397 (empty) (no description set)
     qpvuntsm test.user 2001-02-03 08:05:07 230dd059 (empty) (no description set)
     zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     insta::assert_snapshot!(render(r#"builtin_log_compact"#), @r"
@@ -355,7 +320,6 @@ fn test_log_builtin_templates() {
     qpvuntsm test.user@example.com 2001-02-03 08:05:07 230dd059
     (empty) (no description set)
     zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     insta::assert_snapshot!(render(r#"builtin_log_comfortable"#), @r"
@@ -366,8 +330,6 @@ fn test_log_builtin_templates() {
     (empty) (no description set)
 
     zzzzzzzz root() 00000000
-
-    [EOF]
     ");
 
     insta::assert_snapshot!(render(r#"builtin_log_detailed"#), @r"
@@ -392,8 +354,6 @@ fn test_log_builtin_templates() {
     Committer: (no name set) <(no email set)> (1970-01-01 11:00:00)
 
         (no description set)
-
-    [EOF]
     ");
 }
 
@@ -415,59 +375,13 @@ fn test_log_builtin_templates_colored() {
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "my-bookmark"])
         .success();
 
-    insta::assert_snapshot!(render(r#"builtin_log_oneline"#), @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mr[38;5;8mlvkpnrz[39m [38;5;9m(no email set)[39m [38;5;14m2001-02-03 08:05:08[39m [38;5;13mmy-bookmark[39m [38;5;12md[38;5;8mc315397[39m [38;5;10m(empty)[39m [38;5;10m(no description set)[39m[0m
-    ○  [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user[39m [38;5;6m2001-02-03 08:05:07[39m [1m[38;5;4m2[0m[38;5;8m30dd059[39m [38;5;2m(empty)[39m [38;5;2m(no description set)[39m
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_oneline"#), @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mr\u{1b}[38;5;8mlvkpnrz\u{1b}[39m \u{1b}[38;5;9m(no email set)\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:08\u{1b}[39m \u{1b}[38;5;13mmy-bookmark\u{1b}[39m \u{1b}[38;5;12md\u{1b}[38;5;8mc315397\u{1b}[39m \u{1b}[38;5;10m(empty)\u{1b}[39m \u{1b}[38;5;10m(no description set)\u{1b}[39m\u{1b}[0m\n○  \u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30dd059\u{1b}[39m \u{1b}[38;5;2m(empty)\u{1b}[39m \u{1b}[38;5;2m(no description set)\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 
-    insta::assert_snapshot!(render(r#"builtin_log_compact"#), @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mr[38;5;8mlvkpnrz[39m [38;5;9m(no email set)[39m [38;5;14m2001-02-03 08:05:08[39m [38;5;13mmy-bookmark[39m [38;5;12md[38;5;8mc315397[39m[0m
-    │  [1m[38;5;10m(empty)[39m [38;5;10m(no description set)[39m[0m
-    ○  [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:07[39m [1m[38;5;4m2[0m[38;5;8m30dd059[39m
-    │  [38;5;2m(empty)[39m [38;5;2m(no description set)[39m
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_compact"#), @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mr\u{1b}[38;5;8mlvkpnrz\u{1b}[39m \u{1b}[38;5;9m(no email set)\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:08\u{1b}[39m \u{1b}[38;5;13mmy-bookmark\u{1b}[39m \u{1b}[38;5;12md\u{1b}[38;5;8mc315397\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;10m(empty)\u{1b}[39m \u{1b}[38;5;10m(no description set)\u{1b}[39m\u{1b}[0m\n○  \u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30dd059\u{1b}[39m\n│  \u{1b}[38;5;2m(empty)\u{1b}[39m \u{1b}[38;5;2m(no description set)\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 
-    insta::assert_snapshot!(render(r#"builtin_log_comfortable"#), @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mr[38;5;8mlvkpnrz[39m [38;5;9m(no email set)[39m [38;5;14m2001-02-03 08:05:08[39m [38;5;13mmy-bookmark[39m [38;5;12md[38;5;8mc315397[39m[0m
-    │  [1m[38;5;10m(empty)[39m [38;5;10m(no description set)[39m[0m
-    │
-    ○  [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:07[39m [1m[38;5;4m2[0m[38;5;8m30dd059[39m
-    │  [38;5;2m(empty)[39m [38;5;2m(no description set)[39m
-    │
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
+    insta::assert_snapshot!(render(r#"builtin_log_comfortable"#), @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mr\u{1b}[38;5;8mlvkpnrz\u{1b}[39m \u{1b}[38;5;9m(no email set)\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:08\u{1b}[39m \u{1b}[38;5;13mmy-bookmark\u{1b}[39m \u{1b}[38;5;12md\u{1b}[38;5;8mc315397\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;10m(empty)\u{1b}[39m \u{1b}[38;5;10m(no description set)\u{1b}[39m\u{1b}[0m\n│\n○  \u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30dd059\u{1b}[39m\n│  \u{1b}[38;5;2m(empty)\u{1b}[39m \u{1b}[38;5;2m(no description set)\u{1b}[39m\n│\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 
-    [EOF]
-    ");
-
-    insta::assert_snapshot!(render(r#"builtin_log_detailed"#), @r"
-    [1m[38;5;2m@[0m  Commit ID: [38;5;4mdc31539712c7294d1d712cec63cef4504b94ca74[39m
-    │  Change ID: [38;5;5mrlvkpnrzqnoowoytxnquwvuryrwnrmlp[39m
-    │  Bookmarks: [38;5;5mmy-bookmark[39m
-    │  Author   : [38;5;1m(no name set)[39m <[38;5;1m(no email set)[39m> ([38;5;6m2001-02-03 08:05:08[39m)
-    │  Committer: [38;5;1m(no name set)[39m <[38;5;1m(no email set)[39m> ([38;5;6m2001-02-03 08:05:08[39m)
-    │
-    │  [38;5;2m    (no description set)[39m
-    │
-    ○  Commit ID: [38;5;4m230dd059e1b059aefc0da06a2e5a7dbf22362f22[39m
-    │  Change ID: [38;5;5mqpvuntsmwlqtpsluzzsnyyzlmlwvmlnu[39m
-    │  Author   : [38;5;3mTest User[39m <[38;5;3mtest.user@example.com[39m> ([38;5;6m2001-02-03 08:05:07[39m)
-    │  Committer: [38;5;3mTest User[39m <[38;5;3mtest.user@example.com[39m> ([38;5;6m2001-02-03 08:05:07[39m)
-    │
-    │  [38;5;2m    (no description set)[39m
-    │
-    [1m[38;5;14m◆[0m  Commit ID: [38;5;4m0000000000000000000000000000000000000000[39m
-       Change ID: [38;5;5mzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz[39m
-       Author   : [38;5;1m(no name set)[39m <[38;5;1m(no email set)[39m> ([38;5;6m1970-01-01 11:00:00[39m)
-       Committer: [38;5;1m(no name set)[39m <[38;5;1m(no email set)[39m> ([38;5;6m1970-01-01 11:00:00[39m)
-
-       [38;5;2m    (no description set)[39m
-
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_detailed"#), @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  Commit ID: \u{1b}[38;5;4mdc31539712c7294d1d712cec63cef4504b94ca74\u{1b}[39m\n│  Change ID: \u{1b}[38;5;5mrlvkpnrzqnoowoytxnquwvuryrwnrmlp\u{1b}[39m\n│  Bookmarks: \u{1b}[38;5;5mmy-bookmark\u{1b}[39m\n│  Author   : \u{1b}[38;5;1m(no name set)\u{1b}[39m <\u{1b}[38;5;1m(no email set)\u{1b}[39m> (\u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m)\n│  Committer: \u{1b}[38;5;1m(no name set)\u{1b}[39m <\u{1b}[38;5;1m(no email set)\u{1b}[39m> (\u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m)\n│\n│  \u{1b}[38;5;2m    (no description set)\u{1b}[39m\n│\n○  Commit ID: \u{1b}[38;5;4m230dd059e1b059aefc0da06a2e5a7dbf22362f22\u{1b}[39m\n│  Change ID: \u{1b}[38;5;5mqpvuntsmwlqtpsluzzsnyyzlmlwvmlnu\u{1b}[39m\n│  Author   : \u{1b}[38;5;3mTest User\u{1b}[39m <\u{1b}[38;5;3mtest.user@example.com\u{1b}[39m> (\u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m)\n│  Committer: \u{1b}[38;5;3mTest User\u{1b}[39m <\u{1b}[38;5;3mtest.user@example.com\u{1b}[39m> (\u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m)\n│\n│  \u{1b}[38;5;2m    (no description set)\u{1b}[39m\n│\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  Commit ID: \u{1b}[38;5;4m0000000000000000000000000000000000000000\u{1b}[39m\n   Change ID: \u{1b}[38;5;5mzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\u{1b}[39m\n   Author   : \u{1b}[38;5;1m(no name set)\u{1b}[39m <\u{1b}[38;5;1m(no email set)\u{1b}[39m> (\u{1b}[38;5;6m1970-01-01 11:00:00\u{1b}[39m)\n   Committer: \u{1b}[38;5;1m(no name set)\u{1b}[39m <\u{1b}[38;5;1m(no email set)\u{1b}[39m> (\u{1b}[38;5;6m1970-01-01 11:00:00\u{1b}[39m)\n\n   \u{1b}[38;5;2m    (no description set)\u{1b}[39m");
 }
 
 #[test]
@@ -488,59 +402,13 @@ fn test_log_builtin_templates_colored_debug() {
         .run_jj_in(&repo_path, ["bookmark", "create", "-r@", "my-bookmark"])
         .success();
 
-    insta::assert_snapshot!(render(r#"builtin_log_oneline"#), @r"
-    [1m[38;5;2m<<node working_copy::@>>[0m  [1m[38;5;13m<<log working_copy change_id shortest prefix::r>>[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>[39m<<log working_copy:: >>[38;5;9m<<log working_copy email placeholder::(no email set)>>[39m<<log working_copy:: >>[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>[39m<<log working_copy:: >>[38;5;13m<<log working_copy bookmarks name::my-bookmark>>[39m<<log working_copy:: >>[38;5;12m<<log working_copy commit_id shortest prefix::d>>[38;5;8m<<log working_copy commit_id shortest rest::c315397>>[39m<<log working_copy:: >>[38;5;10m<<log working_copy empty::(empty)>>[39m<<log working_copy:: >>[38;5;10m<<log working_copy empty description placeholder::(no description set)>>[39m<<log working_copy::>>[0m
-    <<node::○>>  [1m[38;5;5m<<log change_id shortest prefix::q>>[0m[38;5;8m<<log change_id shortest rest::pvuntsm>>[39m<<log:: >>[38;5;3m<<log author email local::test.user>>[39m<<log:: >>[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::2>>[0m[38;5;8m<<log commit_id shortest rest::30dd059>>[39m<<log:: >>[38;5;2m<<log empty::(empty)>>[39m<<log:: >>[38;5;2m<<log empty description placeholder::(no description set)>>[39m<<log::>>
-    [1m[38;5;14m<<node immutable::◆>>[0m  [1m[38;5;5m<<log change_id shortest prefix::z>>[0m[38;5;8m<<log change_id shortest rest::zzzzzzz>>[39m<<log:: >>[38;5;2m<<log root::root()>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::0>>[0m[38;5;8m<<log commit_id shortest rest::0000000>>[39m<<log::>>
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_oneline"#), @"\u{1b}[1m\u{1b}[38;5;2m<<node working_copy::@>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13m<<log working_copy change_id shortest prefix::r>>\u{1b}[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;9m<<log working_copy email placeholder::(no email set)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;13m<<log working_copy bookmarks name::my-bookmark>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;12m<<log working_copy commit_id shortest prefix::d>>\u{1b}[38;5;8m<<log working_copy commit_id shortest rest::c315397>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;10m<<log working_copy empty::(empty)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;10m<<log working_copy empty description placeholder::(no description set)>>\u{1b}[39m<<log working_copy::>>\u{1b}[0m\n<<node::○>>  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::q>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::pvuntsm>>\u{1b}[39m<<log:: >>\u{1b}[38;5;3m<<log author email local::test.user>>\u{1b}[39m<<log:: >>\u{1b}[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::2>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::30dd059>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log empty::(empty)>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log empty description placeholder::(no description set)>>\u{1b}[39m<<log::>>\n\u{1b}[1m\u{1b}[38;5;14m<<node immutable::◆>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::z>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::zzzzzzz>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log root::root()>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::0>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::0000000>>\u{1b}[39m<<log::>>");
 
-    insta::assert_snapshot!(render(r#"builtin_log_compact"#), @r"
-    [1m[38;5;2m<<node working_copy::@>>[0m  [1m[38;5;13m<<log working_copy change_id shortest prefix::r>>[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>[39m<<log working_copy:: >>[38;5;9m<<log working_copy email placeholder::(no email set)>>[39m<<log working_copy:: >>[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>[39m<<log working_copy:: >>[38;5;13m<<log working_copy bookmarks name::my-bookmark>>[39m<<log working_copy:: >>[38;5;12m<<log working_copy commit_id shortest prefix::d>>[38;5;8m<<log working_copy commit_id shortest rest::c315397>>[39m<<log working_copy::>>[0m
-    │  [1m[38;5;10m<<log working_copy empty::(empty)>>[39m<<log working_copy:: >>[38;5;10m<<log working_copy empty description placeholder::(no description set)>>[39m<<log working_copy::>>[0m
-    <<node::○>>  [1m[38;5;5m<<log change_id shortest prefix::q>>[0m[38;5;8m<<log change_id shortest rest::pvuntsm>>[39m<<log:: >>[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>[39m<<log:: >>[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::2>>[0m[38;5;8m<<log commit_id shortest rest::30dd059>>[39m<<log::>>
-    │  [38;5;2m<<log empty::(empty)>>[39m<<log:: >>[38;5;2m<<log empty description placeholder::(no description set)>>[39m<<log::>>
-    [1m[38;5;14m<<node immutable::◆>>[0m  [1m[38;5;5m<<log change_id shortest prefix::z>>[0m[38;5;8m<<log change_id shortest rest::zzzzzzz>>[39m<<log:: >>[38;5;2m<<log root::root()>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::0>>[0m[38;5;8m<<log commit_id shortest rest::0000000>>[39m<<log::>>
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_compact"#), @"\u{1b}[1m\u{1b}[38;5;2m<<node working_copy::@>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13m<<log working_copy change_id shortest prefix::r>>\u{1b}[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;9m<<log working_copy email placeholder::(no email set)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;13m<<log working_copy bookmarks name::my-bookmark>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;12m<<log working_copy commit_id shortest prefix::d>>\u{1b}[38;5;8m<<log working_copy commit_id shortest rest::c315397>>\u{1b}[39m<<log working_copy::>>\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;10m<<log working_copy empty::(empty)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;10m<<log working_copy empty description placeholder::(no description set)>>\u{1b}[39m<<log working_copy::>>\u{1b}[0m\n<<node::○>>  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::q>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::pvuntsm>>\u{1b}[39m<<log:: >>\u{1b}[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>\u{1b}[39m<<log:: >>\u{1b}[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::2>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::30dd059>>\u{1b}[39m<<log::>>\n│  \u{1b}[38;5;2m<<log empty::(empty)>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log empty description placeholder::(no description set)>>\u{1b}[39m<<log::>>\n\u{1b}[1m\u{1b}[38;5;14m<<node immutable::◆>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::z>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::zzzzzzz>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log root::root()>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::0>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::0000000>>\u{1b}[39m<<log::>>");
 
-    insta::assert_snapshot!(render(r#"builtin_log_comfortable"#), @r"
-    [1m[38;5;2m<<node working_copy::@>>[0m  [1m[38;5;13m<<log working_copy change_id shortest prefix::r>>[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>[39m<<log working_copy:: >>[38;5;9m<<log working_copy email placeholder::(no email set)>>[39m<<log working_copy:: >>[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>[39m<<log working_copy:: >>[38;5;13m<<log working_copy bookmarks name::my-bookmark>>[39m<<log working_copy:: >>[38;5;12m<<log working_copy commit_id shortest prefix::d>>[38;5;8m<<log working_copy commit_id shortest rest::c315397>>[39m<<log working_copy::>>[0m
-    │  [1m[38;5;10m<<log working_copy empty::(empty)>>[39m<<log working_copy:: >>[38;5;10m<<log working_copy empty description placeholder::(no description set)>>[39m<<log working_copy::>>[0m
-    │  <<log::>>
-    <<node::○>>  [1m[38;5;5m<<log change_id shortest prefix::q>>[0m[38;5;8m<<log change_id shortest rest::pvuntsm>>[39m<<log:: >>[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>[39m<<log:: >>[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::2>>[0m[38;5;8m<<log commit_id shortest rest::30dd059>>[39m<<log::>>
-    │  [38;5;2m<<log empty::(empty)>>[39m<<log:: >>[38;5;2m<<log empty description placeholder::(no description set)>>[39m<<log::>>
-    │  <<log::>>
-    [1m[38;5;14m<<node immutable::◆>>[0m  [1m[38;5;5m<<log change_id shortest prefix::z>>[0m[38;5;8m<<log change_id shortest rest::zzzzzzz>>[39m<<log:: >>[38;5;2m<<log root::root()>>[39m<<log:: >>[1m[38;5;4m<<log commit_id shortest prefix::0>>[0m[38;5;8m<<log commit_id shortest rest::0000000>>[39m<<log::>>
-       <<log::>>
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_comfortable"#), @"\u{1b}[1m\u{1b}[38;5;2m<<node working_copy::@>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13m<<log working_copy change_id shortest prefix::r>>\u{1b}[38;5;8m<<log working_copy change_id shortest rest::lvkpnrz>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;9m<<log working_copy email placeholder::(no email set)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;14m<<log working_copy committer timestamp local format::2001-02-03 08:05:08>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;13m<<log working_copy bookmarks name::my-bookmark>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;12m<<log working_copy commit_id shortest prefix::d>>\u{1b}[38;5;8m<<log working_copy commit_id shortest rest::c315397>>\u{1b}[39m<<log working_copy::>>\u{1b}[0m\n│  \u{1b}[1m\u{1b}[38;5;10m<<log working_copy empty::(empty)>>\u{1b}[39m<<log working_copy:: >>\u{1b}[38;5;10m<<log working_copy empty description placeholder::(no description set)>>\u{1b}[39m<<log working_copy::>>\u{1b}[0m\n│  <<log::>>\n<<node::○>>  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::q>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::pvuntsm>>\u{1b}[39m<<log:: >>\u{1b}[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>\u{1b}[39m<<log:: >>\u{1b}[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::2>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::30dd059>>\u{1b}[39m<<log::>>\n│  \u{1b}[38;5;2m<<log empty::(empty)>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log empty description placeholder::(no description set)>>\u{1b}[39m<<log::>>\n│  <<log::>>\n\u{1b}[1m\u{1b}[38;5;14m<<node immutable::◆>>\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5m<<log change_id shortest prefix::z>>\u{1b}[0m\u{1b}[38;5;8m<<log change_id shortest rest::zzzzzzz>>\u{1b}[39m<<log:: >>\u{1b}[38;5;2m<<log root::root()>>\u{1b}[39m<<log:: >>\u{1b}[1m\u{1b}[38;5;4m<<log commit_id shortest prefix::0>>\u{1b}[0m\u{1b}[38;5;8m<<log commit_id shortest rest::0000000>>\u{1b}[39m<<log::>>\n   <<log::>>");
 
-    insta::assert_snapshot!(render(r#"builtin_log_detailed"#), @r"
-    [1m[38;5;2m<<node working_copy::@>>[0m  <<log::Commit ID: >>[38;5;4m<<log commit_id::dc31539712c7294d1d712cec63cef4504b94ca74>>[39m<<log::>>
-    │  <<log::Change ID: >>[38;5;5m<<log change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>[39m<<log::>>
-    │  <<log::Bookmarks: >>[38;5;5m<<log local_bookmarks name::my-bookmark>>[39m<<log::>>
-    │  <<log::Author   : >>[38;5;1m<<log name placeholder::(no name set)>>[39m<<log:: <>>[38;5;1m<<log email placeholder::(no email set)>>[39m<<log::> (>>[38;5;6m<<log author timestamp local format::2001-02-03 08:05:08>>[39m<<log::)>>
-    │  <<log::Committer: >>[38;5;1m<<log name placeholder::(no name set)>>[39m<<log:: <>>[38;5;1m<<log email placeholder::(no email set)>>[39m<<log::> (>>[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:08>>[39m<<log::)>>
-    │  <<log::>>
-    │  [38;5;2m<<log empty description placeholder::    (no description set)>>[39m<<log::>>
-    │  <<log::>>
-    <<node::○>>  <<log::Commit ID: >>[38;5;4m<<log commit_id::230dd059e1b059aefc0da06a2e5a7dbf22362f22>>[39m<<log::>>
-    │  <<log::Change ID: >>[38;5;5m<<log change_id::qpvuntsmwlqtpsluzzsnyyzlmlwvmlnu>>[39m<<log::>>
-    │  <<log::Author   : >>[38;5;3m<<log author name::Test User>>[39m<<log:: <>>[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>[39m<<log::> (>>[38;5;6m<<log author timestamp local format::2001-02-03 08:05:07>>[39m<<log::)>>
-    │  <<log::Committer: >>[38;5;3m<<log committer name::Test User>>[39m<<log:: <>>[38;5;3m<<log committer email local::test.user>><<log committer email::@>><<log committer email domain::example.com>>[39m<<log::> (>>[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>[39m<<log::)>>
-    │  <<log::>>
-    │  [38;5;2m<<log empty description placeholder::    (no description set)>>[39m<<log::>>
-    │  <<log::>>
-    [1m[38;5;14m<<node immutable::◆>>[0m  <<log::Commit ID: >>[38;5;4m<<log commit_id::0000000000000000000000000000000000000000>>[39m<<log::>>
-       <<log::Change ID: >>[38;5;5m<<log change_id::zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>>[39m<<log::>>
-       <<log::Author   : >>[38;5;1m<<log name placeholder::(no name set)>>[39m<<log:: <>>[38;5;1m<<log email placeholder::(no email set)>>[39m<<log::> (>>[38;5;6m<<log author timestamp local format::1970-01-01 11:00:00>>[39m<<log::)>>
-       <<log::Committer: >>[38;5;1m<<log name placeholder::(no name set)>>[39m<<log:: <>>[38;5;1m<<log email placeholder::(no email set)>>[39m<<log::> (>>[38;5;6m<<log committer timestamp local format::1970-01-01 11:00:00>>[39m<<log::)>>
-       <<log::>>
-       [38;5;2m<<log empty description placeholder::    (no description set)>>[39m<<log::>>
-       <<log::>>
-    [EOF]
-    ");
+    insta::assert_snapshot!(render(r#"builtin_log_detailed"#), @"\u{1b}[1m\u{1b}[38;5;2m<<node working_copy::@>>\u{1b}[0m  <<log::Commit ID: >>\u{1b}[38;5;4m<<log commit_id::dc31539712c7294d1d712cec63cef4504b94ca74>>\u{1b}[39m<<log::>>\n│  <<log::Change ID: >>\u{1b}[38;5;5m<<log change_id::rlvkpnrzqnoowoytxnquwvuryrwnrmlp>>\u{1b}[39m<<log::>>\n│  <<log::Bookmarks: >>\u{1b}[38;5;5m<<log local_bookmarks name::my-bookmark>>\u{1b}[39m<<log::>>\n│  <<log::Author   : >>\u{1b}[38;5;1m<<log name placeholder::(no name set)>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;1m<<log email placeholder::(no email set)>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log author timestamp local format::2001-02-03 08:05:08>>\u{1b}[39m<<log::)>>\n│  <<log::Committer: >>\u{1b}[38;5;1m<<log name placeholder::(no name set)>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;1m<<log email placeholder::(no email set)>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:08>>\u{1b}[39m<<log::)>>\n│  <<log::>>\n│  \u{1b}[38;5;2m<<log empty description placeholder::    (no description set)>>\u{1b}[39m<<log::>>\n│  <<log::>>\n<<node::○>>  <<log::Commit ID: >>\u{1b}[38;5;4m<<log commit_id::230dd059e1b059aefc0da06a2e5a7dbf22362f22>>\u{1b}[39m<<log::>>\n│  <<log::Change ID: >>\u{1b}[38;5;5m<<log change_id::qpvuntsmwlqtpsluzzsnyyzlmlwvmlnu>>\u{1b}[39m<<log::>>\n│  <<log::Author   : >>\u{1b}[38;5;3m<<log author name::Test User>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;3m<<log author email local::test.user>><<log author email::@>><<log author email domain::example.com>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log author timestamp local format::2001-02-03 08:05:07>>\u{1b}[39m<<log::)>>\n│  <<log::Committer: >>\u{1b}[38;5;3m<<log committer name::Test User>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;3m<<log committer email local::test.user>><<log committer email::@>><<log committer email domain::example.com>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log committer timestamp local format::2001-02-03 08:05:07>>\u{1b}[39m<<log::)>>\n│  <<log::>>\n│  \u{1b}[38;5;2m<<log empty description placeholder::    (no description set)>>\u{1b}[39m<<log::>>\n│  <<log::>>\n\u{1b}[1m\u{1b}[38;5;14m<<node immutable::◆>>\u{1b}[0m  <<log::Commit ID: >>\u{1b}[38;5;4m<<log commit_id::0000000000000000000000000000000000000000>>\u{1b}[39m<<log::>>\n   <<log::Change ID: >>\u{1b}[38;5;5m<<log change_id::zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>>\u{1b}[39m<<log::>>\n   <<log::Author   : >>\u{1b}[38;5;1m<<log name placeholder::(no name set)>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;1m<<log email placeholder::(no email set)>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log author timestamp local format::1970-01-01 11:00:00>>\u{1b}[39m<<log::)>>\n   <<log::Committer: >>\u{1b}[38;5;1m<<log name placeholder::(no name set)>>\u{1b}[39m<<log:: <>>\u{1b}[38;5;1m<<log email placeholder::(no email set)>>\u{1b}[39m<<log::> (>>\u{1b}[38;5;6m<<log committer timestamp local format::1970-01-01 11:00:00>>\u{1b}[39m<<log::)>>\n   <<log::>>\n   \u{1b}[38;5;2m<<log empty description placeholder::    (no description set)>>\u{1b}[39m<<log::>>\n   <<log::>>");
 }
 
 #[test]
@@ -559,7 +427,6 @@ fn test_log_evolog_divergence() {
     @  qpvuntsm test.user@example.com 2001-02-03 08:05:08 ff309c29
     │  description 1
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     // Create divergence
@@ -576,22 +443,13 @@ fn test_log_evolog_divergence() {
     │ ○  qpvuntsm?? test.user@example.com 2001-02-03 08:05:10 6ba70e00
     ├─╯  description 2
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ------- stderr -------
     Concurrent modification detected, resolving automatically.
-    [EOF]
     ");
 
     // Color
     let output = test_env.run_jj_in(&repo_path, ["log", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[4m[38;5;1mq[24mpvuntsm[38;5;9m??[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:08[39m [38;5;12mf[38;5;8mf309c29[39m[0m
-    │  [1mdescription 1[0m
-    │ ○  [1m[4m[38;5;1mq[0m[38;5;1mpvuntsm??[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:10[39m [1m[38;5;4m6[0m[38;5;8mba70e00[39m
-    ├─╯  description 2
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[4m\u{1b}[38;5;1mq\u{1b}[24mpvuntsm\u{1b}[38;5;9m??\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:08\u{1b}[39m \u{1b}[38;5;12mf\u{1b}[38;5;8mf309c29\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1mdescription 1\u{1b}[0m\n│ ○  \u{1b}[1m\u{1b}[4m\u{1b}[38;5;1mq\u{1b}[0m\u{1b}[38;5;1mpvuntsm??\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:10\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m6\u{1b}[0m\u{1b}[38;5;8mba70e00\u{1b}[39m\n├─╯  description 2\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 
     // Evolog and hidden divergent
     let output = test_env.run_jj_in(&repo_path, ["evolog"]);
@@ -602,20 +460,11 @@ fn test_log_evolog_divergence() {
     │  (no description set)
     ○  qpvuntsm hidden test.user@example.com 2001-02-03 08:05:07 230dd059
        (empty) (no description set)
-    [EOF]
     ");
 
     // Colored evolog
     let output = test_env.run_jj_in(&repo_path, ["evolog", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[4m[38;5;1mq[24mpvuntsm[38;5;9m??[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:08[39m [38;5;12mf[38;5;8mf309c29[39m[0m
-    │  [1mdescription 1[0m
-    ○  [1m[39mq[0m[38;5;8mpvuntsm[39m hidden [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:08[39m [1m[38;5;4m4[0m[38;5;8m85d52a9[39m
-    │  [38;5;3m(no description set)[39m
-    ○  [1m[39mq[0m[38;5;8mpvuntsm[39m hidden [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:07[39m [1m[38;5;4m2[0m[38;5;8m30dd059[39m
-       [38;5;2m(empty)[39m [38;5;2m(no description set)[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[4m\u{1b}[38;5;1mq\u{1b}[24mpvuntsm\u{1b}[38;5;9m??\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:08\u{1b}[39m \u{1b}[38;5;12mf\u{1b}[38;5;8mf309c29\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1mdescription 1\u{1b}[0m\n○  \u{1b}[1m\u{1b}[39mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m hidden \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:08\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m4\u{1b}[0m\u{1b}[38;5;8m85d52a9\u{1b}[39m\n│  \u{1b}[38;5;3m(no description set)\u{1b}[39m\n○  \u{1b}[1m\u{1b}[39mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m hidden \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30dd059\u{1b}[39m\n   \u{1b}[38;5;2m(empty)\u{1b}[39m \u{1b}[38;5;2m(no description set)\u{1b}[39m");
 }
 
 #[test]
@@ -715,7 +564,6 @@ fn test_log_bookmarks() {
     │ ○  4a7e4246fc4d bookmark1*
     ├─╯
     ◆  000000000000 (no bookmarks)
-    [EOF]
     ");
 
     let template = r#"bookmarks.map(|b| separate("/", b.remote(), b.name())).join(", ")"#;
@@ -730,7 +578,6 @@ fn test_log_bookmarks() {
     │ ○  bookmark1
     ├─╯
     ◆
-    [EOF]
     ");
 
     let template = r#"separate(" ", "L:", local_bookmarks, "R:", remote_bookmarks)"#;
@@ -745,7 +592,6 @@ fn test_log_bookmarks() {
     │ ○  L: bookmark1* R:
     ├─╯
     ◆  L: R:
-    [EOF]
     ");
 
     let template = r#"
@@ -767,7 +613,6 @@ fn test_log_bookmarks() {
     │ ○  bookmark1@origin(+1/-1)
     ├─╯
     ◆
-    [EOF]
     ");
 }
 
@@ -790,18 +635,10 @@ fn test_log_git_head() {
     @  false
     ○  true
     ◆  false
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["log", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    [1m[38;5;2m@[0m  [1m[38;5;13mr[38;5;8mlvkpnrz[39m [38;5;3mtest.user@example.com[39m [38;5;14m2001-02-03 08:05:09[39m [38;5;12m5[38;5;8m0aaf475[39m[0m
-    │  [1minitial[0m
-    ○  [1m[38;5;5mq[0m[38;5;8mpvuntsm[39m [38;5;3mtest.user@example.com[39m [38;5;6m2001-02-03 08:05:07[39m [38;5;2mgit_head()[39m [1m[38;5;4m2[0m[38;5;8m30dd059[39m
-    │  [38;5;2m(empty)[39m [38;5;2m(no description set)[39m
-    [1m[38;5;14m◆[0m  [1m[38;5;5mz[0m[38;5;8mzzzzzzz[39m [38;5;2mroot()[39m [1m[38;5;4m0[0m[38;5;8m0000000[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"\u{1b}[1m\u{1b}[38;5;2m@\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;13mr\u{1b}[38;5;8mlvkpnrz\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;14m2001-02-03 08:05:09\u{1b}[39m \u{1b}[38;5;12m5\u{1b}[38;5;8m0aaf475\u{1b}[39m\u{1b}[0m\n│  \u{1b}[1minitial\u{1b}[0m\n○  \u{1b}[1m\u{1b}[38;5;5mq\u{1b}[0m\u{1b}[38;5;8mpvuntsm\u{1b}[39m \u{1b}[38;5;3mtest.user@example.com\u{1b}[39m \u{1b}[38;5;6m2001-02-03 08:05:07\u{1b}[39m \u{1b}[38;5;2mgit_head()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m2\u{1b}[0m\u{1b}[38;5;8m30dd059\u{1b}[39m\n│  \u{1b}[38;5;2m(empty)\u{1b}[39m \u{1b}[38;5;2m(no description set)\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;14m◆\u{1b}[0m  \u{1b}[1m\u{1b}[38;5;5mz\u{1b}[0m\u{1b}[38;5;8mzzzzzzz\u{1b}[39m \u{1b}[38;5;2mroot()\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m0\u{1b}[0m\u{1b}[38;5;8m0000000\u{1b}[39m");
 }
 
 #[test]
@@ -830,7 +667,6 @@ fn test_log_commit_id_normal_hex() {
     ○  222fa9f0b41347630a1371203b8aad3897d34e5f: 222fa9f0b41347630a1371203b8aad3897d34e5f
     ○  230dd059e1b059aefc0da06a2e5a7dbf22362f22: 230dd059e1b059aefc0da06a2e5a7dbf22362f22
     ◆  0000000000000000000000000000000000000000: 0000000000000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -860,7 +696,6 @@ fn test_log_change_id_normal_hex() {
     ○  rlvkpnrzqnoowoytxnquwvuryrwnrmlp: 8e4fac809cbb3b162c953458183c8dea
     ○  qpvuntsmwlqtpsluzzsnyyzlmlwvmlnu: 9a45c67d3e96a7e5007c110ede34dec5
     ◆  zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz: 00000000000000000000000000000000
-    [EOF]
     ");
 }
 
@@ -888,7 +723,6 @@ fn test_log_customize_short_id() {
     @  Q_pvun test.user@example.com 2001-02-03 08:05:08 F_a156
     │  (empty) first
     ◆  Z_zzzz root() 0_0000
-    [EOF]
     ");
 
     // Customize only the change id
@@ -903,7 +737,6 @@ fn test_log_customize_short_id() {
     @  QPVUNTSM test.user@example.com 2001-02-03 08:05:08 fa15625b
     │  (empty) first
     ◆  ZZZZZZZZ root() 00000000
-    [EOF]
     ");
 }
 
@@ -941,7 +774,6 @@ fn test_log_immutable() {
     │ ◆  A [immutable]
     ├─╯
     ◆  [immutable]
-    [EOF]
     ");
 
     // Suppress error that could be detected earlier
@@ -959,7 +791,6 @@ fn test_log_immutable() {
       |
       = Function `unknown_fn` doesn't exist
     For help, see https://jj-vcs.github.io/jj/latest/config/ or use `jj help -k config`.
-    [EOF]
     [exit status: 1]
     ");
 
@@ -976,7 +807,6 @@ fn test_log_immutable() {
       |
       = Failed to evaluate revset
     2: Revision `unknown_symbol` doesn't exist
-    [EOF]
     [exit status: 1]
     "#);
 }
@@ -1026,7 +856,6 @@ fn test_log_contained_in() {
     │ ○  A [contained_in]
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -1045,7 +874,6 @@ fn test_log_contained_in() {
     │ ○  A
     ├─╯
     ◆
-    [EOF]
     ");
 
     // Suppress error that could be detected earlier
@@ -1069,7 +897,6 @@ fn test_log_contained_in() {
       | ^--------^
       |
       = Function `unknown_fn` doesn't exist
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -1095,7 +922,6 @@ fn test_log_contained_in() {
       = Invalid string pattern
     3: Invalid string pattern kind `x:`
     Hint: Try prefixing with one of `exact:`, `glob:`, `regex:`, or `substring:`
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -1115,7 +941,6 @@ fn test_log_contained_in() {
       = Failed to evaluate revset
     2: Revision `maine` doesn't exist
     Hint: Did you mean `main`?
-    [EOF]
     [exit status: 1]
     "#);
 }
@@ -1166,7 +991,6 @@ fn test_short_prefix_in_transaction() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Created new commit km[kuslswpqwq] 7[4ac55dd119b] test
-    [EOF]
     ");
 
     // Should match log's short prefixes
@@ -1180,7 +1004,6 @@ fn test_short_prefix_in_transaction() {
     kk[mpptxzrspx] 05[2755155952] commit0
     q[pvuntsmwlqt] e[0e22b9fae75] initial
     zz[zzzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
 
     test_env.add_config(r#"revsets.short-prefixes = """#);
@@ -1195,7 +1018,6 @@ fn test_short_prefix_in_transaction() {
     kk[mpptxzrspx] 052[755155952] commit0
     qp[vuntsmwlqt] e0[e22b9fae75] initial
     zz[zzzzzzzzzz] 00[0000000000]
-    [EOF]
     ");
 }
 
@@ -1235,94 +1057,14 @@ fn test_log_diff_predefined_formats() {
         &repo_path,
         ["log", "--no-graph", "--color=always", "-r@", "-T", template],
     );
-    insta::assert_snapshot!(output, @r"
-    === color_words ===
-    [38;5;3mModified regular file file1:[39m
-    [38;5;1m   1[39m [38;5;2m   1[39m: a
-    [38;5;1m   2[39m [38;5;2m   2[39m: b
-         [38;5;2m   3[39m: [4m[38;5;2mc[24m[39m
-    [38;5;3mModified regular file file2:[39m
-    [38;5;1m   1[39m [38;5;2m   1[39m: [4m[38;5;1ma[38;5;2mb[24m[39m
-         [38;5;2m   2[39m: [4m[38;5;2mc[24m[39m
-    [38;5;3mModified regular file rename-target (rename-source => rename-target):[39m
-    === git ===
-    [1mdiff --git a/file1 b/file1[0m
-    [1mindex 422c2b7ab3..de980441c3 100644[0m
-    [1m--- a/file1[0m
-    [1m+++ b/file1[0m
-    [38;5;6m@@ -1,2 +1,3 @@[39m
-     a
-     b
-    [38;5;2m+[4mc[24m[39m
-    [1mdiff --git a/file2 b/file2[0m
-    [1mindex 7898192261..9ddeb5c484 100644[0m
-    [1m--- a/file2[0m
-    [1m+++ b/file2[0m
-    [38;5;6m@@ -1,1 +1,2 @@[39m
-    [38;5;1m-[4ma[24m[39m
-    [38;5;2m+[4mb[24m[39m
-    [38;5;2m+[4mc[24m[39m
-    [1mdiff --git a/rename-source b/rename-target[0m
-    [1mrename from rename-source[0m
-    [1mrename to rename-target[0m
-    === stat ===
-    file1                            | 1 [38;5;2m+[38;5;1m[39m
-    file2                            | 3 [38;5;2m++[38;5;1m-[39m
-    {rename-source => rename-target} | 0[38;5;1m[39m
-    3 files changed, 3 insertions(+), 1 deletion(-)
-    === summary ===
-    [38;5;6mM file1[39m
-    [38;5;6mM file2[39m
-    [38;5;6mR {rename-source => rename-target}[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"=== color_words ===\n\u{1b}[38;5;3mModified regular file file1:\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   1\u{1b}[39m: a\n\u{1b}[38;5;1m   2\u{1b}[39m \u{1b}[38;5;2m   2\u{1b}[39m: b\n     \u{1b}[38;5;2m   3\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mc\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3mModified regular file file2:\u{1b}[39m\n\u{1b}[38;5;1m   1\u{1b}[39m \u{1b}[38;5;2m   1\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;1ma\u{1b}[38;5;2mb\u{1b}[24m\u{1b}[39m\n     \u{1b}[38;5;2m   2\u{1b}[39m: \u{1b}[4m\u{1b}[38;5;2mc\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3mModified regular file rename-target (rename-source => rename-target):\u{1b}[39m\n=== git ===\n\u{1b}[1mdiff --git a/file1 b/file1\u{1b}[0m\n\u{1b}[1mindex 422c2b7ab3..de980441c3 100644\u{1b}[0m\n\u{1b}[1m--- a/file1\u{1b}[0m\n\u{1b}[1m+++ b/file1\u{1b}[0m\n\u{1b}[38;5;6m@@ -1,2 +1,3 @@\u{1b}[39m\n a\n b\n\u{1b}[38;5;2m+\u{1b}[4mc\u{1b}[24m\u{1b}[39m\n\u{1b}[1mdiff --git a/file2 b/file2\u{1b}[0m\n\u{1b}[1mindex 7898192261..9ddeb5c484 100644\u{1b}[0m\n\u{1b}[1m--- a/file2\u{1b}[0m\n\u{1b}[1m+++ b/file2\u{1b}[0m\n\u{1b}[38;5;6m@@ -1,1 +1,2 @@\u{1b}[39m\n\u{1b}[38;5;1m-\u{1b}[4ma\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;2m+\u{1b}[4mb\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;2m+\u{1b}[4mc\u{1b}[24m\u{1b}[39m\n\u{1b}[1mdiff --git a/rename-source b/rename-target\u{1b}[0m\n\u{1b}[1mrename from rename-source\u{1b}[0m\n\u{1b}[1mrename to rename-target\u{1b}[0m\n=== stat ===\nfile1                            | 1 \u{1b}[38;5;2m+\u{1b}[38;5;1m\u{1b}[39m\nfile2                            | 3 \u{1b}[38;5;2m++\u{1b}[38;5;1m-\u{1b}[39m\n{rename-source => rename-target} | 0\u{1b}[38;5;1m\u{1b}[39m\n3 files changed, 3 insertions(+), 1 deletion(-)\n=== summary ===\n\u{1b}[38;5;6mM file1\u{1b}[39m\n\u{1b}[38;5;6mM file2\u{1b}[39m\n\u{1b}[38;5;6mR {rename-source => rename-target}\u{1b}[39m");
 
     // color labels
     let output = test_env.run_jj_in(
         &repo_path,
         ["log", "--no-graph", "--color=debug", "-r@", "-T", template],
     );
-    insta::assert_snapshot!(output, @r"
-    <<log::=== color_words ===>>
-    [38;5;3m<<log diff color_words header::Modified regular file file1:>>[39m
-    [38;5;1m<<log diff color_words removed line_number::   1>>[39m<<log diff color_words:: >>[38;5;2m<<log diff color_words added line_number::   1>>[39m<<log diff color_words::: a>>
-    [38;5;1m<<log diff color_words removed line_number::   2>>[39m<<log diff color_words:: >>[38;5;2m<<log diff color_words added line_number::   2>>[39m<<log diff color_words::: b>>
-    <<log diff color_words::     >>[38;5;2m<<log diff color_words added line_number::   3>>[39m<<log diff color_words::: >>[4m[38;5;2m<<log diff color_words added token::c>>[24m[39m
-    [38;5;3m<<log diff color_words header::Modified regular file file2:>>[39m
-    [38;5;1m<<log diff color_words removed line_number::   1>>[39m<<log diff color_words:: >>[38;5;2m<<log diff color_words added line_number::   1>>[39m<<log diff color_words::: >>[4m[38;5;1m<<log diff color_words removed token::a>>[38;5;2m<<log diff color_words added token::b>>[24m[39m<<log diff color_words::>>
-    <<log diff color_words::     >>[38;5;2m<<log diff color_words added line_number::   2>>[39m<<log diff color_words::: >>[4m[38;5;2m<<log diff color_words added token::c>>[24m[39m
-    [38;5;3m<<log diff color_words header::Modified regular file rename-target (rename-source => rename-target):>>[39m
-    <<log::=== git ===>>
-    [1m<<log diff git file_header::diff --git a/file1 b/file1>>[0m
-    [1m<<log diff git file_header::index 422c2b7ab3..de980441c3 100644>>[0m
-    [1m<<log diff git file_header::--- a/file1>>[0m
-    [1m<<log diff git file_header::+++ b/file1>>[0m
-    [38;5;6m<<log diff git hunk_header::@@ -1,2 +1,3 @@>>[39m
-    <<log diff git context:: a>>
-    <<log diff git context:: b>>
-    [38;5;2m<<log diff git added::+>>[4m<<log diff git added token::c>>[24m[39m
-    [1m<<log diff git file_header::diff --git a/file2 b/file2>>[0m
-    [1m<<log diff git file_header::index 7898192261..9ddeb5c484 100644>>[0m
-    [1m<<log diff git file_header::--- a/file2>>[0m
-    [1m<<log diff git file_header::+++ b/file2>>[0m
-    [38;5;6m<<log diff git hunk_header::@@ -1,1 +1,2 @@>>[39m
-    [38;5;1m<<log diff git removed::->>[4m<<log diff git removed token::a>>[24m<<log diff git removed::>>[39m
-    [38;5;2m<<log diff git added::+>>[4m<<log diff git added token::b>>[24m<<log diff git added::>>[39m
-    [38;5;2m<<log diff git added::+>>[4m<<log diff git added token::c>>[24m[39m
-    [1m<<log diff git file_header::diff --git a/rename-source b/rename-target>>[0m
-    [1m<<log diff git file_header::rename from rename-source>>[0m
-    [1m<<log diff git file_header::rename to rename-target>>[0m
-    <<log::=== stat ===>>
-    <<log diff stat::file1                            | 1 >>[38;5;2m<<log diff stat added::+>>[38;5;1m<<log diff stat removed::>>[39m
-    <<log diff stat::file2                            | 3 >>[38;5;2m<<log diff stat added::++>>[38;5;1m<<log diff stat removed::->>[39m
-    <<log diff stat::{rename-source => rename-target} | 0>>[38;5;1m<<log diff stat removed::>>[39m
-    <<log diff stat stat-summary::3 files changed, 3 insertions(+), 1 deletion(-)>>
-    <<log::=== summary ===>>
-    [38;5;6m<<log diff summary modified::M file1>>[39m
-    [38;5;6m<<log diff summary modified::M file2>>[39m
-    [38;5;6m<<log diff summary renamed::R {rename-source => rename-target}>>[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"<<log::=== color_words ===>>\n\u{1b}[38;5;3m<<log diff color_words header::Modified regular file file1:>>\u{1b}[39m\n\u{1b}[38;5;1m<<log diff color_words removed line_number::   1>>\u{1b}[39m<<log diff color_words:: >>\u{1b}[38;5;2m<<log diff color_words added line_number::   1>>\u{1b}[39m<<log diff color_words::: a>>\n\u{1b}[38;5;1m<<log diff color_words removed line_number::   2>>\u{1b}[39m<<log diff color_words:: >>\u{1b}[38;5;2m<<log diff color_words added line_number::   2>>\u{1b}[39m<<log diff color_words::: b>>\n<<log diff color_words::     >>\u{1b}[38;5;2m<<log diff color_words added line_number::   3>>\u{1b}[39m<<log diff color_words::: >>\u{1b}[4m\u{1b}[38;5;2m<<log diff color_words added token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3m<<log diff color_words header::Modified regular file file2:>>\u{1b}[39m\n\u{1b}[38;5;1m<<log diff color_words removed line_number::   1>>\u{1b}[39m<<log diff color_words:: >>\u{1b}[38;5;2m<<log diff color_words added line_number::   1>>\u{1b}[39m<<log diff color_words::: >>\u{1b}[4m\u{1b}[38;5;1m<<log diff color_words removed token::a>>\u{1b}[38;5;2m<<log diff color_words added token::b>>\u{1b}[24m\u{1b}[39m<<log diff color_words::>>\n<<log diff color_words::     >>\u{1b}[38;5;2m<<log diff color_words added line_number::   2>>\u{1b}[39m<<log diff color_words::: >>\u{1b}[4m\u{1b}[38;5;2m<<log diff color_words added token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[38;5;3m<<log diff color_words header::Modified regular file rename-target (rename-source => rename-target):>>\u{1b}[39m\n<<log::=== git ===>>\n\u{1b}[1m<<log diff git file_header::diff --git a/file1 b/file1>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::index 422c2b7ab3..de980441c3 100644>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::--- a/file1>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::+++ b/file1>>\u{1b}[0m\n\u{1b}[38;5;6m<<log diff git hunk_header::@@ -1,2 +1,3 @@>>\u{1b}[39m\n<<log diff git context:: a>>\n<<log diff git context:: b>>\n\u{1b}[38;5;2m<<log diff git added::+>>\u{1b}[4m<<log diff git added token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[1m<<log diff git file_header::diff --git a/file2 b/file2>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::index 7898192261..9ddeb5c484 100644>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::--- a/file2>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::+++ b/file2>>\u{1b}[0m\n\u{1b}[38;5;6m<<log diff git hunk_header::@@ -1,1 +1,2 @@>>\u{1b}[39m\n\u{1b}[38;5;1m<<log diff git removed::->>\u{1b}[4m<<log diff git removed token::a>>\u{1b}[24m<<log diff git removed::>>\u{1b}[39m\n\u{1b}[38;5;2m<<log diff git added::+>>\u{1b}[4m<<log diff git added token::b>>\u{1b}[24m<<log diff git added::>>\u{1b}[39m\n\u{1b}[38;5;2m<<log diff git added::+>>\u{1b}[4m<<log diff git added token::c>>\u{1b}[24m\u{1b}[39m\n\u{1b}[1m<<log diff git file_header::diff --git a/rename-source b/rename-target>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::rename from rename-source>>\u{1b}[0m\n\u{1b}[1m<<log diff git file_header::rename to rename-target>>\u{1b}[0m\n<<log::=== stat ===>>\n<<log diff stat::file1                            | 1 >>\u{1b}[38;5;2m<<log diff stat added::+>>\u{1b}[38;5;1m<<log diff stat removed::>>\u{1b}[39m\n<<log diff stat::file2                            | 3 >>\u{1b}[38;5;2m<<log diff stat added::++>>\u{1b}[38;5;1m<<log diff stat removed::->>\u{1b}[39m\n<<log diff stat::{rename-source => rename-target} | 0>>\u{1b}[38;5;1m<<log diff stat removed::>>\u{1b}[39m\n<<log diff stat stat-summary::3 files changed, 3 insertions(+), 1 deletion(-)>>\n<<log::=== summary ===>>\n\u{1b}[38;5;6m<<log diff summary modified::M file1>>\u{1b}[39m\n\u{1b}[38;5;6m<<log diff summary modified::M file2>>\u{1b}[39m\n\u{1b}[38;5;6m<<log diff summary renamed::R {rename-source => rename-target}>>\u{1b}[39m");
 
     // cwd != workspace root
     let output = test_env.run_jj_in(".", ["log", "-Rrepo", "--no-graph", "-r@", "-T", template]);
@@ -1365,7 +1107,6 @@ fn test_log_diff_predefined_formats() {
     M repo/file1
     M repo/file2
     R repo/{rename-source => rename-target}
-    [EOF]
     ");
 
     // with non-default config
@@ -1427,7 +1168,6 @@ fn test_log_diff_predefined_formats() {
     M file1
     M file2
     R {rename-source => rename-target}
-    [EOF]
     ");
 
     // bad config
@@ -1458,7 +1198,6 @@ fn test_log_diff_predefined_formats() {
     3: invalid type: string "not an integer", expected usize
 
     Hint: Check the config file: ../config-bad.toml
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -1469,7 +1208,6 @@ fn test_log_diff_predefined_formats() {
     Modified regular file file1:
         ...
             3: c
-    [EOF]
     ");
 
     // git() with parameters
@@ -1483,7 +1221,6 @@ fn test_log_diff_predefined_formats() {
     @@ -2,1 +2,2 @@
      b
     +c
-    [EOF]
     ");
 
     // custom template with files()
@@ -1516,7 +1253,6 @@ fn test_log_diff_predefined_formats() {
     * non-empty len=3
     === 000000000000 ===
     * empty len=0
-    [EOF]
     ");
 
     // custom diff stat template
@@ -1537,7 +1273,6 @@ fn test_log_diff_predefined_formats() {
     * total_added=4 total_removed=0
     === 000000000000 ===
     * total_added=0 total_removed=0
-    [EOF]
     ");
 }
 
@@ -1584,7 +1319,6 @@ fn test_file_list_entries() {
     conflict-file [conflict] conflict=true executable=false
     dir/file [file] conflict=false executable=false
     exec-file [file] conflict=false executable=true
-    [EOF]
     ");
 }
 
@@ -1599,10 +1333,7 @@ fn test_file_list_symlink() {
 
     let template = r#"separate(" ", path, "[" ++ file_type ++ "]") ++ "\n""#;
     let output = test_env.run_jj_in(&repo_path, ["file", "list", "-T", template]);
-    insta::assert_snapshot!(output, @r"
-    symlink [symlink]
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"symlink [symlink]");
 }
 
 #[test]
@@ -1627,7 +1358,6 @@ fn test_repo_path() {
     insta::assert_snapshot!(output.normalize_backslash(), @r"
     dir/file display=dir/file parent=dir parent^2=
     file display=file parent= parent^2=<none>
-    [EOF]
     ");
 
     let template = r#"separate(" ", path, "display=" ++ path.display()) ++ "\n""#;
@@ -1635,7 +1365,6 @@ fn test_repo_path() {
     insta::assert_snapshot!(output.normalize_backslash(), @r"
     dir/file display=file
     file display=../file
-    [EOF]
     ");
 }
 
@@ -1667,10 +1396,9 @@ fn test_signature_templates() {
     @  good test-display signature
     ○  no signature
     ◆  no signature
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["show", "-T", template]);
-    insta::assert_snapshot!(output, @"good test-display signature[EOF]");
+    insta::assert_snapshot!(output, @"good test-display signature[no newline]");
 
     // builtin templates
     test_env.add_config("ui.show-cryptographic-signatures = true");
@@ -1687,7 +1415,6 @@ fn test_signature_templates() {
     ○  qpvuntsm test.user 2001-02-03 08:05:08 879d5d20 (empty) unsigned
     │
     ~
-    [EOF]
     ");
 
     let output = test_env.run_jj_with(|cmd| {
@@ -1701,7 +1428,6 @@ fn test_signature_templates() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 879d5d20
     │  (empty) unsigned
     ~
-    [EOF]
     ");
 
     let output = test_env.run_jj_with(|cmd| {
@@ -1725,8 +1451,6 @@ fn test_signature_templates() {
        Signature: (no signature)
 
            unsigned
-
-    [EOF]
     ");
 
     // customization point
@@ -1742,6 +1466,5 @@ fn test_signature_templates() {
     ○  qpvuntsm test.user 2001-02-03 08:05:08 879d5d20 status: <Error: No CryptographicSignature available> (empty) unsigned
     │
     ~
-    [EOF]
     ");
 }

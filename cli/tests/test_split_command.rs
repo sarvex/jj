@@ -51,11 +51,10 @@ fn test_split_by_paths() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  qpvuntsmwlqt false
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
     insta::assert_snapshot!(get_recorded_dates(&test_env, &repo_path,"@"), @r"
     Author date:  2001-02-03 04:05:08.000 +07:00
-    Committer date: 2001-02-03 04:05:08.000 +07:00[EOF]
+    Committer date: 2001-02-03 04:05:08.000 +07:00[no newline]
     ");
 
     let edit_script = test_env.set_up_fake_editor();
@@ -71,7 +70,6 @@ fn test_split_by_paths() {
     Second part: zsuskuln 709756f0 (no description set)
     Working copy now at: zsuskuln 709756f0 (no description set)
     Parent commit      : qpvuntsm 65569ca7 (no description set)
-    [EOF]
     ");
     insta::assert_snapshot!(
         std::fs::read_to_string(test_env.env_root().join("editor0")).unwrap(), @r#"
@@ -88,30 +86,25 @@ fn test_split_by_paths() {
     @  zsuskulnrvyr false
     ○  qpvuntsmwlqt false
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // The author dates of the new commits should be inherited from the commit being
     // split. The committer dates should be newer.
     insta::assert_snapshot!(get_recorded_dates(&test_env, &repo_path,"@"), @r"
     Author date:  2001-02-03 04:05:08.000 +07:00
-    Committer date: 2001-02-03 04:05:10.000 +07:00[EOF]
+    Committer date: 2001-02-03 04:05:10.000 +07:00[no newline]
     ");
     insta::assert_snapshot!(get_recorded_dates(&test_env, &repo_path,"@-"), @r"
     Author date:  2001-02-03 04:05:08.000 +07:00
-    Committer date: 2001-02-03 04:05:10.000 +07:00[EOF]
+    Committer date: 2001-02-03 04:05:10.000 +07:00[no newline]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    A file2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A file2");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
     insta::assert_snapshot!(output, @r"
     A file1
     A file3
-    [EOF]
     ");
 
     // Insert an empty commit after @- with "split ."
@@ -125,7 +118,6 @@ fn test_split_by_paths() {
     Second part: znkkpsqq 5b5714a3 (empty) (no description set)
     Working copy now at: zsuskuln 0c798ee7 (no description set)
     Parent commit      : znkkpsqq 5b5714a3 (empty) (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -133,14 +125,10 @@ fn test_split_by_paths() {
     ○  znkkpsqqskkl true
     ○  qpvuntsmwlqt false
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@--"]);
-    insta::assert_snapshot!(output, @r"
-    A file2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A file2");
 
     // Remove newly created empty commit
     test_env.run_jj_in(&repo_path, ["abandon", "@-"]).success();
@@ -156,7 +144,6 @@ fn test_split_by_paths() {
     Second part: lylxulpl ed55c86b (no description set)
     Working copy now at: zsuskuln 1e1ed741 (no description set)
     Parent commit      : lylxulpl ed55c86b (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -164,14 +151,10 @@ fn test_split_by_paths() {
     ○  lylxulplsnyw false
     ○  qpvuntsmwlqt true
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@-"]);
-    insta::assert_snapshot!(output, @r"
-    A file2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A file2");
 }
 
 #[test]
@@ -206,7 +189,6 @@ fn test_split_with_non_empty_description() {
     Second part: kkmpptxz e96291aa part 2
     Working copy now at: kkmpptxz e96291aa part 2
     Parent commit      : qpvuntsm 231a3c00 part 1
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -233,7 +215,6 @@ fn test_split_with_non_empty_description() {
     @  kkmpptxzrspx false part 2
     ○  qpvuntsmwlqt false part 1
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 }
 
@@ -260,7 +241,6 @@ fn test_split_with_default_description() {
     Second part: rlvkpnrz 33cd046b (no description set)
     Working copy now at: rlvkpnrz 33cd046b (no description set)
     Parent commit      : qpvuntsm 02ee5d60 TESTED=TODO
-    [EOF]
     ");
 
     // Since the commit being split has no description, the user will only be
@@ -284,7 +264,6 @@ fn test_split_with_default_description() {
     @  rlvkpnrzqnoo false
     ○  qpvuntsmwlqt false TESTED=TODO
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 }
 
@@ -316,7 +295,6 @@ fn test_split_with_merge_child() {
     ○ │  qpvuntsmwlqt true 1
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // Set up the editor and do the split.
@@ -335,7 +313,6 @@ fn test_split_with_merge_child() {
     Working copy now at: zsuskuln 696935af (empty) 2
     Parent commit      : qpvuntsm 8b64ddff (empty) 1
     Parent commit      : royxmykx 5e1b793d Add file2
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @    zsuskulnrvyr true 2
@@ -345,7 +322,6 @@ fn test_split_with_merge_child() {
     ○ │  qpvuntsmwlqt true 1
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 }
 
@@ -364,7 +340,6 @@ fn test_split_siblings_no_descendants() {
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @  qpvuntsmwlqt false
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     let edit_script = test_env.set_up_fake_editor();
@@ -381,14 +356,12 @@ fn test_split_siblings_no_descendants() {
     Working copy now at: kkmpptxz 7eddbf93 (no description set)
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @  kkmpptxzrspx false
     │ ○  qpvuntsmwlqt false TESTED=TODO
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // Since the commit being split has no description, the user will only be
@@ -447,7 +420,6 @@ fn test_split_siblings_with_descendants() {
     ○  rlvkpnrzqnoo false Add file3
     @  qpvuntsmwlqt false Add file1 & file2
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // Set up the editor and do the split.
@@ -473,7 +445,6 @@ fn test_split_siblings_with_descendants() {
     Working copy now at: vruxwmqv 94753be3 Add file2
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     ○  kkmpptxzrspx false Add file4
@@ -483,7 +454,6 @@ fn test_split_siblings_with_descendants() {
     ○ │  qpvuntsmwlqt false Add file1
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // The commit we're splitting has a description, so the user will be
@@ -538,7 +508,6 @@ fn test_split_siblings_with_merge_child() {
     ○ │  qpvuntsmwlqt true 1
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 
     // Set up the editor and do the split.
@@ -561,7 +530,6 @@ fn test_split_siblings_with_merge_child() {
     Parent commit      : qpvuntsm 8b64ddff (empty) 1
     Parent commit      : kkmpptxz e8006b47 Add file1
     Parent commit      : royxmykx 2cc60f3d Add file2
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &workspace_path), @r"
     @      zsuskulnrvyr true 2
@@ -572,7 +540,6 @@ fn test_split_siblings_with_merge_child() {
     ○ │  qpvuntsmwlqt true 1
     ├─╯
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
 }
 
@@ -591,7 +558,6 @@ fn test_split_empty() {
     ------- stderr -------
     Error: Refusing to split empty commit 2ab033062e9fdf7fad2ded8e89c1f145e3698190.
     Hint: Use `jj new` if you want to create another empty commit.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -640,7 +606,6 @@ fn test_split_interactive() {
     Second part: rlvkpnrz 9ed12e4c (no description set)
     Working copy now at: rlvkpnrz 9ed12e4c (no description set)
     Parent commit      : qpvuntsm 0e15949e (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -672,7 +637,6 @@ fn test_split_interactive() {
     │  (no description set)
     │  A file1
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -708,7 +672,6 @@ fn test_split_interactive_with_paths() {
     Second part: kkmpptxz 4cf22d3b (no description set)
     Working copy now at: kkmpptxz 4cf22d3b (no description set)
     Parent commit      : rlvkpnrz e3d766b8 (no description set)
-    [EOF]
     ");
 
     insta::assert_snapshot!(
@@ -735,7 +698,6 @@ fn test_split_interactive_with_paths() {
     │  A file2
     │  A file3
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 }
 
@@ -773,7 +735,6 @@ fn test_split_with_multiple_workspaces_same_working_copy() {
     insta::assert_snapshot!(get_workspace_log_output(&test_env, &main_path), @r"
     @  qpvuntsmwlqt default@ second@ first-commit
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Do the split in the default workspace.
@@ -788,7 +749,6 @@ fn test_split_with_multiple_workspaces_same_working_copy() {
     @  royxmykxtrkr default@ second@ second-commit
     ○  qpvuntsmwlqt first-commit
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Test again with a --parallel split.
@@ -806,7 +766,6 @@ fn test_split_with_multiple_workspaces_same_working_copy() {
     │ ○  qpvuntsmwlqt first-commit
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -838,7 +797,6 @@ fn test_split_with_multiple_workspaces_different_working_copy() {
     │ ○  pmmvwywvzvvn second@
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Do the split in the default workspace.
@@ -855,7 +813,6 @@ fn test_split_with_multiple_workspaces_different_working_copy() {
     │ ○  pmmvwywvzvvn second@
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 
     // Test again with a --parallel split.
@@ -875,7 +832,6 @@ fn test_split_with_multiple_workspaces_different_working_copy() {
     │ ○  pmmvwywvzvvn second@
     ├─╯
     ◆  zzzzzzzzzzzz
-    [EOF]
     ");
 }
 
@@ -917,7 +873,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
     insta::assert_snapshot!(get_log_output(&test_env, &main_path), @r"
     @  qpvuntsmwlqt false *le-signet* first-commit
     ◆  zzzzzzzzzzzz true
-    [EOF]
     ");
     }
 
@@ -937,7 +892,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             Second part: mzvwutvl a9f5665f second-commit
             Working copy now at: mzvwutvl a9f5665f second-commit
             Parent commit      : qpvuntsm 63d0c5ed *le-signet* | first-commit
-            [EOF]
             ");
             }
             insta::allow_duplicates! {
@@ -945,7 +899,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             @  mzvwutvlkqwt false second-commit
             ○  qpvuntsmwlqt false *le-signet* first-commit
             ◆  zzzzzzzzzzzz true
-            [EOF]
             ");
             }
         }
@@ -957,7 +910,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             Second part: mzvwutvl a9f5665f *le-signet* | second-commit
             Working copy now at: mzvwutvl a9f5665f *le-signet* | second-commit
             Parent commit      : qpvuntsm 63d0c5ed first-commit
-            [EOF]
             ");
             }
             insta::allow_duplicates! {
@@ -965,7 +917,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             @  mzvwutvlkqwt false *le-signet* second-commit
             ○  qpvuntsmwlqt false first-commit
             ◆  zzzzzzzzzzzz true
-            [EOF]
             ");
             }
         }
@@ -989,7 +940,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             │ ○  qpvuntsmwlqt false *le-signet* first-commit
             ├─╯
             ◆  zzzzzzzzzzzz true
-            [EOF]
             ");
             }
         }
@@ -1000,7 +950,6 @@ fn test_split_with_bookmarks(bookmark_behavior: BookmarkBehavior) {
             │ ○  qpvuntsmwlqt false first-commit
             ├─╯
             ◆  zzzzzzzzzzzz true
-            [EOF]
             ");
             }
         }

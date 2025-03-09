@@ -44,7 +44,6 @@ fn test_help() {
     Usage: jj workspace [OPTIONS] <COMMAND>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -52,7 +51,6 @@ fn test_help() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Error: There is no jj repo in "."
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -60,7 +58,6 @@ fn test_help() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Error: There is no jj repo in "."
-    [EOF]
     [exit status: 1]
     "#);
 
@@ -85,7 +82,6 @@ fn test_help() {
     Usage: jj [OPTIONS] <COMMAND>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -95,7 +91,6 @@ fn test_help() {
     error: a value is required for '--revisions <REVSETS>' but none was supplied
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }
@@ -126,7 +121,6 @@ fn test_help_keyword() {
       tip: a similar value exists: 'revsets'
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -138,7 +132,6 @@ fn test_help_keyword() {
       [possible values: bookmarks, config, filesets, glossary, revsets, templates, tutorial]
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -150,7 +143,6 @@ fn test_help_keyword() {
       [possible values: bookmarks, config, filesets, glossary, revsets, templates, tutorial]
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -166,7 +158,6 @@ fn test_help_keyword() {
     Usage: jj [OPTIONS] <COMMAND>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 }

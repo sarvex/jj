@@ -23,7 +23,6 @@ fn test_deprecated_flags() {
     insta::assert_snapshot!(output.stderr, @r"
     Warning: `jj util completion --bash` will be removed in a future version, and this will be a hard error
     Hint: Use `jj util completion bash` instead
-    [EOF]
     ");
     assert!(output.stdout.raw().contains("COMPREPLY"), "{output}");
 }

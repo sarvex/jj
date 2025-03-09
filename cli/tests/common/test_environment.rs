@@ -418,12 +418,20 @@ impl Debug for CommandOutputString {
 
 impl Display for CommandOutputString {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.is_empty() {
-            return Ok(());
+        for line in self.normalized.split_inclusive('\n') {
+            if let Some(prefix) = line.strip_suffix('\n') {
+                if prefix.trim_end() != prefix {
+                    // Append "[EOL]" marker to test line ending
+                    // https://github.com/mitsuhiko/insta/issues/384
+                    writeln!(f, "{prefix}[EOL]")?;
+                } else {
+                    writeln!(f, "{prefix}")?;
+                }
+            } else {
+                writeln!(f, "{line}[no newline]")?;
+            }
         }
-        // Append "[EOF]" marker to test line ending
-        // https://github.com/mitsuhiko/insta/issues/384
-        writeln!(f, "{}[EOF]", self.normalized)
+        Ok(())
     }
 }
 

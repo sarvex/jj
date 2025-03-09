@@ -44,7 +44,6 @@ fn test_report_conflicts() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-d=description(A)"]);
@@ -57,7 +56,6 @@ fn test_report_conflicts() {
     Existing conflicts were resolved or abandoned from these commits:
       kkmpptxz hidden 2271a49e (conflict) C
       rlvkpnrz hidden b7d83633 (conflict) B
-    [EOF]
     ");
 
     // Can get hint about multiple root commits
@@ -80,7 +78,6 @@ fn test_report_conflicts() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     // Resolve one of the conflicts by (mostly) following the instructions
@@ -92,7 +89,6 @@ fn test_report_conflicts() {
     Added 0 files, modified 1 files, removed 0 files
     Warning: There are unresolved conflicts at these paths:
     file    2-sided conflict including 1 deletion
-    [EOF]
     ");
     std::fs::write(repo_path.join("file"), "resolved\n").unwrap();
     let output = test_env.run_jj_in(&repo_path, ["squash"]);
@@ -102,7 +98,6 @@ fn test_report_conflicts() {
     Parent commit      : rlvkpnrz 87370844 B
     Existing conflicts were resolved or abandoned from these commits:
       rlvkpnrz hidden b42f84eb (conflict) B
-    [EOF]
     ");
 }
 
@@ -146,7 +141,6 @@ fn test_report_conflicts_with_divergent_commits() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-d=description(A)"]);
@@ -160,7 +154,6 @@ fn test_report_conflicts_with_divergent_commits() {
       zsuskuln hidden 1db43f23 (conflict) C3
       zsuskuln hidden 4ca807ad (conflict) C2
       kkmpptxz hidden b42f84eb (conflict) B
-    [EOF]
     ");
 
     // Same thing when rebasing the divergent commits one at a time
@@ -180,7 +173,6 @@ fn test_report_conflicts_with_divergent_commits() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-s=description(C3)", "-d=root()"]);
@@ -194,7 +186,6 @@ fn test_report_conflicts_with_divergent_commits() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -209,7 +200,6 @@ fn test_report_conflicts_with_divergent_commits() {
     Added 0 files, modified 1 files, removed 0 files
     Existing conflicts were resolved or abandoned from these commits:
       zsuskuln hidden 3c36afc9 (conflict) C2
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -221,7 +211,6 @@ fn test_report_conflicts_with_divergent_commits() {
     Rebased 1 commits onto destination
     Existing conflicts were resolved or abandoned from these commits:
       zsuskuln hidden e3ff827e (conflict) C3
-    [EOF]
     ");
 }
 
@@ -258,6 +247,5 @@ fn test_report_conflicts_with_resolving_conflicts_hint_disabled() {
     New conflicts appeared in these commits:
       kkmpptxz 2271a49e (conflict) C
       rlvkpnrz b7d83633 (conflict) B
-    [EOF]
     ");
 }

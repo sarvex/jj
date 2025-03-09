@@ -41,7 +41,6 @@ fn test_interdiff_basic() {
     Modified regular file file2:
        1    1: foo
             2: bar
-    [EOF]
     ");
 
     // explicit --to
@@ -51,7 +50,6 @@ fn test_interdiff_basic() {
     Modified regular file file2:
        1    1: foo
             2: bar
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -60,10 +58,7 @@ fn test_interdiff_basic() {
         &repo_path,
         ["interdiff", "--from", "left", "--to", "right", "-s"],
     );
-    insta::assert_snapshot!(output, @r"
-    M file2
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"M file2");
 
     let output = test_env.run_jj_in(
         &repo_path,
@@ -77,7 +72,6 @@ fn test_interdiff_basic() {
     @@ -1,1 +1,2 @@
      foo
     +bar
-    [EOF]
     ");
 }
 
@@ -113,7 +107,6 @@ fn test_interdiff_paths() {
     insta::assert_snapshot!(output, @r"
     Modified regular file file1:
        1    1: barbaz
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -133,7 +126,6 @@ fn test_interdiff_paths() {
        1    1: barbaz
     Modified regular file file2:
        1    1: barbaz
-    [EOF]
     ");
 }
 
@@ -176,6 +168,5 @@ fn test_interdiff_conflicting() {
     -bar
     ->>>>>>> Conflict 1 of 1 ends
     +def
-    [EOF]
     ");
 }

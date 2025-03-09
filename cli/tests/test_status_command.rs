@@ -45,7 +45,6 @@ fn test_status_copies() {
     R {rename-source => rename-target}
     Working copy : rlvkpnrz a96c3086 (no description set)
     Parent commit: qpvuntsm e3e2c703 (no description set)
-    [EOF]
     ");
 }
 
@@ -76,7 +75,6 @@ fn test_status_merge() {
     Working copy : mzvwutvl a538c72d (empty) (no description set)
     Parent commit: rlvkpnrz d3dd19f1 left | (empty) left
     Parent commit: zsuskuln 705a356d right
-    [EOF]
     ");
 }
 
@@ -102,7 +100,6 @@ fn test_status_ignored_gitignore() {
     A .gitignore
     Working copy : qpvuntsm 3cef2183 (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -122,7 +119,6 @@ fn test_status_filtered() {
     A file_1
     Working copy : qpvuntsm c8fb8395 (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -194,7 +190,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 aade7195
     │  Initial contents
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["status"]);
@@ -209,23 +204,10 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["status", "--color=always"]);
-    insta::assert_snapshot!(output, @r"
-    The working copy has no changes.
-    Working copy : [1m[38;5;13my[38;5;8mqosqzyt[39m [38;5;12md[38;5;8mcb25635[39m [38;5;9m(conflict)[39m [38;5;10m(empty)[39m boom-cont-2[0m
-    Parent commit: [1m[38;5;5mr[0m[38;5;8moyxmykx[39m [1m[38;5;4m6[0m[38;5;8m64a4c6c[39m [38;5;1m(conflict)[39m [38;5;2m(empty)[39m boom-cont
-    [1m[38;5;3mWarning: [39mThere are unresolved conflicts at these paths:[0m
-    conflicted.txt    [38;5;3m2-sided conflict[39m
-    [1m[38;5;6mHint: [0m[39mTo resolve the conflicts, start by updating to the first one:[39m
-    [39m  jj new [1m[38;5;5mm[0m[38;5;8mzvwutvl[39m[39m
-    [39mThen use `jj resolve`, or edit the conflict markers in the file directly.[39m
-    [39mOnce the conflicts are resolved, you may want to inspect the result with `jj diff`.[39m
-    [39mThen run `jj squash` to move the resolution into the conflicted commit.[39m
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"The working copy has no changes.\nWorking copy : \u{1b}[1m\u{1b}[38;5;13my\u{1b}[38;5;8mqosqzyt\u{1b}[39m \u{1b}[38;5;12md\u{1b}[38;5;8mcb25635\u{1b}[39m \u{1b}[38;5;9m(conflict)\u{1b}[39m \u{1b}[38;5;10m(empty)\u{1b}[39m boom-cont-2\u{1b}[0m\nParent commit: \u{1b}[1m\u{1b}[38;5;5mr\u{1b}[0m\u{1b}[38;5;8moyxmykx\u{1b}[39m \u{1b}[1m\u{1b}[38;5;4m6\u{1b}[0m\u{1b}[38;5;8m64a4c6c\u{1b}[39m \u{1b}[38;5;1m(conflict)\u{1b}[39m \u{1b}[38;5;2m(empty)\u{1b}[39m boom-cont\n\u{1b}[1m\u{1b}[38;5;3mWarning: \u{1b}[39mThere are unresolved conflicts at these paths:\u{1b}[0m\nconflicted.txt    \u{1b}[38;5;3m2-sided conflict\u{1b}[39m\n\u{1b}[1m\u{1b}[38;5;6mHint: \u{1b}[0m\u{1b}[39mTo resolve the conflicts, start by updating to the first one:\u{1b}[39m\n\u{1b}[39m  jj new \u{1b}[1m\u{1b}[38;5;5mm\u{1b}[0m\u{1b}[38;5;8mzvwutvl\u{1b}[39m\u{1b}[39m\n\u{1b}[39mThen use `jj resolve`, or edit the conflict markers in the file directly.\u{1b}[39m\n\u{1b}[39mOnce the conflicts are resolved, you may want to inspect the result with `jj diff`.\u{1b}[39m\n\u{1b}[39mThen run `jj squash` to move the resolution into the conflicted commit.\u{1b}[39m");
 
     let output = test_env.run_jj_in(
         &repo_path,
@@ -237,7 +219,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     Parent commit: royxmykx 664a4c6c (conflict) (empty) boom-cont
     Warning: There are unresolved conflicts at these paths:
     conflicted.txt    2-sided conflict
-    [EOF]
     ");
 
     // Resolve conflict
@@ -273,7 +254,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 aade7195
     │  Initial contents
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["status"]);
@@ -283,7 +263,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     M conflicted.txt
     Working copy : wqnwkozp c4a6dbc2 fixed 2
     Parent commit: kmkuslsw fcebf6ee fixed 1
-    [EOF]
     ");
 
     // Step back one.
@@ -309,7 +288,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     ○  qpvuntsm test.user@example.com 2001-02-03 08:05:08 aade7195
     │  Initial contents
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["status"]);
@@ -320,7 +298,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     Working copy : kmkuslsw fcebf6ee fixed 1
     Parent commit: yqosqzyt dcb25635 (conflict) (empty) boom-cont-2
     Hint: Conflict in parent commit has been resolved in working copy
-    [EOF]
     ");
 
     // Step back to all the way to `root()+` so that wc has no conflict, even though
@@ -349,7 +326,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     @  qpvuntsm test.user@example.com 2001-02-03 08:05:08 aade7195
     │  Initial contents
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["status"]);
@@ -359,7 +335,6 @@ fn test_status_display_relevant_working_commit_conflict_hints() {
     A conflicted.txt
     Working copy : qpvuntsm aade7195 Initial contents
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 }
 
@@ -408,7 +383,6 @@ fn test_status_simplify_conflict_sides() {
     Then use `jj resolve`, or edit the conflict markers in the file directly.
     Once the conflicts are resolved, you may want to inspect the result with `jj diff`.
     Then run `jj squash` to move the resolution into the conflicted commit.
-    [EOF]
     ");
 }
 
@@ -435,7 +409,6 @@ fn test_status_untracked_files() {
     ? sub/initially-untracked
     Working copy : qpvuntsm 230dd059 (empty) (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     test_env
@@ -460,7 +433,6 @@ fn test_status_untracked_files() {
     ? sub/always-untracked
     Working copy : qpvuntsm 99798fcd (no description set)
     Parent commit: zzzzzzzz 00000000 (empty) (no description set)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -472,7 +444,6 @@ fn test_status_untracked_files() {
     ? sub/always-untracked
     Working copy : mzvwutvl 30e53c74 (empty) (no description set)
     Parent commit: qpvuntsm 99798fcd (no description set)
-    [EOF]
     ");
 
     test_env
@@ -498,7 +469,6 @@ fn test_status_untracked_files() {
     ? sub/initially-untracked
     Working copy : mzvwutvl bb362aaf (no description set)
     Parent commit: qpvuntsm 99798fcd (no description set)
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["new"]).success();
@@ -512,6 +482,5 @@ fn test_status_untracked_files() {
     ? sub/initially-untracked
     Working copy : yostqsxw 8e8c02fe (empty) (no description set)
     Parent commit: mzvwutvl bb362aaf (no description set)
-    [EOF]
     ");
 }

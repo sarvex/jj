@@ -84,7 +84,6 @@ fn test_advance_bookmarks_enabled(make_commit: CommitFn) {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{test_bookmark} desc:
-    [EOF]
     ");
     }
 
@@ -95,7 +94,6 @@ fn test_advance_bookmarks_enabled(make_commit: CommitFn) {
     @  bookmarks{} desc:
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 
@@ -108,7 +106,6 @@ fn test_advance_bookmarks_enabled(make_commit: CommitFn) {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 }
@@ -134,7 +131,6 @@ fn test_advance_bookmarks_at_minus(make_commit: CommitFn) {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{test_bookmark} desc:
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 
@@ -144,7 +140,6 @@ fn test_advance_bookmarks_at_minus(make_commit: CommitFn) {
     @  bookmarks{} desc:
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 
@@ -163,7 +158,6 @@ fn test_advance_bookmarks_at_minus(make_commit: CommitFn) {
     ○  bookmarks{test_bookmark test_bookmark2} desc: second
     ○  bookmarks{} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 }
@@ -190,7 +184,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{test_bookmark} desc:
-    [EOF]
     ");
     }
 
@@ -201,7 +194,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     @  bookmarks{} desc:
     ○  bookmarks{} desc: first
     ◆  bookmarks{test_bookmark} desc:
-    [EOF]
     ");
     }
 
@@ -223,7 +215,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     @  bookmarks{} desc:
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
     make_commit(&test_env, &workspace_path, "second");
@@ -233,7 +224,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 
@@ -253,7 +243,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 
@@ -279,7 +268,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     ○  bookmarks{} desc: second
     ○  bookmarks{} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
     make_commit(&test_env, &workspace_path, "fourth");
@@ -291,7 +279,6 @@ fn test_advance_bookmarks_overrides(make_commit: CommitFn) {
     ○  bookmarks{} desc: second
     ○  bookmarks{} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 }
@@ -323,7 +310,6 @@ fn test_advance_bookmarks_multiple_bookmarks(make_commit: CommitFn) {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{first_bookmark second_bookmark} desc:
-    [EOF]
     ");
     }
 
@@ -334,7 +320,6 @@ fn test_advance_bookmarks_multiple_bookmarks(make_commit: CommitFn) {
     @  bookmarks{} desc:
     ○  bookmarks{first_bookmark second_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
     }
 }
@@ -353,7 +338,6 @@ fn test_new_advance_bookmarks_interior() {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 
     // Create a gap in the commits for us to insert our new commit with --before.
@@ -378,7 +362,6 @@ fn test_new_advance_bookmarks_interior() {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 
     test_env
@@ -391,7 +374,6 @@ fn test_new_advance_bookmarks_interior() {
     ○  bookmarks{test_bookmark} desc: second
     ○  bookmarks{} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 }
 
@@ -408,7 +390,6 @@ fn test_new_advance_bookmarks_before() {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 
     // Create a gap in the commits for us to insert our new commit with --before.
@@ -433,7 +414,6 @@ fn test_new_advance_bookmarks_before() {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 
     test_env
@@ -445,7 +425,6 @@ fn test_new_advance_bookmarks_before() {
     ○  bookmarks{} desc: second
     ○  bookmarks{test_bookmark} desc: first
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 }
 
@@ -468,7 +447,6 @@ fn test_new_advance_bookmarks_after() {
     insta::assert_snapshot!(get_log_output_with_bookmarks(&test_env, &workspace_path), @r"
     @  bookmarks{} desc:
     ◆  bookmarks{test_bookmark} desc:
-    [EOF]
     ");
 
     test_env
@@ -481,7 +459,6 @@ fn test_new_advance_bookmarks_after() {
     @  bookmarks{} desc:
     ○  bookmarks{} desc: first
     ◆  bookmarks{test_bookmark} desc:
-    [EOF]
     ");
 }
 
@@ -521,7 +498,6 @@ fn test_new_advance_bookmarks_merge_children() {
     ├─╯
     ○  bookmarks{test_bookmark} desc: 0
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 
     // The bookmark won't advance because `jj  new` had multiple targets.
@@ -536,6 +512,5 @@ fn test_new_advance_bookmarks_merge_children() {
     ├─╯
     ○  bookmarks{test_bookmark} desc: 0
     ◆  bookmarks{} desc:
-    [EOF]
     ");
 }

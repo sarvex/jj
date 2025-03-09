@@ -92,98 +92,40 @@ fn test_bookmark_names() {
     let test_env = test_env;
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "rename", ""]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    bbb-local	x
-    bbb-tracked	x
-    --repository	Path to repository to operate on
-    --ignore-working-copy	Don't snapshot the working copy, and don't update it
-    --ignore-immutable	Allow rewriting immutable commits
-    --at-operation	Operation to load the repo at
-    --debug	Enable debug logging
-    --color	When to colorize output
-    --quiet	Silence non-primary command output
-    --no-pager	Disable the pager
-    --config	Additional configuration options (can be repeated)
-    --config-file	Additional configuration files (can be repeated)
-    --help	Print help (see more with '--help')
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx\nbbb-local\tx\nbbb-tracked\tx\n--repository\tPath to repository to operate on\n--ignore-working-copy\tDon't snapshot the working copy, and don't update it\n--ignore-immutable\tAllow rewriting immutable commits\n--at-operation\tOperation to load the repo at\n--debug\tEnable debug logging\n--color\tWhen to colorize output\n--quiet\tSilence non-primary command output\n--no-pager\tDisable the pager\n--config\tAdditional configuration options (can be repeated)\n--config-file\tAdditional configuration files (can be repeated)\n--help\tPrint help (see more with '--help')");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "rename", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "delete", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "forget", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    aaa-untracked
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx\naaa-untracked");
 
     let output = test_env.run_jj_in(
         &repo_path,
         ["--", "jj", "bookmark", "list", "--bookmark", "a"],
     );
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    aaa-untracked
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx\naaa-untracked");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "move", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "set", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "track", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-untracked@origin	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-untracked@origin\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "bookmark", "untrack", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-tracked@origin	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-tracked@origin\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "git", "push", "-b", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "git", "fetch", "-b", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa-local	x
-    aaa-tracked	x
-    aaa-untracked
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa-local\tx\naaa-tracked\tx\naaa-untracked");
 }
 
 #[test]
@@ -212,10 +154,7 @@ fn test_global_arg_repository_is_respected() {
             "a",
         ],
     );
-    insta::assert_snapshot!(output, @r"
-    aaa	(no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa\t(no description set)");
 }
 
 #[test]
@@ -243,16 +182,10 @@ fn test_aliases_are_resolved() {
     let test_env = test_env;
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "b", "rename", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa	(no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa\t(no description set)");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "b2", "rename", "a"]);
-    insta::assert_snapshot!(output, @r"
-    aaa	(no description set)
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"aaa\t(no description set)");
 }
 
 #[test]
@@ -264,15 +197,9 @@ fn test_completions_are_generated() {
     let _guard = insta_settings.bind_to_scope();
 
     let output = test_env.run_jj_in(".", [""; 0]);
-    insta::assert_snapshot!(output, @r"
-    complete --keep-order --exclusive --command jj --arguments ..
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"complete --keep-order --exclusive --command jj --arguments ..");
     let output = test_env.run_jj_in(".", ["--"]);
-    insta::assert_snapshot!(output, @r"
-    complete --keep-order --exclusive --command jj --arguments ..
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"complete --keep-order --exclusive --command jj --arguments ..");
 }
 
 #[test]
@@ -296,18 +223,16 @@ fn test_zsh_completion() {
         output.normalize_stdout_with(|s| s.split_inclusive('\n').take(2).collect()), @r"
     abandon:Abandon a revision
     absorb:Move changes from a revision into the stack of mutable revisions
-    [EOF]
     ");
     let output = complete_at(2, &["--", "jj", "--no-pager"]);
     insta::assert_snapshot!(
         output.normalize_stdout_with(|s| s.split_inclusive('\n').take(2).collect()), @r"
     abandon:Abandon a revision
     absorb:Move changes from a revision into the stack of mutable revisions
-    [EOF]
     ");
 
     let output = complete_at(1, &["--", "jj", "b"]);
-    insta::assert_snapshot!(output, @"bookmark:Manage bookmarks [default alias: b][EOF]");
+    insta::assert_snapshot!(output, @"bookmark:Manage bookmarks [default alias: b][no newline]");
 }
 
 #[test]
@@ -325,40 +250,22 @@ fn test_remote_names() {
     test_env.add_env_var("COMPLETE", "fish");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "git", "remote", "remove", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "git", "remote", "rename", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "git", "remote", "set-url", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "git", "push", "--remote", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "git", "fetch", "--remote", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 
     let output = test_env.run_jj_in(".", ["--", "jj", "bookmark", "list", "--remote", "o"]);
-    insta::assert_snapshot!(output, @r"
-    origin
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"origin");
 }
 
 #[test]
@@ -388,10 +295,7 @@ fn test_aliases_are_completed() {
     let test_env = test_env;
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "user-al"]);
-    insta::assert_snapshot!(output, @r"
-    user-alias
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"user-alias");
 
     // make sure --repository flag is respected
     let output = test_env.run_jj_in(
@@ -404,10 +308,7 @@ fn test_aliases_are_completed() {
             "repo-al",
         ],
     );
-    insta::assert_snapshot!(output, @r"
-    repo-alias
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"repo-alias");
 
     // cannot load aliases from --config flag
     let output = test_env.run_jj_in(
@@ -496,48 +397,16 @@ fn test_revisions() {
 
     // complete all revisions
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "diff", "--from", ""]);
-    insta::assert_snapshot!(output, @r"
-    immutable_bookmark	immutable
-    mutable_bookmark	mutable
-    k	working_copy
-    y	mutable
-    q	immutable
-    zq	remote_commit
-    zz	(no description set)
-    remote_bookmark@origin	remote_commit
-    alias_with_newline	    roots(
-    siblings	@-+ ~@
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"immutable_bookmark\timmutable\nmutable_bookmark\tmutable\nk\tworking_copy\ny\tmutable\nq\timmutable\nzq\tremote_commit\nzz\t(no description set)\nremote_bookmark@origin\tremote_commit\nalias_with_newline\t    roots(\nsiblings\t@-+ ~@");
 
     // complete only mutable revisions
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "squash", "--into", ""]);
-    insta::assert_snapshot!(output, @r"
-    mutable_bookmark	mutable
-    k	working_copy
-    y	mutable
-    zq	remote_commit
-    alias_with_newline	    roots(
-    siblings	@-+ ~@
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"mutable_bookmark\tmutable\nk\tworking_copy\ny\tmutable\nzq\tremote_commit\nalias_with_newline\t    roots(\nsiblings\t@-+ ~@");
 
     // complete args of the default command
     test_env.add_config("ui.default-command = 'log'");
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "-r", ""]);
-    insta::assert_snapshot!(output, @r"
-    immutable_bookmark	immutable
-    mutable_bookmark	mutable
-    k	working_copy
-    y	mutable
-    q	immutable
-    zq	remote_commit
-    zz	(no description set)
-    remote_bookmark@origin	remote_commit
-    alias_with_newline	    roots(
-    siblings	@-+ ~@
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"immutable_bookmark\timmutable\nmutable_bookmark\tmutable\nk\tworking_copy\ny\tmutable\nq\timmutable\nzq\tremote_commit\nzz\t(no description set)\nremote_bookmark@origin\tremote_commit\nalias_with_newline\t    roots(\nsiblings\t@-+ ~@");
 }
 
 #[test]
@@ -584,60 +453,32 @@ fn test_operations() {
     insta::assert_snapshot!(add_workspace_id, @"eac759b9ab75");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "show", "5"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    518b588abbc6	(2001-02-03 08:05:09) describe commit 19611c995a342c01f525583e5fcafdd211f6d009
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710\n518b588abbc6\t(2001-02-03 08:05:09) describe commit 19611c995a342c01f525583e5fcafdd211f6d009");
     // make sure global --at-op flag is respected
     let output = test_env.run_jj_in(
         &repo_path,
         ["--", "jj", "--at-op", "518b588abbc6", "op", "show", "5"],
     );
-    insta::assert_snapshot!(output, @r"
-    518b588abbc6	(2001-02-03 08:05:09) describe commit 19611c995a342c01f525583e5fcafdd211f6d009
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"518b588abbc6\t(2001-02-03 08:05:09) describe commit 19611c995a342c01f525583e5fcafdd211f6d009");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "--at-op", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "abandon", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "diff", "--op", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "diff", "--from", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "diff", "--to", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "restore", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "op", "undo", "5b"]);
-    insta::assert_snapshot!(output, @r"
-    5bbb4ca536a8	(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"5bbb4ca536a8\t(2001-02-03 08:05:12) describe commit 968261075dddabf4b0e333c1cc9a49ce26a3f710");
 }
 
 #[test]
@@ -664,11 +505,7 @@ fn test_workspaces() {
     let test_env = test_env;
 
     let output = test_env.run_jj_in(&main_path, ["--", "jj", "workspace", "forget", "def"]);
-    insta::assert_snapshot!(output, @r"
-    def-second	(no description set)
-    default	initial
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"def-second\t(no description set)\ndefault\tinitial");
 }
 
 #[test]
@@ -678,28 +515,13 @@ fn test_config() {
     let dir = test_env.env_root();
 
     let output = test_env.run_jj_in(dir, ["--", "jj", "config", "get", "c"]);
-    insta::assert_snapshot!(output, @r"
-    core.fsmonitor	Whether to use an external filesystem monitor, useful for large repos
-    core.watchman.register-snapshot-trigger	Whether to use triggers to monitor for changes in the background.
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"core.fsmonitor\tWhether to use an external filesystem monitor, useful for large repos\ncore.watchman.register-snapshot-trigger\tWhether to use triggers to monitor for changes in the background.");
 
     let output = test_env.run_jj_in(dir, ["--", "jj", "config", "list", "c"]);
-    insta::assert_snapshot!(output, @r"
-    colors	Mapping from jj formatter labels to colors
-    core
-    core.fsmonitor	Whether to use an external filesystem monitor, useful for large repos
-    core.watchman
-    core.watchman.register-snapshot-trigger	Whether to use triggers to monitor for changes in the background.
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"colors\tMapping from jj formatter labels to colors\ncore\ncore.fsmonitor\tWhether to use an external filesystem monitor, useful for large repos\ncore.watchman\ncore.watchman.register-snapshot-trigger\tWhether to use triggers to monitor for changes in the background.");
 
     let output = test_env.run_jj_in(dir, ["--", "jj", "log", "--config", "c"]);
-    insta::assert_snapshot!(output, @r"
-    core.fsmonitor=	Whether to use an external filesystem monitor, useful for large repos
-    core.watchman.register-snapshot-trigger=	Whether to use triggers to monitor for changes in the background.
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"core.fsmonitor=\tWhether to use an external filesystem monitor, useful for large repos\ncore.watchman.register-snapshot-trigger=\tWhether to use triggers to monitor for changes in the background.");
 
     let output = test_env.run_jj_in(
         dir,
@@ -709,16 +531,12 @@ fn test_config() {
     ui.conflict-marker-style=diff
     ui.conflict-marker-style=snapshot
     ui.conflict-marker-style=git
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         dir,
         ["--", "jj", "log", "--config", "ui.conflict-marker-style=g"],
     );
-    insta::assert_snapshot!(output, @r"
-    ui.conflict-marker-style=git
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"ui.conflict-marker-style=git");
 
     let output = test_env.run_jj_in(
         dir,
@@ -733,7 +551,6 @@ fn test_config() {
     insta::assert_snapshot!(output, @r"
     git.abandon-unreachable-commits=false
     git.abandon-unreachable-commits=true
-    [EOF]
     ");
 }
 
@@ -761,7 +578,6 @@ fn test_template_alias() {
     description_placeholder
     email_placeholder
     name_placeholder
-    [EOF]
     ");
 }
 
@@ -922,7 +738,6 @@ fn test_files() {
     │    A f_interdiff_only_from
     │    A f_interdiff_same
     ◆  zzzzzzzz root() 00000000
-    [EOF]
     ");
 
     let mut test_env = test_env;
@@ -938,7 +753,6 @@ fn test_files() {
     f_not_yet_renamed
     f_renamed
     f_unchanged
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "file", "annotate", "-r@-", "f_"]);
@@ -949,17 +763,9 @@ fn test_files() {
     f_not_yet_renamed
     f_renamed
     f_unchanged
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "diff", "-r", "@-", "f_"]);
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    f_added	Added
-    f_deleted	Deleted
-    f_dir/
-    f_modified	Modified
-    f_renamed	Added
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"f_added\tAdded\nf_deleted\tDeleted\nf_dir/\nf_modified\tModified\nf_renamed\tAdded");
 
     let output = test_env.run_jj_in(
         &repo_path,
@@ -972,26 +778,13 @@ fn test_files() {
             &format!("f_dir{}", std::path::MAIN_SEPARATOR),
         ],
     );
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    f_dir/dir_file_1	Added
-    f_dir/dir_file_2	Added
-    f_dir/dir_file_3	Added
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"f_dir/dir_file_1\tAdded\nf_dir/dir_file_2\tAdded\nf_dir/dir_file_3\tAdded");
 
     let output = test_env.run_jj_in(
         &repo_path,
         ["--", "jj", "diff", "--from", "root()", "--to", "@-", "f_"],
     );
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    f_added	Added
-    f_dir/
-    f_modified	Added
-    f_not_yet_renamed	Added
-    f_renamed	Added
-    f_unchanged	Added
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"f_added\tAdded\nf_dir/\nf_modified\tAdded\nf_not_yet_renamed\tAdded\nf_renamed\tAdded\nf_unchanged\tAdded");
 
     // interdiff has a different behavior with --from and --to flags
     let output = test_env.run_jj_in(
@@ -1005,29 +798,16 @@ fn test_files() {
             "f_",
         ],
     );
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    f_interdiff_only_from	Added
-    f_interdiff_same	Added
-    f_interdiff_only_to	Added
-    f_interdiff_same	Added
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"f_interdiff_only_from\tAdded\nf_interdiff_same\tAdded\nf_interdiff_only_to\tAdded\nf_interdiff_same\tAdded");
 
     // squash has a different behavior with --from and --to flags
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "squash", "-f=first", "f_"]);
-    insta::assert_snapshot!(output.normalize_backslash(), @r"
-    f_deleted	Added
-    f_modified	Added
-    f_not_yet_renamed	Added
-    f_unchanged	Added
-    [EOF]
-    ");
+    insta::assert_snapshot!(output.normalize_backslash(), @"f_deleted\tAdded\nf_modified\tAdded\nf_not_yet_renamed\tAdded\nf_unchanged\tAdded");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "resolve", "-r=conflicted", "f_"]);
     insta::assert_snapshot!(output.normalize_backslash(), @r"
     f_dir/
     f_modified
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["--", "jj", "log", "f_"]);
@@ -1039,7 +819,6 @@ fn test_files() {
     f_not_yet_renamed
     f_renamed
     f_unchanged
-    [EOF]
     ");
     let output = test_env.run_jj_in(
         &repo_path,
@@ -1060,7 +839,6 @@ fn test_files() {
     f_modified
     f_not_yet_renamed
     f_unchanged
-    [EOF]
     ");
 
     let outside_repo = test_env.env_root();

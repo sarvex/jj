@@ -21,7 +21,6 @@ fn test_init_local() {
     insta::assert_snapshot!(output, @r#"
     ------- stderr -------
     Initialized repo in "repo"
-    [EOF]
     "#);
 
     let workspace_root = test_env.env_root().join("repo");
@@ -46,7 +45,6 @@ fn test_init_local() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: --ignore-working-copy is not respected
-    [EOF]
     [exit status: 2]
     ");
 
@@ -54,7 +52,6 @@ fn test_init_local() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: --at-op is not respected
-    [EOF]
     [exit status: 2]
     ");
 }

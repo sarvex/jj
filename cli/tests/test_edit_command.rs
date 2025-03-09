@@ -41,7 +41,6 @@ fn test_edit() {
     Usage: jj edit <REVSET>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -52,14 +51,12 @@ fn test_edit() {
     Working copy now at: qpvuntsm 73383c0b first
     Parent commit      : zzzzzzzz 00000000 (empty) (no description set)
     Added 0 files, modified 1 files, removed 0 files
-    [EOF]
     ");
     let output = get_log_output(&test_env, &repo_path);
     insta::assert_snapshot!(output, @r"
     ○  2c910ae2d628 second
     @  73383c0b6439 first
     ◆  000000000000
-    [EOF]
     ");
     insta::assert_snapshot!(read_file(&repo_path.join("file1")), @"0");
 
@@ -70,10 +67,8 @@ fn test_edit() {
     ○  b384b2cc1883 second
     @  ff3f7b0dc386 first
     ◆  000000000000
-    [EOF]
     ------- stderr -------
     Rebased 1 descendant commits onto updated working copy
-    [EOF]
     ");
 }
 
@@ -124,7 +119,6 @@ fn test_edit_current_wc_commit_missing() {
     1: Current working-copy commit not found
     2: Object fa15625b4a986997697639dfc2844138900c79f2 of type commit not found
     3: An object with id fa15625b4a986997697639dfc2844138900c79f2 could not be found
-    [EOF]
     [exit status: 255]
     ");
 }

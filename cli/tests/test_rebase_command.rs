@@ -37,7 +37,6 @@ fn test_rebase_invalid() {
     Usage: jj rebase <--destination <REVSETS>|--insert-after <REVSETS>|--insert-before <REVSETS>>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -50,7 +49,6 @@ fn test_rebase_invalid() {
     Usage: jj rebase --revisions <REVSETS> <--destination <REVSETS>|--insert-after <REVSETS>|--insert-before <REVSETS>>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -63,7 +61,6 @@ fn test_rebase_invalid() {
     Usage: jj rebase --branch <REVSETS> <--destination <REVSETS>|--insert-after <REVSETS>|--insert-before <REVSETS>>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -76,7 +73,6 @@ fn test_rebase_invalid() {
     Usage: jj rebase --revisions <REVSETS> <--destination <REVSETS>|--insert-after <REVSETS>|--insert-before <REVSETS>>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -92,7 +88,6 @@ fn test_rebase_invalid() {
     Usage: jj rebase --revisions <REVSETS> <--destination <REVSETS>|--insert-after <REVSETS>|--insert-before <REVSETS>>
 
     For more information, try '--help'.
-    [EOF]
     [exit status: 2]
     ");
 
@@ -101,7 +96,6 @@ fn test_rebase_invalid() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Cannot rebase 2443ea76b0b1 onto itself
-    [EOF]
     [exit status: 1]
     ");
 
@@ -110,7 +104,6 @@ fn test_rebase_invalid() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 
@@ -119,7 +112,6 @@ fn test_rebase_invalid() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Cannot rebase 2443ea76b0b1 onto descendant 1394f625cbbd
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -138,20 +130,17 @@ fn test_rebase_empty_sets() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-s=none()", "-d=b"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revset `none()` didn't resolve to any revisions
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-b=none()", "-d=b"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revset `none()` didn't resolve to any revisions
-    [EOF]
     [exit status: 1]
     ");
     // Empty because "b..a" is empty
@@ -159,7 +148,6 @@ fn test_rebase_empty_sets() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Nothing changed.
-    [EOF]
     ");
 }
 
@@ -184,14 +172,12 @@ fn test_rebase_bookmark() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-b", "c", "-d", "e"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Rebased 3 commits onto destination
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  d: b
@@ -201,7 +187,6 @@ fn test_rebase_bookmark() {
     @  e: a
     ○  a
     ◆
-    [EOF]
     ");
 
     // Test rebasing multiple bookmarks at once
@@ -214,7 +199,6 @@ fn test_rebase_bookmark() {
     Working copy now at: znkkpsqq 9ca2a154 e | e
     Parent commit      : zsuskuln 1394f625 b | b
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  e: b
@@ -225,7 +209,6 @@ fn test_rebase_bookmark() {
     ○  b: a
     ○  a
     ◆
-    [EOF]
     ");
 
     // Same test but with more than one revision per argument
@@ -238,7 +221,6 @@ fn test_rebase_bookmark() {
       znkkpsqq e52756c8 e | e
       vruxwmqv 514fa6b2 d | d
     Hint: Prefix the expression with `all:` to allow any number of revisions (i.e. `all:e|d`).
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-b=all:e|d", "-d=b"]);
@@ -249,7 +231,6 @@ fn test_rebase_bookmark() {
     Working copy now at: znkkpsqq 817e3fb0 e | e
     Parent commit      : zsuskuln 1394f625 b | b
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  e: b
@@ -260,7 +241,6 @@ fn test_rebase_bookmark() {
     ○  b: a
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -286,7 +266,6 @@ fn test_rebase_bookmark_with_merge() {
     ○ │  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-b", "d", "-d", "b"]);
@@ -297,7 +276,6 @@ fn test_rebase_bookmark_with_merge() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : vruxwmqv 1677f795 d | d
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    e: a d
@@ -308,7 +286,6 @@ fn test_rebase_bookmark_with_merge() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -320,7 +297,6 @@ fn test_rebase_bookmark_with_merge() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : vruxwmqv 3d0f3644 d | d
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    e: a d
@@ -331,7 +307,6 @@ fn test_rebase_bookmark_with_merge() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -356,7 +331,6 @@ fn test_rebase_single_revision() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Descendants of the rebased commit "c" should be rebased onto parents. First
@@ -369,7 +343,6 @@ fn test_rebase_single_revision() {
     Working copy now at: znkkpsqq 2668ffbe e | e
     Parent commit      : vruxwmqv 7b370c85 d | d
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  e: d
@@ -381,7 +354,6 @@ fn test_rebase_single_revision() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -396,7 +368,6 @@ fn test_rebase_single_revision() {
     Parent commit      : zsuskuln 1394f625 b | b
     Parent commit      : royxmykx c0cb3a0b c | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    e: b c
@@ -408,7 +379,6 @@ fn test_rebase_single_revision() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -431,7 +401,6 @@ fn test_rebase_single_revision_merge_parent() {
     ○ │  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     // Descendants of the rebased commit should be rebased onto parents, and if
@@ -445,7 +414,6 @@ fn test_rebase_single_revision_merge_parent() {
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Parent commit      : zsuskuln d370aee1 b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    d: a b
@@ -456,7 +424,6 @@ fn test_rebase_single_revision_merge_parent() {
     ○ │  a
     ├─╯
     ◆
-    [EOF]
     ");
 }
 
@@ -490,7 +457,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Test with two non-related non-merge commits.
@@ -502,7 +468,6 @@ fn test_rebase_multiple_revisions() {
     Working copy now at: xznxytkn 016685dc i | i
     Parent commit      : kmkuslsw e04d3932 f | f
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  i: f
@@ -520,7 +485,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -535,7 +499,6 @@ fn test_rebase_multiple_revisions() {
     Working copy now at: xznxytkn 94538385 i | i
     Parent commit      : kmkuslsw dae8d293 f | f
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  i: f
@@ -552,7 +515,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -570,7 +532,6 @@ fn test_rebase_multiple_revisions() {
     Parent commit      : royxmykx 7e4fbf4f c | c
     Parent commit      : vruxwmqv 4cc44fbf d | d
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    i: c d
@@ -588,7 +549,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -609,7 +569,6 @@ fn test_rebase_multiple_revisions() {
     Parent commit      : royxmykx 7e4fbf4f c | c
     Parent commit      : znkkpsqq ecf9a1d5 e | e
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    i: c e
@@ -627,7 +586,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env.run_jj_in(&repo_path, ["undo"]).success();
 
@@ -640,7 +598,6 @@ fn test_rebase_multiple_revisions() {
     Working copy now at: xznxytkn 5d911e5c i | i
     Parent commit      : kmkuslsw d1bfda8c f | f
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: d
@@ -656,7 +613,6 @@ fn test_rebase_multiple_revisions() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -679,7 +635,6 @@ fn test_rebase_revision_onto_descendant() {
     ├─╯
     ○  base
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -693,7 +648,6 @@ fn test_rebase_revision_onto_descendant() {
     Parent commit      : royxmykx c84e900d b | b
     Parent commit      : zsuskuln d57db87b a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    merge: b a
@@ -704,7 +658,6 @@ fn test_rebase_revision_onto_descendant() {
     │ ○  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     // Now, let's rebase onto the descendant merge
@@ -716,7 +669,6 @@ fn test_rebase_revision_onto_descendant() {
     Parent commit      : royxmykx cea87a87 b | b
     Parent commit      : zsuskuln 2c5b7858 a | a
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "base", "-d", "merge"]);
     insta::assert_snapshot!(output, @r"
@@ -727,7 +679,6 @@ fn test_rebase_revision_onto_descendant() {
     Parent commit      : royxmykx c07c677c b | b
     Parent commit      : zsuskuln abc90087 a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  base: merge
@@ -737,7 +688,6 @@ fn test_rebase_revision_onto_descendant() {
     ○ │  b
     ├─╯
     ◆
-    [EOF]
     ");
 
     // TODO(ilyagr): These will be good tests for `jj rebase --insert-after` and
@@ -761,14 +711,12 @@ fn test_rebase_multiple_destinations() {
     │ ○  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "a", "-d", "b", "-d", "c"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Rebased 1 commits onto destination
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    a: b c
@@ -777,7 +725,6 @@ fn test_rebase_multiple_destinations() {
     ○ │  b
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "a", "-d", "b|c"]);
@@ -788,7 +735,6 @@ fn test_rebase_multiple_destinations() {
       royxmykx fe2e8e8b c | c
       zsuskuln d370aee1 b | b
     Hint: Prefix the expression with `all:` to allow any number of revisions (i.e. `all:b|c`).
-    [EOF]
     [exit status: 1]
     ");
 
@@ -797,7 +743,6 @@ fn test_rebase_multiple_destinations() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Rebased 1 commits onto destination
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    a: c b
@@ -806,7 +751,6 @@ fn test_rebase_multiple_destinations() {
     @ │  c
     ├─╯
     ◆
-    [EOF]
     ");
 
     // undo and do it again, but with 'ui.always-allow-large-revsets'
@@ -829,14 +773,12 @@ fn test_rebase_multiple_destinations() {
     @ │  c
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "a", "-d", "b", "-d", "b"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: More than one revset resolved to revision d370aee184ba
-    [EOF]
     [exit status: 1]
     ");
 
@@ -848,7 +790,6 @@ fn test_rebase_multiple_destinations() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: More than one revset resolved to revision d370aee184ba
-    [EOF]
     [exit status: 1]
     ");
 
@@ -856,7 +797,6 @@ fn test_rebase_multiple_destinations() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The Git backend does not support creating merge commits with the root commit as one of the parents.
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -880,7 +820,6 @@ fn test_rebase_with_descendants() {
     ○ │  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-s", "b", "-d", "a"]);
@@ -889,7 +828,6 @@ fn test_rebase_with_descendants() {
     Rebased 3 commits onto destination
     Working copy now at: vruxwmqv 705832bd d | d
     Parent commit      : royxmykx 57c7246a c | c
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  d: c
@@ -899,7 +837,6 @@ fn test_rebase_with_descendants() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Rebase several subtrees at once.
@@ -911,7 +848,6 @@ fn test_rebase_with_descendants() {
     Working copy now at: vruxwmqv 92c2bc9a d | d
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  d: a
@@ -921,7 +857,6 @@ fn test_rebase_with_descendants() {
     │ ○  b
     ├─╯
     ◆
-    [EOF]
     ");
 
     test_env.run_jj_in(&repo_path, ["undo"]).success();
@@ -934,7 +869,6 @@ fn test_rebase_with_descendants() {
     ○ │  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     // `d` was a descendant of `b`, and both are moved to be direct descendants of
@@ -946,7 +880,6 @@ fn test_rebase_with_descendants() {
     Working copy now at: vruxwmqv f1e71cb7 d | d
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  d: a
@@ -956,7 +889,6 @@ fn test_rebase_with_descendants() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Same test as above, but with multiple commits per argument
@@ -969,7 +901,6 @@ fn test_rebase_with_descendants() {
       vruxwmqv df54a9fd d | d
       zsuskuln d370aee1 b | b
     Hint: Prefix the expression with `all:` to allow any number of revisions (i.e. `all:b|d`).
-    [EOF]
     [exit status: 1]
     ");
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-s=all:b|d", "-d=a"]);
@@ -979,7 +910,6 @@ fn test_rebase_with_descendants() {
     Working copy now at: vruxwmqv d17539f7 d | d
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  d: a
@@ -989,7 +919,6 @@ fn test_rebase_with_descendants() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -1013,7 +942,6 @@ fn test_rebase_error_revision_does_not_exist() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `this` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 
@@ -1021,7 +949,6 @@ fn test_rebase_error_revision_does_not_exist() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Revision `this` doesn't exist
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -1050,7 +977,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     // ===================== rebase -s tests =================
@@ -1060,7 +986,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1071,7 +996,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1083,7 +1007,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ------- stderr -------
     Skipped rebase of 3 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1094,7 +1017,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1106,7 +1028,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Rebased 3 commits onto destination
     Working copy now at: znkkpsqq cf8ecff5 c | c
     Parent commit      : vruxwmqv 24e1a270 b | b
-    [EOF]
     ");
     // Commit "a" should be rebased onto the root commit. Commit "b" should have
     // "base" and "a" as parents as before.
@@ -1119,7 +1040,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○ │  notroot
     ├─╯
     ◆
-    [EOF]
     ");
 
     // ===================== rebase -b tests =================
@@ -1136,7 +1056,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     // The commits in roots(base..c), i.e. commit "a" should be rebased onto "base",
@@ -1146,7 +1065,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ------- stderr -------
     Skipped rebase of 3 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1157,7 +1075,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1169,7 +1086,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Rebased 2 commits onto destination
     Working copy now at: znkkpsqq 76914dcc c | c
     Parent commit      : vruxwmqv f73f03c7 b | b
-    [EOF]
     ");
     // The commits in roots(a..c), i.e. commit "b" should be rebased onto "a",
     // which means "b" loses its "base" parent
@@ -1180,7 +1096,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1192,7 +1107,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ------- stderr -------
     Skipped rebase of 5 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1203,7 +1117,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     // ===================== rebase -r tests =================
@@ -1220,7 +1133,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "base", "-d", "root()"]);
@@ -1231,7 +1143,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Working copy now at: znkkpsqq 45371aaf c | c
     Parent commit      : vruxwmqv c0a76bf4 b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // The user would expect unsimplified ancestry here.
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1244,7 +1155,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     │ ○  base
     ├─╯
     ◆
-    [EOF]
     ");
 
     // This tests the algorithm for rebasing onto descendants. The result should
@@ -1260,7 +1170,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Working copy now at: znkkpsqq e28fa972 c | c
     Parent commit      : vruxwmqv 8d0eeb6a b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1272,7 +1181,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ├─╯
     ○  notroot
     ◆
-    [EOF]
     ");
 
     // This tests the algorithm for rebasing onto descendants. The result should
@@ -1288,7 +1196,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Working copy now at: znkkpsqq a9da974c c | c
     Parent commit      : vruxwmqv 0072139c b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: b
@@ -1300,7 +1207,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ├─╯
     ○  notroot
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1316,7 +1222,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-r", "a", "-d", "root()"]);
@@ -1327,7 +1232,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Working copy now at: znkkpsqq 7210b05e c | c
     Parent commit      : vruxwmqv da3f7511 b | b
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // In this case, it is unclear whether the user would always prefer unsimplified
     // ancestry (whether `b` should also be a direct child of the root commit).
@@ -1339,7 +1243,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     │ ○  a
     ├─╯
     ◆
-    [EOF]
     ");
 
     test_env
@@ -1354,7 +1257,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Parent commit      : zsuskuln 0a7fb8f6 base | base
     Parent commit      : royxmykx 86a06598 a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     // The user would expect unsimplified ancestry here.
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
@@ -1367,7 +1269,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     │ ○  b
     ├─╯
     ◆
-    [EOF]
     ");
 
     // This tests the algorithm for rebasing onto descendants. The result should
@@ -1384,7 +1285,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Parent commit      : zsuskuln 0a7fb8f6 base | base
     Parent commit      : royxmykx 86a06598 a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  b: c
@@ -1395,7 +1295,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 
     // In this test, the commit with weird ancestry is not rebased (neither directly
@@ -1410,7 +1309,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     Working copy now at: znkkpsqq 7a3bc050 c | c
     Parent commit      : royxmykx 86a06598 a | a
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  c: a
@@ -1421,7 +1319,6 @@ fn test_rebase_with_child_and_descendant_bug_2600() {
     ○  base: notroot
     ○  notroot
     ◆
-    [EOF]
     ");
 }
 
@@ -1455,7 +1352,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -1468,7 +1364,6 @@ fn test_rebase_after() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -1484,7 +1379,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Rebasing a commit after itself should be a no-op.
@@ -1493,7 +1387,6 @@ fn test_rebase_after() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -1509,7 +1402,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Rebase a commit after another commit. "c" has parents "b2" and "b4", so its
@@ -1521,7 +1413,6 @@ fn test_rebase_after() {
     Rebased 3 descendant commits
     Working copy now at: xznxytkn e0e873c8 f | f
     Parent commit      : kmkuslsw 754793f3 c | c
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: c
@@ -1537,7 +1428,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1552,7 +1442,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 9804b742 f | f
     Parent commit      : kmkuslsw cd86b3e4 c | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: f
@@ -1568,7 +1457,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1583,7 +1471,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 80c27408 f | f
     Parent commit      : zsuskuln 072d5ae1 b1 | b1
     Added 0 files, modified 0 files, removed 5 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -1599,7 +1486,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1614,7 +1500,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn ebbc24b1 f | f
     Parent commit      : royxmykx 2b8e1148 b2 | b2
     Added 0 files, modified 0 files, removed 4 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -1630,7 +1515,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1647,7 +1531,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 8f8c91d3 f | f
     Parent commit      : kmkuslsw cd86b3e4 c | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: f
@@ -1663,7 +1546,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1681,7 +1563,6 @@ fn test_rebase_after() {
     Parent commit      : nkmrtpmo 858693f7 e | e
     Parent commit      : lylxulpl 7d0512e5 d | d
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    f: e d
@@ -1698,7 +1579,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1713,7 +1593,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 0b53613e f | f
     Parent commit      : kmkuslsw 193687bb c | c
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: c
@@ -1730,7 +1609,6 @@ fn test_rebase_after() {
       ├─╯
       ○  a
       ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1749,7 +1627,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn eaf1d6b8 f | f
     Parent commit      : nkmrtpmo 0d7e4ce9 e | e
     Added 0 files, modified 0 files, removed 3 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    c: b2 b4
@@ -1767,7 +1644,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1782,7 +1658,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 9bc7e54c f | f
     Parent commit      : nkmrtpmo 0f80251b e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -1798,7 +1673,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1815,7 +1689,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 0875aabc f | f
     Parent commit      : nkmrtpmo d429661b e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -1830,7 +1703,6 @@ fn test_rebase_after() {
     ○  c: b2
     ○  b2
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1849,7 +1721,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn 3238a418 f | f
     Parent commit      : kmkuslsw 6a51bd41 c | c
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: c
@@ -1865,7 +1736,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1877,7 +1747,6 @@ fn test_rebase_after() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -1893,7 +1762,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1911,7 +1779,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn a4ace41c f | f
     Parent commit      : nkmrtpmo c7744d08 e | e
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    b4: d f
@@ -1929,7 +1796,6 @@ fn test_rebase_after() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1946,7 +1812,6 @@ fn test_rebase_after() {
     Working copy now at: xznxytkn b4078b57 f | f
     Parent commit      : nkmrtpmo 1b95558f e | e
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    b2: d f
@@ -1961,7 +1826,6 @@ fn test_rebase_after() {
     ○  b1: a
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -1975,7 +1839,6 @@ fn test_rebase_after() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit 2b8e1148290f would be both an ancestor and a descendant of the rebased commits
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -2010,7 +1873,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -2023,7 +1885,6 @@ fn test_rebase_before() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2039,7 +1900,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Rebasing a commit before itself should be a no-op.
@@ -2048,7 +1908,6 @@ fn test_rebase_before() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2064,7 +1923,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     // Rebasing a commit before the root commit should error.
@@ -2072,7 +1930,6 @@ fn test_rebase_before() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: The root commit 000000000000 is immutable
-    [EOF]
     [exit status: 1]
     ");
 
@@ -2085,7 +1942,6 @@ fn test_rebase_before() {
     Rebased 8 descendant commits
     Working copy now at: xznxytkn 24335685 f | f
     Parent commit      : nkmrtpmo e9a28d4b e | e
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2101,7 +1957,6 @@ fn test_rebase_before() {
     ○  a: c
     ○  c
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2116,7 +1971,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 8e3b728a f | f
     Parent commit      : kmkuslsw cd86b3e4 c | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: f
@@ -2132,7 +1986,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2147,7 +2000,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 2b4f48f8 f | f
     Parent commit      : zsuskuln 072d5ae1 b1 | b1
     Added 0 files, modified 0 files, removed 5 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -2163,7 +2015,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2178,7 +2029,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 488ebb95 f | f
     Parent commit      : rlvkpnrz 2443ea76 a | a
     Added 0 files, modified 0 files, removed 6 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -2194,7 +2044,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2212,7 +2061,6 @@ fn test_rebase_before() {
     Parent commit      : royxmykx 2b8e1148 b2 | b2
     Parent commit      : znkkpsqq a52a83a4 b4 | b4
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -2228,7 +2076,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2245,7 +2092,6 @@ fn test_rebase_before() {
     Rebased 5 descendant commits
     Working copy now at: xznxytkn 8268ec4d f | f
     Parent commit      : nkmrtpmo fd26fbd4 e | e
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2261,7 +2107,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2281,7 +2126,6 @@ fn test_rebase_before() {
     Parent commit      : zsuskuln 072d5ae1 b1 | b1
     Parent commit      : vruxwmqv 523e6a8b b3 | b3
     Added 0 files, modified 0 files, removed 4 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  e: c
@@ -2299,7 +2143,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2317,7 +2160,6 @@ fn test_rebase_before() {
     Rebased 7 descendant commits
     Working copy now at: xznxytkn fabd8dd7 f | f
     Parent commit      : nkmrtpmo b5933877 e | e
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2335,7 +2177,6 @@ fn test_rebase_before() {
     ○ │  b2
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2352,7 +2193,6 @@ fn test_rebase_before() {
     Rebased 3 descendant commits
     Working copy now at: xznxytkn cbe2be58 f | f
     Parent commit      : nkmrtpmo e31053d1 e | e
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2370,7 +2210,6 @@ fn test_rebase_before() {
       ├─╯
       ○  a
       ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2388,7 +2227,6 @@ fn test_rebase_before() {
     Rebased 7 descendant commits
     Working copy now at: xznxytkn 1c48b514 f | f
     Parent commit      : kmkuslsw c0fd979a c | c
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: c
@@ -2404,7 +2242,6 @@ fn test_rebase_before() {
     ○  e: b1
     ○  b1
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2421,7 +2258,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn f5991dc7 f | f
     Parent commit      : nkmrtpmo 37894e3c e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2436,7 +2272,6 @@ fn test_rebase_before() {
     ○  c: b2
     ○  b2
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2453,7 +2288,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 308a31e9 f | f
     Parent commit      : nkmrtpmo 538444a5 e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2468,7 +2302,6 @@ fn test_rebase_before() {
     ○  c: b2
     ○  b2
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2481,7 +2314,6 @@ fn test_rebase_before() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2497,7 +2329,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2515,7 +2346,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 84704387 f | f
     Parent commit      : nkmrtpmo cff61821 e | e
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○    b4: d f
@@ -2533,7 +2363,6 @@ fn test_rebase_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2551,7 +2380,6 @@ fn test_rebase_before() {
     Working copy now at: xznxytkn 16422f85 f | f
     Parent commit      : nkmrtpmo ef9dea83 e | e
     Added 0 files, modified 0 files, removed 2 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○  b2: b1
@@ -2566,7 +2394,6 @@ fn test_rebase_before() {
     ○  b3: a
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2580,7 +2407,6 @@ fn test_rebase_before() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit 2b8e1148290f would be both an ancestor and a descendant of the rebased commits
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -2618,7 +2444,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     let setup_opid = test_env.current_operation_id(&repo_path);
 
@@ -2635,7 +2460,6 @@ fn test_rebase_after_before() {
     Working copy now at: nmzmmopx 56c81c6d f | f
     Parent commit      : nkmrtpmo ff196f69 d | d
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: d
@@ -2652,7 +2476,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2672,7 +2495,6 @@ fn test_rebase_after_before() {
     Parent commit      : xznxytkn b3e6aadf e | e
     Parent commit      : nkmrtpmo db529447 d | d
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @    f: e d
@@ -2691,7 +2513,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2712,7 +2533,6 @@ fn test_rebase_after_before() {
     Working copy now at: nmzmmopx 2be98daf f | f
     Parent commit      : xznxytkn 911fc846 e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2730,7 +2550,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2756,7 +2575,6 @@ fn test_rebase_after_before() {
     Parent commit      : nkmrtpmo 4a8ca156 d | d
     Parent commit      : xznxytkn 0cc1825e e | e
     Added 1 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @        f: b1 b2 d e
@@ -2775,7 +2593,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2793,7 +2610,6 @@ fn test_rebase_after_before() {
     Working copy now at: nmzmmopx 951204cf f | f
     Parent commit      : xznxytkn fe8ec4e2 e | e
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     ○      b1: a d f
@@ -2811,7 +2627,6 @@ fn test_rebase_after_before() {
     │ ○  x
     ├─╯
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2831,7 +2646,6 @@ fn test_rebase_after_before() {
     Working copy now at: nmzmmopx 4496f88e f | f
     Parent commit      : xznxytkn a85404a6 e | e
     Added 3 files, modified 0 files, removed 0 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  f: e
@@ -2849,7 +2663,6 @@ fn test_rebase_after_before() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
     test_env
         .run_jj_in(&repo_path, ["op", "restore", &setup_opid])
@@ -2863,7 +2676,6 @@ fn test_rebase_after_before() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Error: Refusing to create a loop: commit 31b84afe1c8f would be both an ancestor and a descendant of the rebased commits
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -2899,7 +2711,6 @@ fn test_rebase_skip_emptied() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(&repo_path, ["rebase", "-d=b", "--skip-emptied"]);
@@ -2909,7 +2720,6 @@ fn test_rebase_skip_emptied() {
     Abandoned 1 newly emptied commits
     Working copy now at: yostqsxw bc4222f2 (empty) also already empty
     Parent commit      : vruxwmqv 6b41ecb2 (empty) already empty
-    [EOF]
     ");
 
     // The parent commit became empty and was dropped, but the already empty commits
@@ -2920,7 +2730,6 @@ fn test_rebase_skip_emptied() {
     ○  b
     ○  a
     ◆
-    [EOF]
     ");
 
     test_env
@@ -2935,7 +2744,6 @@ fn test_rebase_skip_emptied() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -2954,7 +2762,6 @@ fn test_rebase_skip_emptied() {
     Working copy now at: yostqsxw 74149b9b (empty) also already empty
     Parent commit      : vruxwmqv 3bdb2801 (empty) already empty
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
 
     // Rebasing a single commit which becomes empty abandons that commit, whilst its
@@ -2966,7 +2773,6 @@ fn test_rebase_skip_emptied() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -3003,7 +2809,6 @@ fn test_rebase_skip_emptied_descendants() {
     ├─╯
     ○  a
     ◆
-    [EOF]
     ");
 
     let output = test_env.run_jj_in(
@@ -3016,7 +2821,6 @@ fn test_rebase_skip_emptied_descendants() {
     Rebased 3 descendant commits
     Working copy now at: znkkpsqq 353bac5c (empty) also already empty
     Parent commit      : yostqsxw 0a3f76fd (empty) already empty
-    [EOF]
     ");
 
     // Commits not in the rebase target set should not be abandoned even if they
@@ -3028,7 +2832,6 @@ fn test_rebase_skip_emptied_descendants() {
     ○  b
     ○  a
     ◆
-    [EOF]
     ");
 }
 
@@ -3058,7 +2861,6 @@ fn test_rebase_skip_if_on_destination() {
     ├─╯
     ○  a  rlvkpnrz  2443ea76
     ◆    zzzzzzzz  00000000
-    [EOF]
     ");
 
     // Skip rebase with -b
@@ -3067,7 +2869,6 @@ fn test_rebase_skip_if_on_destination() {
     ------- stderr -------
     Skipped rebase of 6 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_long_log_output(&test_env, &repo_path), @r"
     @  f  lylxulpl  88f778c5:  e
@@ -3081,7 +2882,6 @@ fn test_rebase_skip_if_on_destination() {
     ├─╯
     ○  a  rlvkpnrz  2443ea76
     ◆    zzzzzzzz  00000000
-    [EOF]
     ");
 
     // Skip rebase with -s
@@ -3090,7 +2890,6 @@ fn test_rebase_skip_if_on_destination() {
     ------- stderr -------
     Skipped rebase of 4 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_long_log_output(&test_env, &repo_path), @r"
     @  f  lylxulpl  88f778c5:  e
@@ -3104,7 +2903,6 @@ fn test_rebase_skip_if_on_destination() {
     ├─╯
     ○  a  rlvkpnrz  2443ea76
     ◆    zzzzzzzz  00000000
-    [EOF]
     ");
 
     // Skip rebase with -r since commit has no children
@@ -3113,7 +2911,6 @@ fn test_rebase_skip_if_on_destination() {
     ------- stderr -------
     Skipped rebase of 1 commits that were already in place
     Nothing changed.
-    [EOF]
     ");
     insta::assert_snapshot!(get_long_log_output(&test_env, &repo_path), @r"
     @  f  lylxulpl  88f778c5:  e
@@ -3127,7 +2924,6 @@ fn test_rebase_skip_if_on_destination() {
     ├─╯
     ○  a  rlvkpnrz  2443ea76
     ◆    zzzzzzzz  00000000
-    [EOF]
     ");
 
     // Skip rebase of commit, but rebases children onto destination with -r
@@ -3139,7 +2935,6 @@ fn test_rebase_skip_if_on_destination() {
     Working copy now at: lylxulpl 77cb229f f | f
     Parent commit      : vruxwmqv c41e416e c | c
     Added 0 files, modified 0 files, removed 1 files
-    [EOF]
     ");
     insta::assert_snapshot!(get_long_log_output(&test_env, &repo_path), @r"
     @  f  lylxulpl  77cb229f:  c
@@ -3154,7 +2949,6 @@ fn test_rebase_skip_if_on_destination() {
     ├─╯
     ○  a  rlvkpnrz  2443ea76
     ◆    zzzzzzzz  00000000
-    [EOF]
     ");
 }
 

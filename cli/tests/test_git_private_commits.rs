@@ -113,7 +113,6 @@ fn test_git_private_commits_block_pushing() {
     Error: Won't push commit aa3058ff8663 since it is private
     Hint: Rejected commit: yqosqzyt aa3058ff main* | (empty) private 1
     Hint: Configured git.private-commits: 'description(glob:'private*')'
-    [EOF]
     [exit status: 1]
     ");
 
@@ -127,7 +126,6 @@ fn test_git_private_commits_block_pushing() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: znkkpsqq 2e1adf47 (empty) (no description set)
     Parent commit      : yqosqzyt aa3058ff main | (empty) private 1
-    [EOF]
     ");
 }
 
@@ -150,7 +148,6 @@ fn test_git_private_commits_can_be_overridden() {
     Error: Won't push commit aa3058ff8663 since it is private
     Hint: Rejected commit: yqosqzyt aa3058ff main* | (empty) private 1
     Hint: Configured git.private-commits: 'description(glob:'private*')'
-    [EOF]
     [exit status: 1]
     ");
 
@@ -163,7 +160,6 @@ fn test_git_private_commits_can_be_overridden() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: znkkpsqq 2e1adf47 (empty) (no description set)
     Parent commit      : yqosqzyt aa3058ff main | (empty) private 1
-    [EOF]
     ");
 }
 
@@ -188,7 +184,6 @@ fn test_git_private_commits_are_not_checked_if_immutable() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: yostqsxw dce4a15c (empty) (no description set)
     Parent commit      : yqosqzyt aa3058ff main | (empty) private 1
-    [EOF]
     ");
 }
 
@@ -218,7 +213,6 @@ fn test_git_private_commits_not_directly_in_line_block_pushing() {
     Error: Won't push commit f1253a9b1ea9 since it is private
     Hint: Rejected commit: yqosqzyt f1253a9b (empty) private 1
     Hint: Configured git.private-commits: 'description(glob:'private*')'
-    [EOF]
     [exit status: 1]
     ");
 }
@@ -243,7 +237,6 @@ fn test_git_private_commits_descending_from_commits_pushed_do_not_block_pushing(
     ------- stderr -------
     Changes to push to origin:
       Move forward bookmark main from 7eb97bf230ad to 05ef53bc99ec
-    [EOF]
     ");
 }
 
@@ -282,7 +275,6 @@ fn test_git_private_commits_already_on_the_remote_do_not_block_push() {
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
     Working copy now at: kpqxywon a7b08364 (empty) (no description set)
     Parent commit      : yostqsxw fbb35276 main | (empty) public 3
-    [EOF]
     ");
 
     test_env.add_config(r#"git.private-commits = "description(glob:'private*')""#);
@@ -296,7 +288,6 @@ fn test_git_private_commits_already_on_the_remote_do_not_block_push() {
     ------- stderr -------
     Changes to push to origin:
       Move forward bookmark bookmark1 from 7eb97bf230ad to fbb352762352
-    [EOF]
     ");
 
     // Ensure that the already-pushed commit doesn't block a new bookmark from
@@ -318,7 +309,6 @@ fn test_git_private_commits_already_on_the_remote_do_not_block_push() {
     ------- stderr -------
     Changes to push to origin:
       Add bookmark bookmark2 to ee5b808b0b95
-    [EOF]
     ");
 }
 
@@ -344,7 +334,6 @@ fn test_git_private_commits_are_evaluated_separately_for_each_remote() {
     ------- stderr -------
     Changes to push to origin:
       Move forward bookmark main from 7eb97bf230ad to d8632ce893ab
-    [EOF]
     ");
 
     test_env.add_config(r#"git.private-commits = "description(glob:'private*')""#);
@@ -360,7 +349,6 @@ fn test_git_private_commits_are_evaluated_separately_for_each_remote() {
     Error: Won't push commit 36b7ecd11ad9 since it is private
     Hint: Rejected commit: znkkpsqq 36b7ecd1 (empty) private 1
     Hint: Configured git.private-commits: 'description(glob:'private*')'
-    [EOF]
     [exit status: 1]
     ");
 }

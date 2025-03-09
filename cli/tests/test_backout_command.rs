@@ -29,13 +29,9 @@ fn test_backout() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
-    insta::assert_snapshot!(output, @r"
-    A a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A a");
 
     // Backout the commit
     let output = test_env.run_jj_in(&repo_path, ["backout", "-r", "@"]);
@@ -46,13 +42,9 @@ fn test_backout() {
     │  This backs out commit 2443ea76b0b1c531326908326aab7020abab8e6c.
     @  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     "#);
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@+"]);
-    insta::assert_snapshot!(output, @r"
-    D a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"D a");
 
     // Backout the new backed-out commit
     test_env.run_jj_in(&repo_path, ["edit", "@+"]).success();
@@ -67,13 +59,9 @@ fn test_backout() {
     │  This backs out commit 2443ea76b0b1c531326908326aab7020abab8e6c.
     ○  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     "#);
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s", "-r", "@+"]);
-    insta::assert_snapshot!(output, @r"
-    A a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A a");
 }
 
 #[test]
@@ -102,7 +90,6 @@ fn test_backout_multiple() {
     ○  46cc97af6802 b
     ○  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     ");
 
     // Backout multiple commits
@@ -124,7 +111,6 @@ fn test_backout_multiple() {
     ○  46cc97af6802 b
     ○  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     "#);
     // View the output of each backed out commit
     let output = test_env.run_jj_in(&repo_path, ["show", "@+"]);
@@ -142,7 +128,6 @@ fn test_backout_multiple() {
        1    1: a
        2    2: b
        3     : c
-    [EOF]
     "#);
     let output = test_env.run_jj_in(&repo_path, ["show", "@++"]);
     insta::assert_snapshot!(output, @r#"
@@ -157,7 +142,6 @@ fn test_backout_multiple() {
 
     Removed regular file b:
        1     : b
-    [EOF]
     "#);
     let output = test_env.run_jj_in(&repo_path, ["show", "@+++"]);
     insta::assert_snapshot!(output, @r#"
@@ -173,7 +157,6 @@ fn test_backout_multiple() {
     Modified regular file a:
        1    1: a
        2     : b
-    [EOF]
     "#);
 }
 
@@ -200,13 +183,9 @@ fn test_backout_description_template() {
     insta::assert_snapshot!(get_log_output(&test_env, &repo_path), @r"
     @  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     ");
     let output = test_env.run_jj_in(&repo_path, ["diff", "-s"]);
-    insta::assert_snapshot!(output, @r"
-    A a
-    [EOF]
-    ");
+    insta::assert_snapshot!(output, @"A a");
 
     // Verify that message of backed out commit follows the template
     let output = test_env.run_jj_in(&repo_path, ["backout", "-r", "a"]);
@@ -215,7 +194,6 @@ fn test_backout_description_template() {
     ○  1db880a5204e Revert commit 2443ea76b0b1 "a"
     @  2443ea76b0b1 a
     ◆  000000000000
-    [EOF]
     "#);
 }
 
