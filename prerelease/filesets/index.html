@@ -740,6 +740,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#quoting-file-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quoting file names
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#file-patterns" class="md-nav__link">
     <span class="md-ellipsis">
       File patterns
@@ -1517,6 +1526,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#quoting-file-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quoting file names
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#file-patterns" class="md-nav__link">
     <span class="md-ellipsis">
       File patterns
@@ -1573,6 +1591,7 @@
 Expressions in this language are called "filesets" (the idea comes from
 <a href="https://repo.mercurial-scm.org/hg/help/filesets">Mercurial</a>). The language
 consists of file patterns, operators, and functions.</p>
+<h2 id="quoting-file-names">Quoting file names<a class="headerlink" href="#quoting-file-names" title="Permanent link">&para;</a></h2>
 <p>Many <code>jj</code> commands accept fileset expressions as positional arguments. File
 names passed to these commands <a href="../templates/#string-literals">must be quoted</a> if they contain
 whitespace or meta characters. However, as a special case, quotes can be omitted
@@ -1588,12 +1607,14 @@ required:</p>
 <li><code>jj diff '~glob:**/*.rs'</code></li>
 </ul>
 <h2 id="file-patterns">File patterns<a class="headerlink" href="#file-patterns" title="Permanent link">&para;</a></h2>
-<p>The following patterns are supported:</p>
+<p>The following patterns are supported. In all cases, we do not mention any shell
+quoting that might be necessary, and the quotes around <code>"path"</code> are optional if
+the path <a href="#quoting-file-names">has no special characters</a>.</p>
 <ul>
-<li><code>"path"</code>, <code>path</code> (the quotes are optional), or <code>cwd:"path"</code>: Matches
-  cwd-relative path prefix (file or files under directory recursively.)</li>
-<li><code>cwd-file:"path"</code> or <code>file:"path"</code>: Matches cwd-relative file (or exact) path.</li>
-<li><code>cwd-glob:"pattern"</code> or <code>glob:"pattern"</code>: Matches file paths with cwd-relative
+<li><code>"path"</code> or <code>cwd:"path"</code>: Matches cwd-relative path prefix (file or files
+  under directory recursively.)</li>
+<li><code>file:"path"</code> or <code>cwd-file:"path"</code>: Matches cwd-relative file (or exact) path.</li>
+<li><code>glob:"pattern"</code> or <code>cwd-glob:"pattern"</code>: Matches file paths with cwd-relative
   Unix-style shell <a href="https://docs.rs/glob/latest/glob/struct.Pattern.html">wildcard <code>pattern</code></a>. For example, <code>glob:"*.c"</code> will
   match all <code>.c</code> files in the current working directory non-recursively.</li>
 <li><code>root:"path"</code>: Matches workspace-relative path prefix (file or files under
