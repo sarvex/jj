@@ -7105,8 +7105,9 @@ Martin von Zweigbergk</p>
 <h6 id="options_16"><strong>Options:</strong><a class="headerlink" href="#options_16" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
-<p><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> — Show changes in this revision, compared to its parent(s)</p>
-<p>If the revision is a merge commit, this shows changes <em>from</em> the automatic merge of the contents of all of its parents <em>to</em> the contents of the revision itself.</p>
+<p><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — Show changes in these revisions</p>
+<p>If there are multiple revisions, then then total diff for all of them will be shown. For example, if you have a linear chain of revisions A..D, then <code>jj diff -r B::D</code> equals <code>jj diff --from A --to D</code>. Multiple heads and/or roots are supported, but gaps in the revset are not supported (e.g. <code>jj diff -r 'A|C'</code> in a linear chain A..C).</p>
+<p>If a revision is a merge commit, this shows changes <em>from</em> the automatic merge of the contents of all of its parents <em>to</em> the contents of the revision itself.</p>
 </li>
 <li>
 <p><code>-f</code>, <code>--from &lt;REVSET&gt;</code> — Show changes from this revision</p>
