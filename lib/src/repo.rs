@@ -55,7 +55,6 @@ use crate::index::IndexStore;
 use crate::index::MutableIndex;
 use crate::index::ReadonlyIndex;
 use crate::local_backend::LocalBackend;
-use crate::merge::trivial_merge;
 use crate::merge::MergeBuilder;
 use crate::object_id::HexPrefix;
 use crate::object_id::ObjectId;
@@ -1673,20 +1672,19 @@ impl MutableRepo {
         let changed_wc_commits = diff_named_commit_ids(base.wc_commit_ids(), other.wc_commit_ids());
         for (workspace_id, (base_target, other_target)) in changed_wc_commits {
             let self_target = self.view().get_wc_commit_id(workspace_id);
-            if let Some(&new_target) = trivial_merge(&[self_target, base_target, other_target]) {
-                if let Some(target) = new_target.cloned() {
-                    self.view_mut().set_wc_commit(workspace_id.clone(), target);
+            if let Some(other_target) = other_target {
+                if base_target == self_target {
+                    self.view_mut()
+                        .set_wc_commit(workspace_id.clone(), other_target.clone());
                 } else {
-                    self.view_mut().remove_wc_commit(workspace_id);
+                    // If there's a conflict, we keep the `self` side unchanged
                 }
             } else {
-                // If there's a conflict, we keep the `self` side unchanged, with one exception
-                // below.
-                if other_target.is_none() {
-                    // The other side removed the workspace. We want to remove it even if the self
-                    // side changed the working-copy commit. TODO(ilyagr): I'm not sure why
-                    self.view_mut().remove_wc_commit(workspace_id);
-                }
+                // The other side removed the workspace. We want to remove it
+                // even in the conflicted case (if the self side also changed
+                // the working-copy commit). TODO(ilyagr): I'm not sure why
+                // doing this in the conflicted case makes sense.
+                self.view_mut().remove_wc_commit(workspace_id);
             }
         }
 
