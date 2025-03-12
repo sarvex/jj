@@ -55,6 +55,7 @@ use crate::index::IndexStore;
 use crate::index::MutableIndex;
 use crate::index::ReadonlyIndex;
 use crate::local_backend::LocalBackend;
+use crate::merge::trivial_merge;
 use crate::merge::MergeBuilder;
 use crate::object_id::HexPrefix;
 use crate::object_id::ObjectId;
@@ -1665,35 +1666,27 @@ impl MutableRepo {
     }
 
     fn merge_view(&mut self, base: &View, other: &View) -> BackendResult<()> {
-        let mut workspace_updates = vec![];
-        for (workspace_id, (my_commit, other_commit)) in
-            diff_named_commit_ids(self.view().wc_commit_ids(), other.wc_commit_ids())
-        {
-            // We never have `my_commit == other_commit` as
-            // `diff_named_commit_ids` omits such pairs. This is fine; we want
-            // to keep the `self` side unchanged in such cases.
-            let base_wc_commit = base.get_wc_commit_id(workspace_id);
-            let changed_commit = if my_commit == base_wc_commit {
-                other_commit
-            } else if other_commit == base_wc_commit {
-                // Keep the `self` side unchanged. Returning `my_commit` here
-                // would look more symmetric, but would have the same outcome.
-                continue;
-            } else if other_commit.is_none() {
-                // The other side removed the workspace and it moved on our
-                // side. We want to remove it. TODO(ilyagr): I'm not sure why.
-                None
+        // In cases when base_target would equal to other_target, or neither would
+        // exist, the conflict resolves to the `self` position and there is nothing we
+        // need to do. So, it's fine that `diff_named_commit_ids`` does not return such
+        // pairs
+        let changed_wc_commits = diff_named_commit_ids(base.wc_commit_ids(), other.wc_commit_ids());
+        for (workspace_id, (base_target, other_target)) in changed_wc_commits {
+            let self_target = self.view().get_wc_commit_id(workspace_id);
+            if let Some(&new_target) = trivial_merge(&[self_target, base_target, other_target]) {
+                if let Some(target) = new_target.cloned() {
+                    self.view_mut().set_wc_commit(workspace_id.clone(), target);
+                } else {
+                    self.view_mut().remove_wc_commit(workspace_id);
+                }
             } else {
-                // There is a conflict. We keep the `self` side unchanged in this case.
-                continue;
-            };
-            workspace_updates.push((workspace_id.clone(), changed_commit.cloned()));
-        }
-        for (workspace_id, changed_commit) in workspace_updates.into_iter() {
-            if let Some(moved) = changed_commit {
-                self.view_mut().set_wc_commit(workspace_id, moved);
-            } else {
-                self.view_mut().remove_wc_commit(&workspace_id);
+                // If there's a conflict, we keep the `self` side unchanged, with one exception
+                // below.
+                if other_target.is_none() {
+                    // The other side removed the workspace. We want to remove it even if the self
+                    // side changed the working-copy commit. TODO(ilyagr): I'm not sure why
+                    self.view_mut().remove_wc_commit(workspace_id);
+                }
             }
         }
 
