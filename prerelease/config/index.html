@@ -880,6 +880,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      List
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Template
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#log" class="md-nav__link">
     <span class="md-ellipsis">
       Log
@@ -899,7 +923,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#default-template" class="md-nav__link">
+  <a href="#default-template_1" class="md-nav__link">
     <span class="md-ellipsis">
       Default Template
     </span>
@@ -2414,6 +2438,30 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#list" class="md-nav__link">
+    <span class="md-ellipsis">
+      List
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Template
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#log" class="md-nav__link">
     <span class="md-ellipsis">
       Log
@@ -2433,7 +2481,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#default-template" class="md-nav__link">
+  <a href="#default-template_1" class="md-nav__link">
     <span class="md-ellipsis">
       Default Template
     </span>
@@ -3313,6 +3361,21 @@ making it the default:</p>
 </code></pre></div>
 <p>You can pass the <code>--no-edit</code> flag to <code>prev</code> and <code>next</code> if you find yourself
 needing the original behavior.</p>
+<h2 id="list">List<a class="headerlink" href="#list" title="Permanent link">&para;</a></h2>
+<h3 id="default-template">Default Template<a class="headerlink" href="#default-template" title="Permanent link">&para;</a></h3>
+<p>You can configure the template used when no <code>-T</code> is specified.</p>
+<ul>
+<li><code>templates.config_list</code> for <code>jj config list</code></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">[templates]</span>
+<span class="c1"># Use builtin config list template</span>
+<span class="n">config_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_config_list&quot;</span>
+</code></pre></div>
+<p>If you want to see the config variable origin (type and path) when you do <code>jj config list</code>
+you can add this to your config:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[templates]</span>
+<span class="n">config_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;builtin_config_list_detailed&quot;</span>
+</code></pre></div>
 <h2 id="log">Log<a class="headerlink" href="#log" title="Permanent link">&para;</a></h2>
 <h3 id="default-revisions">Default revisions<a class="headerlink" href="#default-revisions" title="Permanent link">&para;</a></h3>
 <p>You can configure the revisions <code>jj log</code> would show when neither <code>-r</code> nor any paths are specified.</p>
@@ -3322,7 +3385,7 @@ needing the original behavior.</p>
 </code></pre></div>
 <p>The default value for <code>revsets.log</code> is
 <code>'present(@) | ancestors(immutable_heads().., 2) | present(trunk())'</code>.</p>
-<h3 id="default-template">Default Template<a class="headerlink" href="#default-template" title="Permanent link">&para;</a></h3>
+<h3 id="default-template_1">Default Template<a class="headerlink" href="#default-template_1" title="Permanent link">&para;</a></h3>
 <p>You can configure the template used when no <code>-T</code> is specified.</p>
 <ul>
 <li><code>templates.log</code> for <code>jj log</code></li>
