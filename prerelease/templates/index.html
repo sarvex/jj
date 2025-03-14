@@ -881,6 +881,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#commitref-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      CommitRef type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#configvalue-type" class="md-nav__link">
     <span class="md-ellipsis">
       ConfigValue type
@@ -965,15 +974,6 @@
   <a href="#option-type" class="md-nav__link">
     <span class="md-ellipsis">
       Option type
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#refname-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      RefName type
     </span>
   </a>
   
@@ -1911,6 +1911,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#commitref-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      CommitRef type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#configvalue-type" class="md-nav__link">
     <span class="md-ellipsis">
       ConfigValue type
@@ -1995,15 +2004,6 @@
   <a href="#option-type" class="md-nav__link">
     <span class="md-ellipsis">
       Option type
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#refname-type" class="md-nav__link">
-    <span class="md-ellipsis">
-      RefName type
     </span>
   </a>
   
@@ -2268,13 +2268,15 @@ type</a> are available as keywords. For example,
   working-copy commit as <code>&lt;workspace name&gt;@</code>.</li>
 <li><code>current_working_copy() -&gt; Boolean</code>: True for the working-copy commit of the
   current workspace.</li>
-<li><code>bookmarks() -&gt; List&lt;RefName&gt;</code>: Local and remote bookmarks pointing to the
+<li><code>bookmarks() -&gt; List&lt;CommitRef&gt;</code>: Local and remote bookmarks pointing to the
   commit. A tracking remote bookmark will be included only if its target is
   different from the local one.</li>
-<li><code>local_bookmarks() -&gt; List&lt;RefName&gt;</code>: All local bookmarks pointing to the commit.</li>
-<li><code>remote_bookmarks() -&gt; List&lt;RefName&gt;</code>: All remote bookmarks pointing to the commit.</li>
-<li><code>tags() -&gt; List&lt;RefName&gt;</code></li>
-<li><code>git_refs() -&gt; List&lt;RefName&gt;</code></li>
+<li><code>local_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All local bookmarks pointing to the
+  commit.</li>
+<li><code>remote_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All remote bookmarks pointing to the
+  commit.</li>
+<li><code>tags() -&gt; List&lt;CommitRef&gt;</code></li>
+<li><code>git_refs() -&gt; List&lt;CommitRef&gt;</code></li>
 <li><code>git_head() -&gt; Boolean</code>: True for the Git <code>HEAD</code> commit.</li>
 <li><code>divergent() -&gt; Boolean</code>: True if the commit's change id corresponds to multiple
   visible commits.</li>
@@ -2296,6 +2298,28 @@ type</a> are available as keywords. For example,
   ChangeId, whose canonical hex representation is "reversed" (z-k).</li>
 <li><code>.short([len: Integer]) -&gt; String</code></li>
 <li><code>.shortest([min_len: Integer]) -&gt; ShortestIdPrefix</code>: Shortest unique prefix.</li>
+</ul>
+<h3 id="commitref-type">CommitRef type<a class="headerlink" href="#commitref-type" title="Permanent link">&para;</a></h3>
+<p>The following methods are defined.</p>
+<ul>
+<li><code>.name() -&gt; String</code>: Local bookmark or tag name.</li>
+<li><code>.remote() -&gt; String</code>: Remote name or empty if this is a local ref.</li>
+<li><code>.present() -&gt; Boolean</code>: True if the ref points to any commit.</li>
+<li><code>.conflict() -&gt; Boolean</code>: True if <a href="../bookmarks/#conflicts">the bookmark or tag is
+  conflicted</a>.</li>
+<li><code>.normal_target() -&gt; Option&lt;Commit&gt;</code>: Target commit if the ref is not
+  conflicted and points to a commit.</li>
+<li><code>.removed_targets() -&gt; List&lt;Commit&gt;</code>: Old target commits if conflicted.</li>
+<li><code>.added_targets() -&gt; List&lt;Commit&gt;</code>: New target commits. The list usually
+  contains one "normal" target.</li>
+<li><code>.tracked() -&gt; Boolean</code>: True if the ref is tracked by a local ref. The local
+  ref might have been deleted (but not pushed yet.)</li>
+<li><code>.tracking_present() -&gt; Boolean</code>: True if the ref is tracked by a local ref,
+    and if the local ref points to any commit.</li>
+<li><code>.tracking_ahead_count() -&gt; SizeHint</code>: Number of commits ahead of the tracking
+  local ref.</li>
+<li><code>.tracking_behind_count() -&gt; SizeHint</code>: Number of commits behind of the
+  tracking local ref.</li>
 </ul>
 <h3 id="configvalue-type">ConfigValue type<a class="headerlink" href="#configvalue-type" title="Permanent link">&para;</a></h3>
 <p>This type can be printed in TOML syntax. The following methods are defined.</p>
@@ -2385,28 +2409,6 @@ defined.</p>
 <p>An option can be implicitly converted to <code>Boolean</code> denoting whether the
 contained value is set. If set, all methods of the contained value can be
 invoked. If not set, an error will be reported inline on method call.</p>
-<h3 id="refname-type">RefName type<a class="headerlink" href="#refname-type" title="Permanent link">&para;</a></h3>
-<p>The following methods are defined.</p>
-<ul>
-<li><code>.name() -&gt; String</code>: Local bookmark or tag name.</li>
-<li><code>.remote() -&gt; String</code>: Remote name or empty if this is a local ref.</li>
-<li><code>.present() -&gt; Boolean</code>: True if the ref points to any commit.</li>
-<li><code>.conflict() -&gt; Boolean</code>: True if <a href="../bookmarks/#conflicts">the bookmark or tag is
-  conflicted</a>.</li>
-<li><code>.normal_target() -&gt; Option&lt;Commit&gt;</code>: Target commit if the ref is not
-  conflicted and points to a commit.</li>
-<li><code>.removed_targets() -&gt; List&lt;Commit&gt;</code>: Old target commits if conflicted.</li>
-<li><code>.added_targets() -&gt; List&lt;Commit&gt;</code>: New target commits. The list usually
-  contains one "normal" target.</li>
-<li><code>.tracked() -&gt; Boolean</code>: True if the ref is tracked by a local ref. The local
-  ref might have been deleted (but not pushed yet.)</li>
-<li><code>.tracking_present() -&gt; Boolean</code>: True if the ref is tracked by a local ref,
-    and if the local ref points to any commit.</li>
-<li><code>.tracking_ahead_count() -&gt; SizeHint</code>: Number of commits ahead of the tracking
-  local ref.</li>
-<li><code>.tracking_behind_count() -&gt; SizeHint</code>: Number of commits behind of the
-  tracking local ref.</li>
-</ul>
 <h3 id="repopath-type">RepoPath type<a class="headerlink" href="#repopath-type" title="Permanent link">&para;</a></h3>
 <p>A slash-separated path relative to the repository root. The following methods
 are defined.</p>
