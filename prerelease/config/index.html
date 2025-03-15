@@ -1439,9 +1439,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#user-config-file" class="md-nav__link">
+  <a href="#user-config-files" class="md-nav__link">
     <span class="md-ellipsis">
-      User config file
+      User config files
     </span>
   </a>
   
@@ -2997,9 +2997,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#user-config-file" class="md-nav__link">
+  <a href="#user-config-files" class="md-nav__link">
     <span class="md-ellipsis">
-      User config file
+      User config files
     </span>
   </a>
   
@@ -3097,7 +3097,7 @@
 </li>
 <li>
 <p>The user settings. These can be edited with <code>jj config edit --user</code>. User
-settings are located in <a href="#user-config-file">the user config file</a>, which can be found with <code>jj
+settings are located in <a href="#user-config-files">the user config files</a>, which can be found with <code>jj
 config path --user</code>.</p>
 </li>
 <li>
@@ -4190,16 +4190,24 @@ raw integer literal, the value is interpreted as if it were specified in bytes.<
 <p>Files that already exist in the working copy are not subject to this limit.</p>
 <p>Setting this value to zero will disable the limit entirely.</p>
 <h2 id="ways-to-specify-jj-config-details">Ways to specify <code>jj</code> config: details<a class="headerlink" href="#ways-to-specify-jj-config-details" title="Permanent link">&para;</a></h2>
-<h3 id="user-config-file">User config file<a class="headerlink" href="#user-config-file" title="Permanent link">&para;</a></h3>
-<p>An easy way to find the user config file is:</p>
+<h3 id="user-config-files">User config files<a class="headerlink" href="#user-config-files" title="Permanent link">&para;</a></h3>
+<p>An easy way to find the user config file/directory is:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span>path<span class="w"> </span>--user
 </code></pre></div>
-<p>The rest of this section covers the details of where this file can be located.</p>
-<p>On all platforms, the user's global <code>jj</code> configuration file is located at either
-<code>~/.jjconfig.toml</code> (where <code>~</code> represents <code>$HOME</code> on Unix-likes, or
-<code>%USERPROFILE%</code> on Windows) or in a platform-specific directory. The
-platform-specific location is recommended for better integration with platform
-services. It is an error for both of these files to exist.</p>
+<p>On all platforms, the user's global <code>jj</code> configurations are loaded in the following
+precedence order (with later configs overriding earlier ones):</p>
+<ul>
+<li><code>$HOME/.jjconfig.toml</code></li>
+<li><code>$XDG_CONFIG_HOME/jj/config.toml</code> (preferred)</li>
+<li><code>$XDG_CONFIG_HOME/jj/conf.d/*.toml</code></li>
+</ul>
+<p>where <code>$HOME</code> represents the user's home directory (<code>%USERPROFILE%</code> on Windows),
+and <code>$XDG_CONFIG_HOME</code> represents the platform-specific configuration directory.
+The platform-specific location is recommended for better integration with platform
+services.</p>
+<p>The files in the <code>conf.d</code> directory are loaded in lexicographic order. This allows
+configs to be split across multiple files and combines well
+with <a href="#conditional-variables">Conditional Variables</a>.</p>
 <table>
 <thead>
 <tr>
@@ -4226,17 +4234,16 @@ services. It is an error for both of these files to exist.</p>
 </tr>
 </tbody>
 </table>
-<p>The location of the <code>jj</code> config file can also be overridden with the
+<p>The location of the <code>jj</code> user config files/directories can also be overridden with the
 <code>JJ_CONFIG</code> environment variable. If it is not empty, it will be used instead
-of any configuration file in the default locations. If it is a path to a TOML
+of any configuration files in the default locations. If it is a path to a TOML
 file, then that file will be loaded instead. If it is a path to a directory,
 then all the TOML files in that directory will be loaded in lexicographic order
-and merged. This allows you to split your configuration across multiple files
-and can combine well with <a href="#conditional-variables">Conditional Variables</a>.</p>
-<p>For example,
-<div class="highlight"><pre><span></span><code>env<span class="w"> </span><span class="nv">JJ_CONFIG</span><span class="o">=</span>/dev/null<span class="w"> </span>jj<span class="w"> </span>log<span class="w">       </span><span class="c1"># Ignores any settings specified in the config file.</span>
+and merged. Multiple paths can be specified by separating them with a
+platform-specific path separator (<code>:</code> on Unix-like systems, <code>;</code> on Windows).</p>
+<p>For example, the following could be used to run <code>jj</code> without loading any user configs:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">JJ_CONFIG</span><span class="o">=</span><span class="w"> </span>jj<span class="w"> </span>log<span class="w">       </span><span class="c1"># Ignores any settings specified in the config file.</span>
 </code></pre></div>
-could be used to run jj without loading any user configs.</p>
 <h3 id="json-schema-support">JSON Schema Support<a class="headerlink" href="#json-schema-support" title="Permanent link">&para;</a></h3>
 <p>Many popular editors support TOML file syntax highlighting and validation. To
 enable schema validation in your editor, add this line at the top of your TOML
@@ -4325,18 +4332,14 @@ conditions are specified, their intersection is used.</p>
 </code></pre></div>
 <h4 id="using-multiple-files">Using multiple files<a class="headerlink" href="#using-multiple-files" title="Permanent link">&para;</a></h4>
 <p><code>--when</code> can also be used on the top level of a TOML file, which is convenient
-when splitting your config across multiple files using <a href="#user-config-file"><code>JJ_CONFIG</code></a>.
+when splitting your config across multiple files.
 The behavior of conditions are the same as when using <code>[[--scope]]</code> tables.</p>
-<p>Note that the TOML files are read and merged in lexicographical order. This
-means that in the below example <code>work.toml</code> will override <code>config.toml</code>, but if
-<code>work.toml</code> would be renamed <code>at_work.toml</code> the overriding would not work as
-intended.</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># In config.toml</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># In $XDG_CONFIG_HOME/jj/config.toml</span>
 <span class="k">[user]</span>
 <span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR NAME&quot;</span>
 <span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOUR_DEFAULT_EMAIL@example.com&quot;</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1"># In work.toml</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># In $XDG_CONFIG_HOME/jj/conf.d/work.toml</span>
 <span class="n">--when</span><span class="p">.</span><span class="n">repositories</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;~/the/work/repo&quot;</span><span class="p">]</span>
 
 <span class="k">[user]</span>
