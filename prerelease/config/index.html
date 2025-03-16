@@ -4195,17 +4195,17 @@ raw integer literal, the value is interpreted as if it were specified in bytes.<
 <p>An easy way to find the user config file/directory is:</p>
 <div class="highlight"><pre><span></span><code>jj<span class="w"> </span>config<span class="w"> </span>path<span class="w"> </span>--user
 </code></pre></div>
-<p>On all platforms, the user's global <code>jj</code> configurations are loaded in the following
-precedence order (with later configs overriding earlier ones):</p>
+<p>On all platforms, the user's global <code>jj</code> configurations are by default loaded in
+the following precedence order (with later configs overriding earlier ones):</p>
 <ul>
 <li><code>$HOME/.jjconfig.toml</code></li>
-<li><code>$XDG_CONFIG_HOME/jj/config.toml</code> (preferred)</li>
-<li><code>$XDG_CONFIG_HOME/jj/conf.d/*.toml</code></li>
+<li><code>&lt;PLATFORM_SPECIFIC&gt;/jj/config.toml</code> (preferred)</li>
+<li><code>&lt;PLATFORM_SPECIFIC&gt;/jj/conf.d/*.toml</code></li>
 </ul>
 <p>where <code>$HOME</code> represents the user's home directory (<code>%USERPROFILE%</code> on Windows),
-and <code>$XDG_CONFIG_HOME</code> represents the platform-specific configuration directory.
-The platform-specific location is recommended for better integration with platform
-services.</p>
+and <code>&lt;PLATFORM_SPECIFIC&gt;</code> represents the platform-specific configuration
+directory shown in the table below. The platform-specific location is
+recommended for better integration with platform services.</p>
 <p>The files in the <code>conf.d</code> directory are loaded in lexicographic order. This allows
 configs to be split across multiple files and combines well
 with <a href="#conditional-variables">Conditional Variables</a>.</p>
@@ -4213,24 +4213,24 @@ with <a href="#conditional-variables">Conditional Variables</a>.</p>
 <thead>
 <tr>
 <th style="text-align: left;">Platform</th>
-<th style="text-align: left;">Value</th>
-<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Location of <code>&lt;PLATFORM_SPECIFIC&gt;</code> dir</th>
+<th style="text-align: left;">Example config file location</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;">Linux</td>
-<td style="text-align: left;"><code>$XDG_CONFIG_HOME/jj/config.toml</code></td>
+<td style="text-align: left;"><code>$XDG_CONFIG_HOME</code> or <code>$HOME/.config</code></td>
 <td style="text-align: left;"><code>/home/alice/.config/jj/config.toml</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">macOS</td>
-<td style="text-align: left;"><code>$HOME/Library/Application Support/jj/config.toml</code></td>
+<td style="text-align: left;"><code>$HOME/Library/Application Support</code></td>
 <td style="text-align: left;"><code>/Users/Alice/Library/Application Support/jj/config.toml</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">Windows</td>
-<td style="text-align: left;"><code>{FOLDERID_RoamingAppData}\jj\config.toml</code></td>
+<td style="text-align: left;"><code>{FOLDERID_RoamingAppData}</code></td>
 <td style="text-align: left;"><code>C:\Users\Alice\AppData\Roaming\jj\config.toml</code></td>
 </tr>
 </tbody>
