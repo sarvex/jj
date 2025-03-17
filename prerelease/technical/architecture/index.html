@@ -1066,9 +1066,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#localbackend" class="md-nav__link">
+  <a href="#simplebackend" class="md-nav__link">
     <span class="md-ellipsis">
-      LocalBackend
+      SimpleBackend
     </span>
   </a>
   
@@ -1755,9 +1755,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#localbackend" class="md-nav__link">
+  <a href="#simplebackend" class="md-nav__link">
     <span class="md-ellipsis">
-      LocalBackend
+      SimpleBackend
     </span>
   </a>
   
@@ -1978,8 +1978,8 @@ predecessors, and the bit-reversed commit ID as change ID.</p>
 <p>Because we use the Git Object ID as commit ID, two commits that differ only in
 their change ID, for example, will get the same commit ID, so we error out when
 trying to write the second one of them.</p>
-<h3 id="localbackend">LocalBackend<a class="headerlink" href="#localbackend" title="Permanent link">&para;</a></h3>
-<p>The <code>LocalBackend</code> is just a proof of concept. It stores objects addressed by
+<h3 id="simplebackend">SimpleBackend<a class="headerlink" href="#simplebackend" title="Permanent link">&para;</a></h3>
+<p>The <code>SimpleBackend</code> is just a proof of concept. It stores objects addressed by
 their hash, with one file per object.</p>
 <h3 id="store">Store<a class="headerlink" href="#store" title="Permanent link">&para;</a></h3>
 <p>The <code>Store</code> type wraps the <code>Backend</code> and returns wrapped types for commits and
