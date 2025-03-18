@@ -257,19 +257,18 @@ source <(COMPLETE=zsh jj)
 
 ### Fish
 
-!!! note
-
-    No configuration is required with fish >= 4.1 which loads dynamic completions by default.
 
 #### Standard
 
 ```shell
+# Not recommended, use the dynamic completions instead
 jj util completion fish | source
 ```
 
 #### Dynamic
 
 ```shell
+# Only needed with fish < 4.1. fish >= 4.1 loads these by default
 COMPLETE=fish jj | source
 ```
 
