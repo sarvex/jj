@@ -272,6 +272,17 @@ jj util completion fish | source
 COMPLETE=fish jj | source
 ```
 
+!!! note
+
+    If dynamic completion work only partially, or if you get only static completions,
+    this might be because your `fish` version is older than 4.1 or because the static
+    completions are loaded by your personal config and/or by your distribution's
+    config. In the latter case, contact whomever made the `jj` package you are using.
+
+    Packagers: it is recommended to configure dynamic completions for `fish` in the
+    `jj` package if the package is likely to be used with older versions of fish, and to
+    not configure fish completions at all if `jj` is likely to be used by `fish` >= 4.1.
+
 ### Nushell
 
 ```nu
