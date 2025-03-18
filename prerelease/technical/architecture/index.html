@@ -1955,13 +1955,13 @@ relate. For example, given a <code>Workspace</code>, you can use it to get a <co
 or a <code>RepoLoader</code>. A <code>Transaction</code> is required to acquire a <code>MutableRepo</code>, etc.
 The following sections describe each component.</p>
 <p><img alt="Type diagram" src="../types.svg" /></p>
-<p><em>This diagram was created with <a href="https://excalidraw.com/">Excalidraw</a>. You can get a copy of it <a href="https://excalidraw.com/#json=wuOSusqzm6MjoXatFk1kn,aCySj27AVmQMf7aJdMzMCw">at this
+<p><em>This diagram was created with <a href="https://excalidraw.com/">Excalidraw</a>. You can get a copy of it <a href="https://excalidraw.com/#json=X081PJVRW2h4iW12qZxc1,H2Yg3qnycVG0Vpq5Z90Miw">at this
 location</a>, and Right Click &gt; "Copy to Clipboard as SVG".</em></p>
 <h3 id="backend">Backend<a class="headerlink" href="#backend" title="Permanent link">&para;</a></h3>
 <p>The <code>Backend</code> trait defines the interface each
 commit backend needs to implement. The current in-tree commit backends
 are <code>GitBackend</code>
-and <code>LocalBackend</code>.</p>
+and <code>SimpleBackend</code>.</p>
 <p>Since there are non-commit backends, the <code>Backend</code> trait should probably be
 renamed to <code>CommitBackend</code>.</p>
 <h3 id="gitbackend">GitBackend<a class="headerlink" href="#gitbackend" title="Permanent link">&para;</a></h3>
