@@ -1259,6 +1259,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="GnuPG Signing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pkcs12-certificates" class="md-nav__link">
+    <span class="md-ellipsis">
+      PKCS#12 Certificates
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -2817,6 +2832,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="GnuPG Signing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pkcs12-certificates" class="md-nav__link">
+    <span class="md-ellipsis">
+      PKCS#12 Certificates
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -3997,10 +4027,30 @@ to change the program used or specify a path to <code>gpg</code> explicitly you 
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
 <span class="n">backends</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpg2&quot;</span>
 </code></pre></div>
-<p>Also by default the gpg backend will ignore key expiry when verifying commit signatures.
-To consider expired keys as invalid you can set:</p>
+<p>Also by default the gpg backend will consider key expiry when verifying commit signatures.
+To consider expired keys as valid you can set:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
-<span class="n">backends</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="n">allow-expired-keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="n">backends</span><span class="p">.</span><span class="n">gpg</span><span class="p">.</span><span class="n">allow-expired-keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+</code></pre></div>
+<h4 id="pkcs12-certificates">PKCS#12 Certificates<a class="headerlink" href="#pkcs12-certificates" title="Permanent link">&para;</a></h4>
+<p>PKCS#12 certificates can be used to sign commits using the <code>gpgsm</code> backend.</p>
+<div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
+<span class="n">behavior</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;own&quot;</span>
+<span class="n">backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpgsm&quot;</span>
+<span class="c1">## You can set `key` to anything accepted by `gpgsm -u`</span>
+<span class="c1">## If not set then defaults to the key associated with `user.email`</span>
+<span class="c1"># key = &quot;4ED556E9729E000F&quot;</span>
+<span class="c1"># key = &quot;signing@example.com&quot;</span>
+</code></pre></div>
+<p>By default the gpgsm backend will look for a <code>gpgsm</code> binary on your path. If you want
+to change the program used or specify a path to <code>gpgsm</code> explicitly you can set:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
+<span class="n">backends</span><span class="p">.</span><span class="n">gpgsm</span><span class="p">.</span><span class="n">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gpgsm&quot;</span>
+</code></pre></div>
+<p>Also by default the gpgsm backend will consider key expiry when verifying commit signatures.
+To consider expired keys as valid you can set:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
+<span class="n">backends</span><span class="p">.</span><span class="n">gpgsm</span><span class="p">.</span><span class="n">allow-expired-keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
 <h3 id="ssh-signing">SSH Signing<a class="headerlink" href="#ssh-signing" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
