@@ -4343,8 +4343,8 @@ config files or environment variables. For example,</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Must not have spaces around the `=`</span>
 jj<span class="w"> </span>--config<span class="w"> </span>ui.color<span class="o">=</span>always<span class="w"> </span>--config<span class="w"> </span>ui.diff-editor<span class="o">=</span>meld<span class="w"> </span>split
 </code></pre></div>
-<p>Config value should be specified as a TOML expression. If string value doesn't
-contain any TOML constructs (such as array notation), quotes can be omitted.
+<p>Config value should be specified as a TOML expression. If string value isn't
+enclosed by any TOML constructs (such as array notation), quotes can be omitted.
 Here is an example with more advanced TOML constructs:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Single quotes and the &#39;\&#39; are interpreted by the shell and assume a Unix shell</span>
 <span class="c1"># Double quotes are passed to jj and are parsed as TOML syntax</span>

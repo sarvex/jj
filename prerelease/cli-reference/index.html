@@ -6715,7 +6715,7 @@ does not match the <code>jj help</code> output exactly.</p>
 </li>
 <li>
 <p><code>--config &lt;NAME=VALUE&gt;</code> — Additional configuration options (can be repeated)</p>
-<p>The name should be specified as TOML dotted keys. The value should be specified as a TOML expression. If string value doesn't contain any TOML constructs (such as array notation), quotes can be omitted.</p>
+<p>The name should be specified as TOML dotted keys. The value should be specified as a TOML expression. If string value isn't enclosed by any TOML constructs (such as array notation), quotes can be omitted.</p>
 </li>
 <li>
 <p><code>--config-file &lt;PATH&gt;</code> — Additional configuration files (can be repeated)</p>
@@ -7024,7 +7024,7 @@ Martin von Zweigbergk</p>
 <li><code>&lt;NAME&gt;</code></li>
 <li>
 <p><code>&lt;VALUE&gt;</code> — New value to set</p>
-<p>The value should be specified as a TOML expression. If string value doesn't contain any TOML constructs (such as apostrophes or array notation), quotes can be omitted. Note that the value may also need shell quoting. TOML multi-line strings can be useful if the value contains apostrophes. For example, to set <code>foo.bar</code> to the string "don't" use <code>jj config set --user foo.bar "'''don't'''"</code>. This is valid in both Bash and Fish.</p>
+<p>The value should be specified as a TOML expression. If string value isn't enclosed by any TOML constructs (such as apostrophes or array notation), quotes can be omitted. Note that the value may also need shell quoting. TOML multi-line strings can be useful if the value contains apostrophes. For example, to set <code>foo.bar</code> to the string "{don't}" use <code>jj config set --user foo.bar "'''{don't}'''"</code>. This is valid in both Bash and Fish.</p>
 <p>Alternative, e.g. to avoid dealing with shell quoting, use <code>jj config edit</code> to edit the TOML file directly.</p>
 </li>
 </ul>
