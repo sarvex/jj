@@ -2735,6 +2735,7 @@ fn build_untracked_reason_message(reason: &UntrackedReason) -> Option<String> {
                  ({max_size} bytes)",
             ))
         }
+        UntrackedReason::FileInTrackMatcherButIgnored => None,
         // Paths with UntrackedReason::FileNotAutoTracked shouldn't be warned about
         // every time we make a snapshot. These paths will be printed by
         // "jj status" instead.
@@ -2777,7 +2778,9 @@ pub fn print_snapshot_stats(
         .values()
         .filter_map(|reason| match reason {
             UntrackedReason::FileTooLarge { size, .. } => Some(size),
-            UntrackedReason::FileNotAutoTracked => None,
+            UntrackedReason::FileNotAutoTracked | UntrackedReason::FileInTrackMatcherButIgnored => {
+                None
+            }
         });
     if let Some(size) = large_files_sizes.max() {
         writedoc!(
