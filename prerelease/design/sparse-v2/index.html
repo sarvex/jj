@@ -1992,7 +1992,7 @@ if desired.</p>
 indirection will save on storage since working copy patterns are not expected to
 change very frequently.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// Before:</span>
-<span class="k">pub</span><span class="w"> </span><span class="n">wc_commit_ids</span><span class="p">:</span><span class="w"> </span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="n">WorkspaceId</span><span class="p">,</span><span class="w"> </span><span class="n">CommitId</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="k">pub</span><span class="w"> </span><span class="n">wc_commit_ids</span><span class="p">:</span><span class="w"> </span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="n">WorkspaceNameBuf</span><span class="p">,</span><span class="w"> </span><span class="n">CommitId</span><span class="o">&gt;</span><span class="p">,</span>
 
 <span class="c1">// After:</span>
 <span class="k">pub</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">WorkingCopyInfo</span><span class="w"> </span><span class="p">{</span>
@@ -2000,7 +2000,7 @@ change very frequently.</p>
 <span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">wc_patterns_id</span><span class="p">:</span><span class="w"> </span><span class="nc">WorkingCopyPatternsId</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="o">..</span><span class="p">.</span>
-<span class="k">pub</span><span class="w"> </span><span class="n">wc_info</span><span class="p">:</span><span class="w"> </span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="n">WorkspaceId</span><span class="p">,</span><span class="w"> </span><span class="n">WorkingCopyInfo</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="k">pub</span><span class="w"> </span><span class="n">wc_info</span><span class="p">:</span><span class="w"> </span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="n">WorkspaceNameBuf</span><span class="p">,</span><span class="w"> </span><span class="n">WorkingCopyInfo</span><span class="o">&gt;</span><span class="p">,</span>
 </code></pre></div>
 <p>A View object with no stored working copy patterns will be modified at read
 time to include the current working copy patterns, thus all <code>read_view</code>
