@@ -1985,9 +1985,9 @@ git_refs                                    # last imported/exported refs
 branch. <code>jj branch</code> sub commands will be added to change the tracking state.</p>
 <div class="highlight"><pre><span></span><code><span class="k">fn</span><span class="w"> </span><span class="nf">default_state_for_newly_imported_branch</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">remote</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">remote</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;git&quot;</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracking</span>
+<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracked</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">config</span><span class="p">[</span><span class="s">&quot;git.auto-local-bookmark&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracking</span>
+<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracked</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">New</span>
 <span class="w">    </span><span class="p">}</span>
@@ -1997,7 +1997,7 @@ branch. <code>jj branch</code> sub commands will be added to change the tracking
 <div class="highlight"><pre><span></span><code><span class="k">fn</span><span class="w"> </span><span class="nf">target_in_merge_context</span><span class="p">(</span><span class="n">known_target</span><span class="p">,</span><span class="w"> </span><span class="n">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">match</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">New</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">RefTarget</span><span class="p">::</span><span class="n">absent</span><span class="p">(),</span>
-<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracking</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">known_target</span><span class="p">,</span>
+<span class="w">        </span><span class="n">State</span><span class="p">::</span><span class="n">Tracked</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">known_target</span><span class="p">,</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
