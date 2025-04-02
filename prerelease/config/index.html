@@ -3518,7 +3518,7 @@ will need to modify the <code>format_time_range()</code> template alias.</p>
 <span class="c1"># Both name and email address</span>
 <span class="s1">&#39;format_short_signature(signature)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;signature&#39;</span>
 <span class="c1"># Username part of the email address</span>
-<span class="s1">&#39;format_short_signature(signature)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;signature.username()&#39;</span>
+<span class="s1">&#39;format_short_signature(signature)&#39;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;signature.email().local()&#39;</span>
 </code></pre></div>
 <h3 id="commit-timestamp">Commit timestamp<a class="headerlink" href="#commit-timestamp" title="Permanent link">&para;</a></h3>
 <p>Commits have both an "author timestamp" and "committer timestamp". By default,
