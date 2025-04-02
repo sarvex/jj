@@ -6870,6 +6870,11 @@ does not match the <code>jj help</code> output exactly.</p>
 <p><code>-T</code>, <code>--template &lt;TEMPLATE&gt;</code> — Render each bookmark using the given template</p>
 <p>All 0-argument methods of the [<code>CommitRef</code> type] are available as keywords in the template expression. See [<code>jj help -k templates</code>] for more information.</p>
 </li>
+<li>
+<p><code>--sort &lt;SORT_KEY&gt;</code> — Sort bookmarks based on the given key (or multiple keys)</p>
+<p>Suffix the key with <code>-</code> to sort in descending order of the value (e.g. <code>--sort name-</code>). Note that when using multiple keys, the first key is the most significant.</p>
+<p>Possible values: <code>name</code>, <code>name-</code>, <code>author-name</code>, <code>author-name-</code>, <code>author-email</code>, <code>author-email-</code>, <code>author-date</code>, <code>author-date-</code>, <code>committer-name</code>, <code>committer-name-</code>, <code>committer-email</code>, <code>committer-email-</code>, <code>committer-date</code>, <code>committer-date-</code></p>
+</li>
 </ul>
 <h2 id="jj-bookmark-move"><code>jj bookmark move</code><a class="headerlink" href="#jj-bookmark-move" title="Permanent link">&para;</a></h2>
 <p>Move existing bookmarks to target revision</p>
