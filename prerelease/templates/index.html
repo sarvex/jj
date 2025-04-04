@@ -2255,41 +2255,41 @@ type</a> are available as keywords. For example,
 <h3 id="commit-type">Commit type<a class="headerlink" href="#commit-type" title="Permanent link">&para;</a></h3>
 <p>This type cannot be printed. The following methods are defined.</p>
 <ul>
-<li><code>description() -&gt; String</code></li>
-<li><code>change_id() -&gt; ChangeId</code></li>
-<li><code>commit_id() -&gt; CommitId</code></li>
-<li><code>parents() -&gt; List&lt;Commit&gt;</code></li>
-<li><code>author() -&gt; Signature</code></li>
-<li><code>committer() -&gt; Signature</code></li>
-<li><code>signature() -&gt; Option&lt;CryptographicSignature&gt;</code></li>
-<li><code>mine() -&gt; Boolean</code>: Commits where the author's email matches the email of the current
-  user.</li>
-<li><code>working_copies() -&gt; String</code>: For multi-workspace repository, indicate
+<li><code>.description() -&gt; String</code></li>
+<li><code>.change_id() -&gt; ChangeId</code></li>
+<li><code>.commit_id() -&gt; CommitId</code></li>
+<li><code>.parents() -&gt; List&lt;Commit&gt;</code></li>
+<li><code>.author() -&gt; Signature</code></li>
+<li><code>.committer() -&gt; Signature</code></li>
+<li><code>.signature() -&gt; Option&lt;CryptographicSignature&gt;</code></li>
+<li><code>.mine() -&gt; Boolean</code>: Commits where the author's email matches the email of
+  the current user.</li>
+<li><code>.working_copies() -&gt; String</code>: For multi-workspace repository, indicate
   working-copy commit as <code>&lt;workspace name&gt;@</code>.</li>
-<li><code>current_working_copy() -&gt; Boolean</code>: True for the working-copy commit of the
+<li><code>.current_working_copy() -&gt; Boolean</code>: True for the working-copy commit of the
   current workspace.</li>
-<li><code>bookmarks() -&gt; List&lt;CommitRef&gt;</code>: Local and remote bookmarks pointing to the
+<li><code>.bookmarks() -&gt; List&lt;CommitRef&gt;</code>: Local and remote bookmarks pointing to the
   commit. A tracking remote bookmark will be included only if its target is
   different from the local one.</li>
-<li><code>local_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All local bookmarks pointing to the
+<li><code>.local_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All local bookmarks pointing to the
   commit.</li>
-<li><code>remote_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All remote bookmarks pointing to the
+<li><code>.remote_bookmarks() -&gt; List&lt;CommitRef&gt;</code>: All remote bookmarks pointing to the
   commit.</li>
-<li><code>tags() -&gt; List&lt;CommitRef&gt;</code></li>
-<li><code>git_refs() -&gt; List&lt;CommitRef&gt;</code></li>
-<li><code>git_head() -&gt; Boolean</code>: True for the Git <code>HEAD</code> commit.</li>
-<li><code>divergent() -&gt; Boolean</code>: True if the commit's change id corresponds to multiple
+<li><code>.tags() -&gt; List&lt;CommitRef&gt;</code></li>
+<li><code>.git_refs() -&gt; List&lt;CommitRef&gt;</code></li>
+<li><code>.git_head() -&gt; Boolean</code>: True for the Git <code>HEAD</code> commit.</li>
+<li><code>.divergent() -&gt; Boolean</code>: True if the commit's change id corresponds to multiple
   visible commits.</li>
-<li><code>hidden() -&gt; Boolean</code>: True if the commit is not visible (a.k.a. abandoned).</li>
-<li><code>immutable() -&gt; Boolean</code>: True if the commit is included in <a href="../config/#set-of-immutable-commits">the set of
+<li><code>.hidden() -&gt; Boolean</code>: True if the commit is not visible (a.k.a. abandoned).</li>
+<li><code>.immutable() -&gt; Boolean</code>: True if the commit is included in <a href="../config/#set-of-immutable-commits">the set of
   immutable commits</a>.</li>
-<li><code>contained_in(revset: String) -&gt; Boolean</code>: True if the commit is included in <a href="../revsets/">the provided revset</a>.</li>
-<li><code>conflict() -&gt; Boolean</code>: True if the commit contains merge conflicts.</li>
-<li><code>empty() -&gt; Boolean</code>: True if the commit modifies no files.</li>
-<li><code>diff([files: String]) -&gt; TreeDiff</code>: Changes from the parents within <a href="../filesets/">the
+<li><code>.contained_in(revset: String) -&gt; Boolean</code>: True if the commit is included in <a href="../revsets/">the provided revset</a>.</li>
+<li><code>.conflict() -&gt; Boolean</code>: True if the commit contains merge conflicts.</li>
+<li><code>.empty() -&gt; Boolean</code>: True if the commit modifies no files.</li>
+<li><code>.diff([files: String]) -&gt; TreeDiff</code>: Changes from the parents within <a href="../filesets/">the
   <code>files</code> expression</a>. All files are compared by default, but it is
   likely to change in future version to respect the command line path arguments.</li>
-<li><code>root() -&gt; Boolean</code>: True if the commit is the root commit.</li>
+<li><code>.root() -&gt; Boolean</code>: True if the commit is the root commit.</li>
 </ul>
 <h3 id="commitid-changeid-type">CommitId / ChangeId type<a class="headerlink" href="#commitid-changeid-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined.</p>
@@ -2391,14 +2391,14 @@ defined.</p>
 <h3 id="operation-type">Operation type<a class="headerlink" href="#operation-type" title="Permanent link">&para;</a></h3>
 <p>This type cannot be printed. The following methods are defined.</p>
 <ul>
-<li><code>current_operation() -&gt; Boolean</code></li>
-<li><code>description() -&gt; String</code></li>
-<li><code>id() -&gt; OperationId</code></li>
-<li><code>tags() -&gt; String</code></li>
-<li><code>time() -&gt; TimestampRange</code></li>
-<li><code>user() -&gt; String</code></li>
-<li><code>snapshot() -&gt; Boolean</code>: True if the operation is a snapshot operation.</li>
-<li><code>root() -&gt; Boolean</code>: True if the operation is the root operation.</li>
+<li><code>.current_operation() -&gt; Boolean</code></li>
+<li><code>.description() -&gt; String</code></li>
+<li><code>.id() -&gt; OperationId</code></li>
+<li><code>.tags() -&gt; String</code></li>
+<li><code>.time() -&gt; TimestampRange</code></li>
+<li><code>.user() -&gt; String</code></li>
+<li><code>.snapshot() -&gt; Boolean</code>: True if the operation is a snapshot operation.</li>
+<li><code>.root() -&gt; Boolean</code>: True if the operation is the root operation.</li>
 </ul>
 <h3 id="operationid-type">OperationId type<a class="headerlink" href="#operationid-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined.</p>
