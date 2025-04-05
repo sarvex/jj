@@ -96,6 +96,19 @@ jobs:
         RUST_BACKTRACE: 1
         CARGO_TERM_COLOR: always
         LIBGIT2_NO_VENDOR: ${{ matrix.LIBGIT2_NO_VENDOR || '0' }}
+    # Try to catch packaging issues that will prevent installation.
+    - name: Install
+      run: >-
+        cargo install
+        --config .cargo/config-ci.toml
+        --profile dev
+        --locked
+        --verbose
+        --path cli
+        --bin jj
+        ${{ matrix.cargo_flags }}
+      env:
+        LIBGIT2_NO_VENDOR: ${{ matrix.LIBGIT2_NO_VENDOR || '0' }}
 
   no-git:
     name: build (no git)
