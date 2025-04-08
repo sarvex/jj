@@ -1696,10 +1696,7 @@ a comparison with Git, including how workflows are different, see the
 <li><code>core.excludesFile</code></li>
 </ul>
 </li>
-<li><strong>Authentication: Yes.</strong> With the default authentication scheme, which uses
-  <code>git</code> under the hood. With <code>git.subprocess = false</code>, only <code>ssh-agent</code>, a
-   password-less key (only <code>~/.ssh/id_rsa</code>, <code>~/.ssh/id_ed25519</code> or
-   <code>~/.ssh/id_ed25519_sk</code>), or a <code>credential.helper</code> are supported.</li>
+<li><strong>Authentication: Yes.</strong> <code>git</code> is used for remote operations under the hood.</li>
 <li><strong>Branches: Yes.</strong> You can read more about
   <a href="../bookmarks/">how branches work in Jujutsu</a>
   and <a href="#branches">how they interoperate with Git</a>.</li>
