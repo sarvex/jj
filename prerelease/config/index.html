@@ -797,6 +797,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#bookmark-listing-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bookmark listing order
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#diff-colors-and-styles" class="md-nav__link">
     <span class="md-ellipsis">
       Diff colors and styles
@@ -2392,6 +2401,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#bookmark-listing-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bookmark listing order
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#diff-colors-and-styles" class="md-nav__link">
     <span class="md-ellipsis">
       Diff colors and styles
@@ -3283,6 +3301,20 @@ fill in things like BUG=, TESTED= etc.</p>
 <div class="highlight"><pre><span></span><code><span class="k">[ui]</span>
 <span class="n">default-description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">TESTED=TODO&quot;</span>
 </code></pre></div>
+<h3 id="bookmark-listing-order">Bookmark listing order<a class="headerlink" href="#bookmark-listing-order" title="Permanent link">&para;</a></h3>
+<p>By default, <code>jj bookmark list</code> displays bookmarks sorted alphabetically by name.
+You can customize this sorting behavior by specifying sort keys in your config
+file:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[ui]</span>
+<span class="n">bookmark-list-sort-keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>The configuration works identically to using the <code>--sort</code> option for
+<code>jj bookmark list</code>. The following sort keys are supported: <code>name</code>, <code>author-name</code>,
+<code>author-email</code>, <code>author-date</code>, <code>committer-name</code>, <code>committer-email</code>,
+<code>committer-date</code>. Suffix the key with <code>-</code> to sort in descending order. Multiple
+keys can be supplied here, the first key is the most significant.</p>
+<p>When the <code>--sort</code> option is used with <code>jj bookmark list</code>, the configuration
+is ignored.</p>
 <h3 id="diff-colors-and-styles">Diff colors and styles<a class="headerlink" href="#diff-colors-and-styles" title="Permanent link">&para;</a></h3>
 <p>In color-words and git diffs, word-level hunks are rendered with underline. You
 can override the default style with the following keys:</p>
