@@ -1871,6 +1871,12 @@ directories in your working copy. If you then run e.g. <code>jj status</code>, t
 resulting snapshot will contain those directories, making it look like they
 replaced all the other paths in your repo. You will probably want to run
 <code>jj abandon</code> to get back to the state with the unresolved conflicts.</p>
+<p>Change IDs are stored in git commit headers as reverse hex encodings. These is
+a non-standard header and is not preserved by all <code>git</code> tooling. For example,
+the header is preserved by a <code>git commit --amend</code>, but is not preserved through
+a rebase operation. GitHub and other major forges seem to preserve them for the
+most part. This functionality is currently behind a <code>git.write-change-id-header</code>
+flag.</p>
 
 
 
