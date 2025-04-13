@@ -7201,6 +7201,7 @@ Martin von Zweigbergk</p>
 <p>Create new changes with the same content as existing ones</p>
 <p>When none of the <code>--destination</code>, <code>--insert-after</code>, or <code>--insert-before</code> arguments are provided, commits will be duplicated onto their existing parents or onto other newly duplicated commits.</p>
 <p>When any of the <code>--destination</code>, <code>--insert-after</code>, or <code>--insert-before</code> arguments are provided, the roots of the specified commits will be duplicated onto the destination indicated by the arguments. Other specified commits will be duplicated onto these newly duplicated commits. If the <code>--insert-after</code> or <code>--insert-before</code> arguments are provided, the new children indicated by the arguments will be rebased onto the heads of the specified commits.</p>
+<p>By default, the duplicated commits retain the descriptions of the originals. This can be customized with the <code>templates.duplicate_description</code> setting.</p>
 <p><strong>Usage:</strong> <code>jj duplicate [OPTIONS] [REVSETS]...</code></p>
 <h6 id="arguments_18"><strong>Arguments:</strong><a class="headerlink" href="#arguments_18" title="Permanent link">&para;</a></h6>
 <ul>
