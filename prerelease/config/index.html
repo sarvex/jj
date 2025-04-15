@@ -3373,6 +3373,13 @@ is ignored.</p>
 <span class="s1">&quot;Signed-off-by: &quot; ++ committer ++ &quot;\n&quot;</span>
 <span class="s1">&#39;&#39;&#39;</span>
 </code></pre></div>
+<p>Some ready-to-use trailer templates are available for frequently used trailers:</p>
+<ul>
+<li><code>format_signed_off_by_trailer(commit)</code> creates a "Signed-off-by" trailer
+  using the committer info;</li>
+<li><code>format_gerrit_change_id_trailer(commit)</code> creates a "Change-Id" trailer
+  suitable to be used with Gerrit. It is based Jujutsu's change id.</li>
+</ul>
 <h3 id="diff-colors-and-styles">Diff colors and styles<a class="headerlink" href="#diff-colors-and-styles" title="Permanent link">&para;</a></h3>
 <p>In color-words and git diffs, word-level hunks are rendered with underline. You
 can override the default style with the following keys:</p>
