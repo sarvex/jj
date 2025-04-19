@@ -3354,7 +3354,7 @@ subcommand name, subcommand alias, or user-defined alias (defaults to <code>"log
 <div class="highlight"><pre><span></span><code><span class="k">[templates]</span>
 <span class="n">draft_commit_description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">concat(</span>
-<span class="s1">  coalesce(description, &quot;\n&quot;),</span>
+<span class="s1">  coalesce(description, default_commit_description),</span>
 <span class="s1">  surround(</span>
 <span class="s1">    &quot;\nJJ: This commit contains the following changes:\n&quot;, &quot;&quot;,</span>
 <span class="s1">    indent(&quot;JJ:     &quot;, diff.stat(72)),</span>
@@ -3364,6 +3364,15 @@ subcommand name, subcommand alias, or user-defined alias (defaults to <code>"log
 <span class="s1">)</span>
 <span class="s1">&#39;&#39;&#39;</span>
 </code></pre></div>
+<p>You can override only the <code>default_commit_description</code> value if you like, e.g.:
+<div class="highlight"><pre><span></span><code><span class="k">[template-aliases]</span>
+<span class="n">default_commit_description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&quot;</span>
+
+<span class="s1">Closes #NNNN</span>
+<span class="s1">&quot;</span>
+<span class="s1">&#39;&#39;&#39;</span>
+</code></pre></div></p>
 <h3 id="duplicate-commit-description">Duplicate commit description<a class="headerlink" href="#duplicate-commit-description" title="Permanent link">&para;</a></h3>
 <p>By default, <code>jj duplicate</code> copies the descriptions from the original commits.
 You can customize this behavior by specifying the <code>duplicate_description</code>
