@@ -19,6 +19,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::sync::Arc;
 
+use futures::future::try_join_all;
 use pollster::FutureExt as _;
 
 use crate::backend;
@@ -125,12 +126,13 @@ impl TreeBuilder {
             }
 
             let mut new_unblocked = HashSet::new();
-            // TODO: Writing trees concurrently should help on high-latency backends
+            let mut writes = vec![];
+            let mut dir_writes = vec![];
             for dir in unblocked {
                 let tree = trees_to_write.remove(dir).unwrap();
                 let (parent, basename) = dir.split().unwrap();
-                let parent_tree = trees_to_write.get_mut(parent).unwrap();
                 if tree.is_empty() {
+                    let parent_tree = trees_to_write.get_mut(parent).unwrap();
                     if let Some(TreeValue::Tree(_)) = parent_tree.value(basename) {
                         parent_tree.remove(basename);
                     } else {
@@ -138,8 +140,8 @@ impl TreeBuilder {
                         // above)
                     }
                 } else {
-                    let tree = store.write_tree(&dir, tree).block_on()?;
-                    parent_tree.set(basename.to_owned(), TreeValue::Tree(tree.id().clone()));
+                    writes.push(store.write_tree(&dir, tree));
+                    dir_writes.push(dir);
                 }
 
                 let parent_blocked_by = blocked_by.get_mut(parent).unwrap();
@@ -149,6 +151,14 @@ impl TreeBuilder {
                     new_unblocked.insert(parent);
                 }
             }
+
+            let written = try_join_all(writes).block_on()?;
+            for (dir, tree) in dir_writes.iter().zip(written) {
+                let (parent, basename) = dir.split().unwrap();
+                let parent_tree = trees_to_write.get_mut(parent).unwrap();
+                parent_tree.set(basename.to_owned(), TreeValue::Tree(tree.id().clone()));
+            }
+
             unblocked = new_unblocked;
         }
 
