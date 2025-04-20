@@ -21,6 +21,7 @@ use std::iter::zip;
 
 use bstr::BString;
 use bstr::ByteSlice as _;
+use futures::future::try_join_all;
 use futures::stream::BoxStream;
 use futures::try_join;
 use futures::Stream;
@@ -1017,22 +1018,23 @@ pub async fn update_from_content(
 
     // Now write the new files contents we found by parsing the file with conflict
     // markers.
-    // TODO: Write these concurrently
-    let new_file_ids: Vec<Option<FileId>> = zip(contents.iter(), simplified_file_ids.iter())
-        .map(|(content, file_id)| -> BackendResult<Option<FileId>> {
-            match file_id {
-                Some(_) => {
-                    let file_id = store.write_file(path, &mut content.as_slice()).block_on()?;
-                    Ok(Some(file_id))
+    let new_file_ids: Vec<Option<FileId>> =
+        try_join_all(zip(contents.iter(), simplified_file_ids.iter()).map(
+            async |(content, file_id)| -> BackendResult<Option<FileId>> {
+                match file_id {
+                    Some(_) => {
+                        let file_id = store.write_file(path, &mut content.as_slice()).await?;
+                        Ok(Some(file_id))
+                    }
+                    None => {
+                        // The missing side of a conflict is still represented by
+                        // the empty string we materialized it as
+                        Ok(None)
+                    }
                 }
-                None => {
-                    // The missing side of a conflict is still represented by
-                    // the empty string we materialized it as
-                    Ok(None)
-                }
-            }
-        })
-        .try_collect()?;
+            },
+        ))
+        .block_on()?;
 
     // If the conflict was simplified, expand the conflict to the original
     // number of sides.
