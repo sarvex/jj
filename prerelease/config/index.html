@@ -1121,6 +1121,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#showing-the-ruler-on-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Showing the ruler on startup
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2765,6 +2774,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#showing-the-ruler-on-startup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Showing the ruler on startup
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3834,6 +3852,13 @@ features like word-wrapping are disabled.</p>
 <span class="c1"># Use the alternate screen if the input is either long or takes more</span>
 <span class="c1"># than 2 seconds to finish. Similar but not identical to `less -F -+X`.</span>
 <span class="n">interface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;quit-quickly-or-clear-output&quot;</span>
+</code></pre></div>
+<h4 id="showing-the-ruler-on-startup">Showing the ruler on startup<a class="headerlink" href="#showing-the-ruler-on-startup" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">[ui.streampager]</span>
+<span class="c1"># Start with the ruler showing</span>
+<span class="n">show-ruler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="c1"># (default)</span>
+<span class="c1"># Start with the ruler hidden</span>
+<span class="n">show-ruler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
 </code></pre></div>
 <h3 id="processing-contents-to-be-paged">Processing contents to be paged<a class="headerlink" href="#processing-contents-to-be-paged" title="Permanent link">&para;</a></h3>
 <p>If you'd like to pass the output through a formatter e.g.
