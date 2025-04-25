@@ -1667,17 +1667,17 @@ itself a conflict, then we simply insert the conflict expression there. Then we
 simplify by removing canceling terms. These two steps are implemented in
 <code>Merge::flatten()</code> and <code>Merge::simplify()</code> in <a href="https://github.com/jj-vcs/jj/blob/main/lib/src/merge.rs"><code>merge.rs</code></a>.</p>
 <p>For example, let's say commit B is based on A and is rebased to C, where it
-results in conflicts (<code>B+C-A</code>), which the user leaves unresolved. If the commit
-is then rebased to D, the result will be <code>(B+C-A)+(D-C)</code> (<code>D-C</code> comes from
-changing the base from C to D). That expression can be simplified to <code>B+D-A</code>,
-which is a regular 3-way merge between B and D with A as base (no trace of C).
-This is what lets the user keep old commits rebased to head without resolving
-conflicts and still not get messy recursive conflicts.</p>
+results in conflicts (<code>C+(B-A)</code>), which the user leaves unresolved. If the
+commit is then rebased to D, the result will be <code>D+((C+(B-A))-C)</code>. That expression
+can be simplified to <code>D+(B-A)</code>, which is a regular 3-way merge between D and B
+with A as base (no trace of C). This is what lets the user keep old commits
+rebased to head without resolving conflicts and still not get messy recursive
+conflicts.</p>
 <p>As another example, let's go through what happens when you back out a conflicted
-commit. Let's say we have the usual <code>B+C-A</code> conflict on top of non-conflict
-state C. We then back out that change. Backing out ("reverting" in Git-speak) a
-change means applying its reverse diff, so the result is <code>(B+C-A)+(A-(B+C-A))</code>,
-which we can simplify to just <code>A</code> (i.e. no conflict).</p>
+commit. Let's say we have the usual <code>C+(B-A)</code> conflict on top of non-conflict
+state C. We then revert that change. Reverting a change means applying its
+reverse diff, so the result is <code>(C+(B-A))+(A-(C+(B-A)))</code>, which we can simplify
+to just <code>A</code> (i.e. no conflict).</p>
 
 
 
