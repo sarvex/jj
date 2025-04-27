@@ -1091,6 +1091,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#trailer-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trailer type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#treediff-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeDiff type
@@ -2165,6 +2174,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#trailer-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trailer type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#treediff-type" class="md-nav__link">
     <span class="md-ellipsis">
       TreeDiff type
@@ -2332,6 +2350,7 @@ type</a> are available as keywords. For example,
 <p>This type cannot be printed. The following methods are defined.</p>
 <ul>
 <li><code>.description() -&gt; String</code></li>
+<li><code>.trailers() -&gt; List&lt;Trailer&gt;</code></li>
 <li><code>.change_id() -&gt; ChangeId</code></li>
 <li><code>.commit_id() -&gt; CommitId</code></li>
 <li><code>.parents() -&gt; List&lt;Commit&gt;</code></li>
@@ -2579,6 +2598,12 @@ inside a single-quoted string literal.</p>
 <li><code>.start() -&gt; Timestamp</code></li>
 <li><code>.end() -&gt; Timestamp</code></li>
 <li><code>.duration() -&gt; String</code></li>
+</ul>
+<h3 id="trailer-type">Trailer type<a class="headerlink" href="#trailer-type" title="Permanent link">&para;</a></h3>
+<p>The following methods are defined.</p>
+<ul>
+<li><code>.key() -&gt; String</code></li>
+<li><code>.value() -&gt; String</code></li>
 </ul>
 <h3 id="treediff-type">TreeDiff type<a class="headerlink" href="#treediff-type" title="Permanent link">&para;</a></h3>
 <p>This type cannot be printed. The following methods are defined.</p>
