@@ -1674,10 +1674,10 @@ with A as base (no trace of C). This is what lets the user keep old commits
 rebased to head without resolving conflicts and still not get messy recursive
 conflicts.</p>
 <p>As another example, let's go through what happens when you back out a conflicted
-commit. Let's say we have the usual <code>C+(B-A)</code> conflict on top of non-conflict
-state C. We then revert that change. Reverting a change means applying its
-reverse diff, so the result is <code>(C+(B-A))+(A-(C+(B-A)))</code>, which we can simplify
-to just <code>A</code> (i.e. no conflict).</p>
+commit. Let's say we have the usual <code>E = C+(B-A)</code> conflict on top of
+non-conflict state <code>C</code>. We then revert that change. Reverting a change means
+applying its reverse diff <code>-(E-C)</code>, so the result is <code>E+(C-E) =
+(C+(B-A))+(C-(C+(B-A)))</code>, which we can simplify to just <code>C</code> (i.e. no conflict).</p>
 
 
 
