@@ -640,6 +640,7 @@ mod tests {
     use jj_lib::merge::MergedTreeValue;
     use jj_lib::repo::Repo as _;
     use testutils::repo_path;
+    use testutils::repo_path_component;
     use testutils::TestRepo;
 
     use super::*;
@@ -1232,6 +1233,75 @@ mod tests {
                                 line: "resolved\n",
                             },
                         ],
+                    },
+                ],
+            },
+        ]
+        "#);
+        let no_changes_tree_id = apply_diff(store, &left_tree, &right_tree, &changed_files, &files);
+        let no_changes_tree = store.get_root_tree(&no_changes_tree_id).unwrap();
+        assert_eq!(
+            no_changes_tree.id(),
+            left_tree.id(),
+            "no-changes tree was different",
+        );
+
+        let mut files = files;
+        for file in &mut files {
+            file.toggle_all();
+        }
+        let all_changes_tree_id =
+            apply_diff(store, &left_tree, &right_tree, &changed_files, &files);
+        let all_changes_tree = store.get_root_tree(&all_changes_tree_id).unwrap();
+        assert_eq!(
+            all_changes_tree.id(),
+            right_tree.id(),
+            "all-changes tree was different",
+        );
+    }
+
+    #[test]
+    fn test_edit_diff_builtin_replace_directory_with_file() {
+        let test_repo = TestRepo::init();
+        let store = test_repo.repo.store();
+
+        let folder_path = repo_path("folder");
+        let file_in_folder_path = folder_path.join(repo_path_component("file_in_folder"));
+        let left_tree = testutils::create_tree(&test_repo.repo, &[(&file_in_folder_path, "")]);
+        let right_tree = testutils::create_tree(&test_repo.repo, &[(folder_path, "")]);
+
+        let (changed_files, files) = make_diff(store, &left_tree, &right_tree);
+        insta::assert_debug_snapshot!(changed_files, @r#"
+        [
+            "folder/file_in_folder",
+            "folder",
+        ]
+        "#);
+        insta::assert_debug_snapshot!(files, @r#"
+        [
+            File {
+                old_path: None,
+                path: "folder/file_in_folder",
+                file_mode: Unix(
+                    33188,
+                ),
+                sections: [
+                    FileMode {
+                        is_checked: false,
+                        mode: Absent,
+                    },
+                ],
+            },
+            File {
+                old_path: None,
+                path: "folder",
+                file_mode: Absent,
+                sections: [
+                    FileMode {
+                        is_checked: false,
+                        mode: Unix(
+                            33188,
+                        ),
                     },
                 ],
             },
