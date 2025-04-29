@@ -968,6 +968,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#list-type_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      List type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#listtemplate-type" class="md-nav__link">
     <span class="md-ellipsis">
       ListTemplate type
@@ -2051,6 +2060,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#list-type_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      List type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#listtemplate-type" class="md-nav__link">
     <span class="md-ellipsis">
       ListTemplate type
@@ -2477,6 +2495,12 @@ defined.</p>
   <code>expression</code>. Example: <code>description.lines().filter(|s| s.contains("#"))</code></li>
 <li><code>.map(|item| expression) -&gt; ListTemplate</code>: Apply template <code>expression</code>
   to each element. Example: <code>parents.map(|c| c.commit_id().short())</code></li>
+</ul>
+<h3 id="list-type_1">List<Trailer> type<a class="headerlink" href="#list-type_1" title="Permanent link">&para;</a></h3>
+<p>The following methods are defined. See also the <code>List</code> type.</p>
+<ul>
+<li><code>.contains_key(key: Template) -&gt; Boolean</code>: True if the commit description
+  contains at least one trailer with the key <code>key</code>.</li>
 </ul>
 <h3 id="listtemplate-type">ListTemplate type<a class="headerlink" href="#listtemplate-type" title="Permanent link">&para;</a></h3>
 <p>The following methods are defined. See also the <code>List</code> type.</p>
