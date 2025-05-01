@@ -639,8 +639,13 @@ mod tests {
     use jj_lib::matchers::EverythingMatcher;
     use jj_lib::merge::MergedTreeValue;
     use jj_lib::repo::Repo as _;
+    use proptest_state_machine::prop_state_machine;
+    use proptest_state_machine::StateMachineTest;
+    use testutils::proptest::RepoRefState;
+    use testutils::proptest::Transition;
     use testutils::repo_path;
     use testutils::repo_path_component;
+    use testutils::write_file;
     use testutils::TestRepo;
 
     use super::*;
@@ -1415,5 +1420,117 @@ mod tests {
             },
         ]
         "#);
+    }
+
+    prop_state_machine! {
+        #[test]
+        fn test_edit_diff_builtin_proptest(sequential 1..20 => EditDiffBuiltinPropTest);
+    }
+
+    struct EditDiffBuiltinPropTest {
+        test_repo: TestRepo,
+        left_tree_id: MergedTreeId,
+        right_tree_id: MergedTreeId,
+    }
+
+    impl StateMachineTest for EditDiffBuiltinPropTest {
+        type SystemUnderTest = EditDiffBuiltinPropTest;
+
+        type Reference = RepoRefState;
+
+        fn init_test(ref_state: &RepoRefState) -> Self::SystemUnderTest {
+            use testutils::proptest::File::*;
+
+            let test_repo = TestRepo::init();
+            let store = test_repo.repo.store();
+            let mut tree_builder = MergedTreeBuilder::new(store.empty_merged_tree_id());
+            for (path, file) in ref_state.files() {
+                match file {
+                    RegularFile {
+                        contents,
+                        executable,
+                    } => {
+                        let id = write_file(store, &path, contents);
+                        tree_builder.set_or_remove(
+                            path,
+                            Merge::resolved(Some(TreeValue::File {
+                                id: id.clone(),
+                                executable: *executable,
+                            })),
+                        );
+                    }
+                }
+            }
+
+            let left_tree_id = tree_builder.write_tree(store).unwrap();
+            let right_tree_id = left_tree_id.clone();
+            Self {
+                test_repo,
+                left_tree_id,
+                right_tree_id,
+            }
+        }
+
+        fn apply(
+            mut state: Self::SystemUnderTest,
+            _ref_state: &RepoRefState,
+            transition: Transition,
+        ) -> Self::SystemUnderTest {
+            let store = state.test_repo.repo.store();
+            let mut tree_builder = MergedTreeBuilder::new(state.right_tree_id);
+
+            match transition {
+                Transition::CreateFile {
+                    path,
+                    contents,
+                    executable,
+                } => {
+                    let id = write_file(store, &path, &contents);
+                    tree_builder.set_or_remove(
+                        path,
+                        Merge::resolved(Some(TreeValue::File {
+                            id: id.clone(),
+                            executable,
+                        })),
+                    );
+                }
+                Transition::DeleteFile { path } => {
+                    tree_builder.set_or_remove(path, Merge::resolved(None));
+                }
+            }
+
+            state.right_tree_id = tree_builder.write_tree(store).unwrap();
+            state
+        }
+
+        fn check_invariants(state: &Self::SystemUnderTest, _ref_state: &RepoRefState) {
+            let store = state.test_repo.repo.store();
+            let left_tree = store.get_root_tree(&state.left_tree_id).unwrap();
+            let right_tree = store.get_root_tree(&state.right_tree_id).unwrap();
+
+            let store = state.test_repo.repo.store();
+            let (changed_files, files) = make_diff(store, &left_tree, &right_tree);
+            let no_changes_tree_id =
+                apply_diff(store, &left_tree, &right_tree, &changed_files, &files);
+            let no_changes_tree = store.get_root_tree(&no_changes_tree_id).unwrap();
+            assert_eq!(
+                no_changes_tree.id(),
+                state.left_tree_id,
+                "no-changes tree was different",
+            );
+
+            let mut files = files;
+            for file in &mut files {
+                file.toggle_all();
+            }
+            let all_changes_tree_id =
+                apply_diff(store, &left_tree, &right_tree, &changed_files, &files);
+            let all_changes_tree = store.get_root_tree(&all_changes_tree_id).unwrap();
+            assert_eq!(
+                all_changes_tree.id(),
+                state.right_tree_id,
+                "all-changes tree was different",
+            );
+        }
     }
 }
