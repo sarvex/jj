@@ -4491,14 +4491,9 @@ with <a href="#conditional-variables">Conditional Variables</a>.</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Linux</td>
+<td style="text-align: left;">Linux and macOS</td>
 <td style="text-align: left;"><code>$XDG_CONFIG_HOME</code> or <code>$HOME/.config</code></td>
 <td style="text-align: left;"><code>/home/alice/.config/jj/config.toml</code></td>
-</tr>
-<tr>
-<td style="text-align: left;">macOS</td>
-<td style="text-align: left;"><code>$HOME/Library/Application Support</code></td>
-<td style="text-align: left;"><code>/Users/Alice/Library/Application Support/jj/config.toml</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">Windows</td>
@@ -4507,6 +4502,10 @@ with <a href="#conditional-variables">Conditional Variables</a>.</p>
 </tr>
 </tbody>
 </table>
+<p>On macOS, jj used to put the user config in <code>~/Library/Application Support</code>,
+and jj will still look there for backwards compatibility purposes; this is
+considered a deprecated location, and you should use the new default
+<code>XDG_CONFIG_HOME</code>.</p>
 <p>The location of the <code>jj</code> user config files/directories can also be overridden with the
 <code>JJ_CONFIG</code> environment variable. If it is not empty, it will be used instead
 of any configuration files in the default locations. If it is a path to a TOML
