@@ -6786,7 +6786,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>This option only affects the check. It does not affect the <code>immutable_heads()</code> revset or the <code>immutable</code> template keyword.</p>
 </li>
 <li>
-<p><code>--at-operation &lt;AT_OPERATION&gt;</code> — Operation to load the repo at</p>
+<p><code>--at-operation &lt;AT_OPERATION&gt;</code> [alias: <code>at-op</code>] — Operation to load the repo at</p>
 <p>Operation to load the repo at. By default, Jujutsu loads the repo at the most recent operation, or at the merge of the divergent operations if any.</p>
 <p>You can use <code>--at-op=&lt;operation ID&gt;</code> to see what the repo looked like at an earlier operation. For example <code>jj --at-op=&lt;operation ID&gt; st</code> will show you what <code>jj st</code> would have shown you when the given operation had just finished. <code>--at-op=@</code> is pretty much the same as the default except that divergent operations will never be merged.</p>
 <p>Use <code>jj op log</code> to find the operation ID you want. Any unambiguous prefix of the operation ID is enough.</p>
@@ -6852,7 +6852,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>Default value: <code>@</code></p>
 </li>
 <li>
-<p><code>-t</code>, <code>--into &lt;REVSETS&gt;</code> — Destination revisions to absorb into</p>
+<p><code>-t</code>, <code>--into &lt;REVSETS&gt;</code> [alias: <code>to</code>] — Destination revisions to absorb into</p>
 <p>Only ancestors of the source revision will be considered.</p>
 <p>Default value: <code>mutable()</code></p>
 </li>
@@ -6876,19 +6876,21 @@ does not match the <code>jj help</code> output exactly.</p>
 <h2 id="jj-bookmark-create"><code>jj bookmark create</code><a class="headerlink" href="#jj-bookmark-create" title="Permanent link">&para;</a></h2>
 <p>Create a new bookmark</p>
 <p><strong>Usage:</strong> <code>jj bookmark create [OPTIONS] &lt;NAMES&gt;...</code></p>
+<p><strong>Command Alias:</strong> <code>c</code></p>
 <h6 id="arguments_2"><strong>Arguments:</strong><a class="headerlink" href="#arguments_2" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAMES&gt;</code> — The bookmarks to create</li>
 </ul>
 <h6 id="options_3"><strong>Options:</strong><a class="headerlink" href="#options_3" title="Permanent link">&para;</a></h6>
 <ul>
-<li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> — The bookmark's target revision</li>
+<li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> [alias: <code>to</code>] — The bookmark's target revision</li>
 </ul>
 <h2 id="jj-bookmark-delete"><code>jj bookmark delete</code><a class="headerlink" href="#jj-bookmark-delete" title="Permanent link">&para;</a></h2>
 <p>Delete an existing bookmark and propagate the deletion to remotes on the next push</p>
 <p>Revisions referred to by the deleted bookmarks are not abandoned. To delete revisions as well as bookmarks, use <code>jj abandon</code>. For example, <code>jj abandon main..&lt;bookmark&gt;</code> will abandon revisions belonging to the <code>&lt;bookmark&gt;</code> branch (relative to the <code>main</code> branch.)</p>
 <p>If you don't want the deletion of the local bookmark to propagate to any tracked remote bookmarks, use <code>jj bookmark forget</code> instead.</p>
 <p><strong>Usage:</strong> <code>jj bookmark delete &lt;NAMES&gt;...</code></p>
+<p><strong>Command Alias:</strong> <code>d</code></p>
 <h6 id="arguments_3"><strong>Arguments:</strong><a class="headerlink" href="#arguments_3" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -6900,6 +6902,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>Forget a bookmark without marking it as a deletion to be pushed</p>
 <p>If a local bookmark is forgotten, any corresponding remote bookmarks will become untracked to ensure that the forgotten bookmark will not impact remotes on future pushes.</p>
 <p><strong>Usage:</strong> <code>jj bookmark forget [OPTIONS] &lt;NAMES&gt;...</code></p>
+<p><strong>Command Alias:</strong> <code>f</code></p>
 <h6 id="arguments_4"><strong>Arguments:</strong><a class="headerlink" href="#arguments_4" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -6919,6 +6922,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>By default, a tracking remote bookmark will be included only if its target is different from the local target. A non-tracking remote bookmark won't be listed. For a conflicted bookmark (both local and remote), old target revisions are preceded by a "-" and new target revisions are preceded by a "+".</p>
 <p>See [<code>jj help -k bookmarks</code>] for more information.</p>
 <p><strong>Usage:</strong> <code>jj bookmark list [OPTIONS] [NAMES]...</code></p>
+<p><strong>Command Alias:</strong> <code>l</code></p>
 <h6 id="arguments_5"><strong>Arguments:</strong><a class="headerlink" href="#arguments_5" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -6960,6 +6964,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>Example: pull up the nearest bookmarks to the working-copy parent</p>
 <p>$ jj bookmark move --from 'heads(::@- &amp; bookmarks())' --to @-</p>
 <p><strong>Usage:</strong> <code>jj bookmark move [OPTIONS] &lt;--from &lt;REVSETS&gt;|NAMES&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>m</code></p>
 <h6 id="arguments_6"><strong>Arguments:</strong><a class="headerlink" href="#arguments_6" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -6977,6 +6982,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>Rename <code>old</code> bookmark name to <code>new</code> bookmark name</p>
 <p>The new bookmark name points at the same commit as the old bookmark name.</p>
 <p><strong>Usage:</strong> <code>jj bookmark rename &lt;OLD&gt; &lt;NEW&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>r</code></p>
 <h6 id="arguments_7"><strong>Arguments:</strong><a class="headerlink" href="#arguments_7" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;OLD&gt;</code> — The old name of the bookmark</li>
@@ -6985,19 +6991,21 @@ does not match the <code>jj help</code> output exactly.</p>
 <h2 id="jj-bookmark-set"><code>jj bookmark set</code><a class="headerlink" href="#jj-bookmark-set" title="Permanent link">&para;</a></h2>
 <p>Create or update a bookmark to point to a certain commit</p>
 <p><strong>Usage:</strong> <code>jj bookmark set [OPTIONS] &lt;NAMES&gt;...</code></p>
+<p><strong>Command Alias:</strong> <code>s</code></p>
 <h6 id="arguments_8"><strong>Arguments:</strong><a class="headerlink" href="#arguments_8" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAMES&gt;</code> — The bookmarks to update</li>
 </ul>
 <h6 id="options_7"><strong>Options:</strong><a class="headerlink" href="#options_7" title="Permanent link">&para;</a></h6>
 <ul>
-<li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> — The bookmark's target revision</li>
+<li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> [alias: <code>to</code>] — The bookmark's target revision</li>
 <li><code>-B</code>, <code>--allow-backwards</code> — Allow moving the bookmark backwards or sideways</li>
 </ul>
 <h2 id="jj-bookmark-track"><code>jj bookmark track</code><a class="headerlink" href="#jj-bookmark-track" title="Permanent link">&para;</a></h2>
 <p>Start tracking given remote bookmarks</p>
 <p>A tracking remote bookmark will be imported as a local bookmark of the same name. Changes to it will propagate to the existing local bookmark on future pulls.</p>
 <p><strong>Usage:</strong> <code>jj bookmark track &lt;BOOKMARK@REMOTE&gt;...</code></p>
+<p><strong>Command Alias:</strong> <code>t</code></p>
 <h6 id="arguments_9"><strong>Arguments:</strong><a class="headerlink" href="#arguments_9" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -7060,6 +7068,7 @@ does not match the <code>jj help</code> output exactly.</p>
 <p>Start an editor on a jj config file.</p>
 <p>Creates the file if it doesn't already exist regardless of what the editor does.</p>
 <p><strong>Usage:</strong> <code>jj config edit &lt;--user|--repo&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>e</code></p>
 <h6 id="options_9"><strong>Options:</strong><a class="headerlink" href="#options_9" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>--user</code> — Target the user-level config</li>
@@ -7074,6 +7083,7 @@ user.name="Martin von Zweigbergk"
 $ jj config get user.name
 Martin von Zweigbergk</p>
 <p><strong>Usage:</strong> <code>jj config get &lt;NAME&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>g</code></p>
 <h6 id="arguments_12"><strong>Arguments:</strong><a class="headerlink" href="#arguments_12" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAME&gt;</code></li>
@@ -7081,6 +7091,7 @@ Martin von Zweigbergk</p>
 <h2 id="jj-config-list"><code>jj config list</code><a class="headerlink" href="#jj-config-list" title="Permanent link">&para;</a></h2>
 <p>List variables set in config files, along with their values</p>
 <p><strong>Usage:</strong> <code>jj config list [OPTIONS] [NAME]</code></p>
+<p><strong>Command Alias:</strong> <code>l</code></p>
 <h6 id="arguments_13"><strong>Arguments:</strong><a class="headerlink" href="#arguments_13" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAME&gt;</code> — An optional name of a specific config option to look up</li>
@@ -7112,6 +7123,7 @@ Martin von Zweigbergk</p>
 <p>A config file at that path may or may not exist.</p>
 <p>See <code>jj config edit</code> if you'd like to immediately edit a file.</p>
 <p><strong>Usage:</strong> <code>jj config path &lt;--user|--repo&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>p</code></p>
 <h6 id="options_11"><strong>Options:</strong><a class="headerlink" href="#options_11" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>--user</code> — Target the user-level config</li>
@@ -7120,6 +7132,7 @@ Martin von Zweigbergk</p>
 <h2 id="jj-config-set"><code>jj config set</code><a class="headerlink" href="#jj-config-set" title="Permanent link">&para;</a></h2>
 <p>Update a config file to set the given option to a given value</p>
 <p><strong>Usage:</strong> <code>jj config set &lt;--user|--repo&gt; &lt;NAME&gt; &lt;VALUE&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>s</code></p>
 <h6 id="arguments_14"><strong>Arguments:</strong><a class="headerlink" href="#arguments_14" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAME&gt;</code></li>
@@ -7137,6 +7150,7 @@ Martin von Zweigbergk</p>
 <h2 id="jj-config-unset"><code>jj config unset</code><a class="headerlink" href="#jj-config-unset" title="Permanent link">&para;</a></h2>
 <p>Update a config file to unset the given option</p>
 <p><strong>Usage:</strong> <code>jj config unset &lt;--user|--repo&gt; &lt;NAME&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>u</code></p>
 <h6 id="arguments_15"><strong>Arguments:</strong><a class="headerlink" href="#arguments_15" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;NAME&gt;</code></li>
@@ -7150,6 +7164,7 @@ Martin von Zweigbergk</p>
 <p>Update the change description or other metadata</p>
 <p>Starts an editor to let you edit the description of changes. The editor will be $EDITOR, or <code>pico</code> if that's not defined (<code>Notepad</code> on Windows).</p>
 <p><strong>Usage:</strong> <code>jj describe [OPTIONS] [REVSETS]...</code></p>
+<p><strong>Command Alias:</strong> <code>desc</code></p>
 <h6 id="arguments_16"><strong>Arguments:</strong><a class="headerlink" href="#arguments_16" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;REVSETS&gt;</code> — The revision(s) whose description to edit (default: @)</li>
@@ -7264,8 +7279,8 @@ Martin von Zweigbergk</p>
 <h6 id="options_17"><strong>Options:</strong><a class="headerlink" href="#options_17" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>-d</code>, <code>--destination &lt;REVSETS&gt;</code> — The revision(s) to duplicate onto (can be repeated to create a merge commit)</li>
-<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> — The revision(s) to insert after (can be repeated to create a merge commit)</li>
-<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> — The revision(s) to insert before (can be repeated to create a merge commit)</li>
+<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> [alias: <code>after</code>] — The revision(s) to insert after (can be repeated to create a merge commit)</li>
+<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> [alias: <code>before</code>] — The revision(s) to insert before (can be repeated to create a merge commit)</li>
 </ul>
 <h2 id="jj-edit"><code>jj edit</code><a class="headerlink" href="#jj-edit" title="Permanent link">&para;</a></h2>
 <p>Sets the specified revision as the working-copy revision</p>
@@ -7279,6 +7294,7 @@ Martin von Zweigbergk</p>
 <p>Show how a change has evolved over time</p>
 <p>Lists the previous commits which a change has pointed to. The current commit of a change evolves when the change is updated, rebased, etc.</p>
 <p><strong>Usage:</strong> <code>jj evolog [OPTIONS]</code></p>
+<p><strong>Command Alias:</strong> <code>evolution-log</code></p>
 <h6 id="options_18"><strong>Options:</strong><a class="headerlink" href="#options_18" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
@@ -7820,7 +7836,7 @@ output of the first tool.</p>
 <li><code>-m</code>, <code>--message &lt;MESSAGE&gt;</code> — The change description to use</li>
 <li><code>--no-edit</code> — Do not edit the newly created change</li>
 <li>
-<p><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> — Insert the new change after the given commit(s)</p>
+<p><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> [alias: <code>after</code>] — Insert the new change after the given commit(s)</p>
 <p>Example: <code>jj new --after A</code> creates a new change between <code>A</code> and its
  children:</p>
 <div class="highlight"><pre><span></span><code>                B   C
@@ -7841,7 +7857,7 @@ output of the first tool.</p>
 </code></pre></div>
 </li>
 <li>
-<p><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> — Insert the new change before the given commit(s)</p>
+<p><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> [alias: <code>before</code>] — Insert the new change before the given commit(s)</p>
 <p>Example: <code>jj new --before C</code> creates a new change between <code>C</code> and its
  parents:</p>
 <div class="highlight"><pre><span></span><code>                   C
@@ -7911,6 +7927,7 @@ B   =&gt;   @
 <p>Commands for working with the operation log</p>
 <p>See the <a href="https://jj-vcs.github.io/jj/latest/operation-log/">operation log documentation</a> for more information.</p>
 <p><strong>Usage:</strong> <code>jj operation &lt;COMMAND&gt;</code></p>
+<p><strong>Command Alias:</strong> <code>op</code></p>
 <h6 id="subcommands_6"><strong>Subcommands:</strong><a class="headerlink" href="#subcommands_6" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>abandon</code> — Abandon operation history</li>
@@ -7935,7 +7952,7 @@ B   =&gt;   @
 <p><strong>Usage:</strong> <code>jj operation diff [OPTIONS]</code></p>
 <h6 id="options_33"><strong>Options:</strong><a class="headerlink" href="#options_33" title="Permanent link">&para;</a></h6>
 <ul>
-<li><code>--operation &lt;OPERATION&gt;</code> — Show repository changes in this operation, compared to its parent</li>
+<li><code>--operation &lt;OPERATION&gt;</code> [alias: <code>op</code>] — Show repository changes in this operation, compared to its parent</li>
 <li><code>-f</code>, <code>--from &lt;FROM&gt;</code> — Show repository changes from this operation</li>
 <li><code>-t</code>, <code>--to &lt;TO&gt;</code> — Show repository changes to this operation</li>
 <li><code>--no-graph</code> — Don't show the graph, show a flat list of modified changes</li>
@@ -8376,8 +8393,8 @@ J           J
 <li>
 <p><code>-d</code>, <code>--destination &lt;REVSETS&gt;</code> — The revision(s) to rebase onto (can be repeated to create a merge commit)</p>
 </li>
-<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> — The revision(s) to insert after (can be repeated to create a merge commit)</li>
-<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> — The revision(s) to insert before (can be repeated to create a merge commit)</li>
+<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> [alias: <code>after</code>] — The revision(s) to insert after (can be repeated to create a merge commit)</li>
+<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> [alias: <code>before</code>] — The revision(s) to insert before (can be repeated to create a merge commit)</li>
 <li><code>--skip-emptied</code> — If true, when rebasing would produce an empty commit, the commit is abandoned. It will not be abandoned if it was already empty before the rebase. Will never skip merge commits with multiple non-empty parents</li>
 </ul>
 <h2 id="jj-resolve"><code>jj resolve</code><a class="headerlink" href="#jj-resolve" title="Permanent link">&para;</a></h2>
@@ -8417,7 +8434,7 @@ J           J
 <h6 id="options_41"><strong>Options:</strong><a class="headerlink" href="#options_41" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>-f</code>, <code>--from &lt;REVSET&gt;</code> — Revision to restore from (source)</li>
-<li><code>-t</code>, <code>--into &lt;REVSET&gt;</code> — Revision to restore into (destination)</li>
+<li><code>-t</code>, <code>--into &lt;REVSET&gt;</code> [alias: <code>to</code>] — Revision to restore into (destination)</li>
 <li>
 <p><code>-c</code>, <code>--changes-in &lt;REVSET&gt;</code> — Undo the changes in a revision as compared to the merge of its parents.</p>
 <p>This undoes the changes that can be seen with <code>jj diff -r REVSET</code>. If <code>REVSET</code> only has a single parent, this option is equivalent to <code>jj restore --into REVSET --from REVSET-</code>.</p>
@@ -8438,8 +8455,8 @@ J           J
 <ul>
 <li><code>-r</code>, <code>--revisions &lt;REVSETS&gt;</code> — The revision(s) to apply the reverse of</li>
 <li><code>-d</code>, <code>--destination &lt;REVSETS&gt;</code> — The revision(s) to apply the reverse changes on top of</li>
-<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> — The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)</li>
-<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> — The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)</li>
+<li><code>-A</code>, <code>--insert-after &lt;REVSETS&gt;</code> [alias: <code>after</code>] — The revision(s) to insert the reverse changes after (can be repeated to create a merge commit)</li>
+<li><code>-B</code>, <code>--insert-before &lt;REVSETS&gt;</code> [alias: <code>before</code>] — The revision(s) to insert the reverse changes before (can be repeated to create a merge commit)</li>
 </ul>
 <h2 id="jj-root"><code>jj root</code><a class="headerlink" href="#jj-root" title="Permanent link">&para;</a></h2>
 <p>Show the current workspace root directory (shortcut for <code>jj workspace root</code>)</p>
@@ -8584,7 +8601,7 @@ J           J
 <ul>
 <li><code>-r</code>, <code>--revision &lt;REVSET&gt;</code> — Revision to squash into its parent (default: @)</li>
 <li><code>-f</code>, <code>--from &lt;REVSETS&gt;</code> — Revision(s) to squash from (default: @)</li>
-<li><code>-t</code>, <code>--into &lt;REVSET&gt;</code> — Revision to squash into (default: @)</li>
+<li><code>-t</code>, <code>--into &lt;REVSET&gt;</code> [alias: <code>to</code>] — Revision to squash into (default: @)</li>
 <li><code>-m</code>, <code>--message &lt;MESSAGE&gt;</code> — The description to use for squashed revision (don't open editor)</li>
 <li><code>-u</code>, <code>--use-destination-message</code> — Use the description of the destination revision and discard the description(s) of the source revision(s)</li>
 <li><code>-i</code>, <code>--interactive</code> — Interactively choose which parts to squash</li>
@@ -8598,6 +8615,7 @@ J           J
 <li>The working copy commit and its (first) parent, and a summary of the changes between them * <a href="https://jj-vcs.github.io/jj/latest/bookmarks/#conflicts">Conflicted bookmarks</a></li>
 </ul>
 <p><strong>Usage:</strong> <code>jj status [FILESETS]...</code></p>
+<p><strong>Command Alias:</strong> <code>st</code></p>
 <h6 id="arguments_49"><strong>Arguments:</strong><a class="headerlink" href="#arguments_49" title="Permanent link">&para;</a></h6>
 <ul>
 <li><code>&lt;FILESETS&gt;</code> — Restrict the status display to these paths</li>
@@ -8612,6 +8630,7 @@ J           J
 <h2 id="jj-tag-list"><code>jj tag list</code><a class="headerlink" href="#jj-tag-list" title="Permanent link">&para;</a></h2>
 <p>List tags</p>
 <p><strong>Usage:</strong> <code>jj tag list [OPTIONS] [NAMES]...</code></p>
+<p><strong>Command Alias:</strong> <code>l</code></p>
 <h6 id="arguments_50"><strong>Arguments:</strong><a class="headerlink" href="#arguments_50" title="Permanent link">&para;</a></h6>
 <ul>
 <li>
