@@ -1346,18 +1346,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sign-commits-only-on-jj-git-push" class="md-nav__link">
+  <a href="#manually-signing-commits" class="md-nav__link">
     <span class="md-ellipsis">
-      Sign commits only on jj git push
+      Manually signing commits
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#manually-signing-commits" class="md-nav__link">
+  <a href="#automatically-signing-commits" class="md-nav__link">
     <span class="md-ellipsis">
-      Manually signing commits
+      Automatically signing commits
     </span>
   </a>
   
@@ -2999,18 +2999,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sign-commits-only-on-jj-git-push" class="md-nav__link">
+  <a href="#manually-signing-commits" class="md-nav__link">
     <span class="md-ellipsis">
-      Sign commits only on jj git push
+      Manually signing commits
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#manually-signing-commits" class="md-nav__link">
+  <a href="#automatically-signing-commits" class="md-nav__link">
     <span class="md-ellipsis">
-      Manually signing commits
+      Automatically signing commits
     </span>
   </a>
   
@@ -4294,7 +4294,28 @@ as follows:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[signing]</span>
 <span class="n">backends</span><span class="p">.</span><span class="n">ssh</span><span class="p">.</span><span class="n">allowed-signers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/path/to/allowed-signers&quot;</span>
 </code></pre></div>
-<h3 id="sign-commits-only-on-jj-git-push">Sign commits only on <code>jj git push</code><a class="headerlink" href="#sign-commits-only-on-jj-git-push" title="Permanent link">&para;</a></h3>
+<h3 id="manually-signing-commits">Manually signing commits<a class="headerlink" href="#manually-signing-commits" title="Permanent link">&para;</a></h3>
+<p>You can use <a href="../cli-reference/#jj-sign"><code>jj sign</code></a>/<a href="../cli-reference/#jj-unsign"><code>jj unsign</code></a>
+to sign/unsign commits manually.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>jj sign</code> always signs commits, even if they are already signed by the
+user. While this is cumbersome for users signing via hardware devices, we
+cannot reliably check if a commit is already signed without creating a
+signature (see <a href="https://github.com/jj-vcs/jj/issues/5786">this issue</a>).</p>
+</div>
+<h3 id="automatically-signing-commits">Automatically signing commits<a class="headerlink" href="#automatically-signing-commits" title="Permanent link">&para;</a></h3>
+<p>The <code>signing.behavior</code> configuration option has four different options for what
+to do with signing commits on modification of a change (e.g., rebasing or edits).</p>
+<ul>
+<li><code>drop</code>: do not automatically sign; if a change was signed before
+  modification, drop that signing after modification.</li>
+<li><code>keep</code>: if a change was signed before modification, and it was authored by
+  you, attempt to sign it again after the modification.</li>
+<li><code>own</code>: sign all commits that were authored by you when you modify them.</li>
+<li><code>force</code>: sign all commits after modification, always, even if you are not the
+  author.</li>
+</ul>
 <p>Instead of signing all commits during creation when <code>signing.behavior</code> is
 set to <code>own</code>, the <code>git.sign-on-push</code> configuration can be used to sign
 commits only upon running <code>jj git push</code>. All mutable unsigned commits
@@ -4310,19 +4331,10 @@ performed in a single batch operation.</p>
 <span class="k">[git]</span>
 <span class="n">sign-on-push</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </code></pre></div>
-<h3 id="manually-signing-commits">Manually signing commits<a class="headerlink" href="#manually-signing-commits" title="Permanent link">&para;</a></h3>
-<p>You can use <a href="../cli-reference/#jj-sign"><code>jj sign</code></a>/<a href="../cli-reference/#jj-unsign"><code>jj unsign</code></a>
-to sign/unsign commits manually.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code>jj sign</code> is always signing commits, even if they are already signed by the
-user. While this is cumbersome for users signing via hardware devices, we
-cannot reliably check if a commit is already signed without creating a
-signature (see <a href="https://github.com/jj-vcs/jj/issues/5786">this issue</a>).</p>
-</div>
 <h2 id="commit-signature-verification">Commit Signature Verification<a class="headerlink" href="#commit-signature-verification" title="Permanent link">&para;</a></h2>
 <p>By default signature verification and display is <strong>disabled</strong> as it incurs a
-performance cost when rendering medium to large change logs.</p>
+performance cost when rendering medium to large change logs. You can enable it
+by setting <code>ui.show-cryptographic-signatures</code> to true in your configuration.</p>
 <p>If you want to display commit signatures in your templates, you can use
 <code>commit.signature()</code> (see <a href="../templates/#commit-type">Commit type</a>). The
 returned <a href="../templates/#cryptographicsignature-type">CryptographicSignature
