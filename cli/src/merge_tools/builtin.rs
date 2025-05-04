@@ -437,7 +437,13 @@ fn apply_changes(
 
         match contents {
             scm_record::SelectedContents::Unchanged => {
-                // Do nothing.
+                // scm_record currently only reports `Unchanged` if the file is empty.
+                // TODO: It would be sufficient to only update the executable flag on the tree
+                // value, but there's no way to retrieve the FileId or only flip the executable
+                // flag. We resort to re-writing the file, knowing that it's empty.
+                let executable = file_mode == mode::EXECUTABLE;
+                let value = write_file(&path, &[], executable)?;
+                tree_builder.set_or_remove(path, value);
             }
             scm_record::SelectedContents::Binary {
                 old_description: _,
