@@ -212,10 +212,19 @@
           pkgs.lib.concatStringsSep " "
           (pkgs.lib.concatMap (x: ["-C" "link-arg=${x}"]) rustLinkerFlags);
 
+        libraryPath = with pkgs;
+          lib.makeLibraryPath [
+            # add other library packages here if needed
+            stdenv.cc.cc
+          ];
+
         # The `RUSTFLAGS` environment variable is set in `shellHook` instead of `env`
         # to allow the `xcrun` command above to be interpreted by the shell.
-        shellHook = ''
+        #
+        # Also set LD_LIBRARY_PATH for `uv`: https://stackoverflow.com/questions/79563650/importerror-error-importing-numpy-you-should-not-try-to-import-numpy-from-its
+        shellHook =  ''
           export RUSTFLAGS="-Zthreads=0 ${rustLinkFlagsString}"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libraryPath}"
         '';
       in
         pkgs.mkShell {
