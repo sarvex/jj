@@ -109,6 +109,7 @@ pub fn base_user_config() -> StackedConfig {
         operation.username = "test-username"
         operation.hostname = "host.example.com"
         debug.randomness-seed = 42
+        git.write-change-id-header = false
     "#;
     let mut config = StackedConfig::with_defaults();
     config.add_layer(ConfigLayer::parse(ConfigSource::User, config_text).unwrap());

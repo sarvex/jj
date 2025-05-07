@@ -15,6 +15,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 * The old `libgit2` code path for fetches and pushes has been removed,
   and the `git.subprocess` setting along with it.
 
+* Change IDs are now stored in the Git commit by default. Disable by
+  setting `git.write-change-id-header` to `false`. Please let us know if you do.
+
 ### Deprecations
 
 ### New features

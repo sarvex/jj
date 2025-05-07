@@ -623,6 +623,8 @@ fn test_config_set_for_user_directory() {
 
     [template-aliases]
     'format_time_range(time_range)' = 'time_range.start() ++ " - " ++ time_range.end()'
+    [git]
+    write-change-id-header = false
     "#);
 
     // Add one more config file to the directory
@@ -646,6 +648,8 @@ fn test_config_set_for_user_directory() {
 
     [template-aliases]
     'format_time_range(time_range)' = 'time_range.start() ++ " - " ++ time_range.end()'
+    [git]
+    write-change-id-header = false
     "#);
 
     insta::assert_snapshot!(

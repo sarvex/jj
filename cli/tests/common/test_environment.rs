@@ -66,6 +66,8 @@ impl Default for TestEnvironment {
             r#"
 [template-aliases]
 'format_time_range(time_range)' = 'time_range.start() ++ " - " ++ time_range.end()'
+[git]
+write-change-id-header = false
         "#,
         );
 

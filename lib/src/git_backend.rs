@@ -2359,15 +2359,17 @@ mod tests {
     // UserSettings type. testutils returns jj_lib (2)'s UserSettings, whereas
     // our UserSettings type comes from jj_lib (1).
     fn user_settings() -> UserSettings {
-        let config = StackedConfig::with_defaults();
+        let mut config = StackedConfig::with_defaults();
+        let mut layer = ConfigLayer::empty(ConfigSource::Default);
+        layer
+            .set_value("git.write-change-id-header", false)
+            .unwrap();
+        config.add_layer(layer);
         UserSettings::from_config(config).unwrap()
     }
 
     fn user_settings_with_change_id() -> UserSettings {
-        let mut config = StackedConfig::with_defaults();
-        let mut layer = ConfigLayer::empty(ConfigSource::Default);
-        layer.set_value("git.write-change-id-header", true).unwrap();
-        config.add_layer(layer);
+        let config = StackedConfig::with_defaults();
         UserSettings::from_config(config).unwrap()
     }
 }

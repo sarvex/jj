@@ -149,10 +149,10 @@ fn test_new_wc_commit_when_wc_immutable() {
     let output = work_dir.run_jj(["bookmark", "set", "main", "-r@"]);
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
-    Moved 1 bookmarks to kkmpptxz a164195b main | (empty) a
+    Moved 1 bookmarks to kkmpptxz 7ec46fca main | (empty) a
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
-    Working copy  (@) now at: zsuskuln ef5fa85b (empty) (no description set)
-    Parent commit (@-)      : kkmpptxz a164195b main | (empty) a
+    Working copy  (@) now at: zsuskuln 2ec95daa (empty) (no description set)
+    Parent commit (@-)      : kkmpptxz 7ec46fca main | (empty) a
     [EOF]
     ");
 }
@@ -170,8 +170,8 @@ fn test_immutable_heads_set_to_working_copy() {
     insta::assert_snapshot!(output, @r"
     ------- stderr -------
     Warning: The working-copy commit in workspace 'default' became immutable, so a new commit has been created on top of it.
-    Working copy  (@) now at: pmmvwywv 7278b2d8 (empty) (no description set)
-    Parent commit (@-)      : kkmpptxz a713ef56 (empty) a
+    Working copy  (@) now at: pmmvwywv 12bba747 (empty) (no description set)
+    Parent commit (@-)      : kkmpptxz b0930409 (empty) a
     [EOF]
     ");
 }
