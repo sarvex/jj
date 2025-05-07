@@ -487,18 +487,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#from-source-vendored-openssl" class="md-nav__link">
+  <a href="#from-source_1" class="md-nav__link">
     <span class="md-ellipsis">
-      From Source, Vendored OpenSSL
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-source-homebrew-openssl" class="md-nav__link">
-    <span class="md-ellipsis">
-      From Source, Homebrew OpenSSL
+      From Source
     </span>
   </a>
   
@@ -1980,18 +1971,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#from-source-vendored-openssl" class="md-nav__link">
+  <a href="#from-source_1" class="md-nav__link">
     <span class="md-ellipsis">
-      From Source, Vendored OpenSSL
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-source-homebrew-openssl" class="md-nav__link">
-    <span class="md-ellipsis">
-      From Source, Homebrew OpenSSL
+      From Source
     </span>
   </a>
   
@@ -2228,10 +2210,9 @@ options below.</p>
 </div>
 <h3 id="linux">Linux<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
 <h4 id="from-source">From Source<a class="headerlink" href="#from-source" title="Permanent link">&para;</a></h4>
-<p>First make sure that you have a Rust version &gt;= 1.84 and that the <code>libssl-dev</code>,
-<code>openssl</code>, <code>pkg-config</code>, and <code>build-essential</code> packages are installed by running
-something like this:</p>
-<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libssl-dev<span class="w"> </span>openssl<span class="w"> </span>pkg-config<span class="w"> </span>build-essential
+<p>First make sure that you have a Rust version &gt;= 1.84 and that the
+<code>build-essential</code> package is installed by running something like this:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>build-essential
 </code></pre></div>
 <p>Now run either:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># To install the *prerelease* version from the main branch</span>
@@ -2276,31 +2257,14 @@ Details on how to enable the GURU repository can be found <a href="https://wiki.
 <div class="highlight"><pre><span></span><code>zypper<span class="w"> </span>install<span class="w"> </span>jujutsu
 </code></pre></div>
 <h3 id="mac">Mac<a class="headerlink" href="#mac" title="Permanent link">&para;</a></h3>
-<h4 id="from-source-vendored-openssl">From Source, Vendored OpenSSL<a class="headerlink" href="#from-source-vendored-openssl" title="Permanent link">&para;</a></h4>
+<h4 id="from-source_1">From Source<a class="headerlink" href="#from-source_1" title="Permanent link">&para;</a></h4>
 <p>First make sure that you have a Rust version &gt;= 1.84. You may also need to run:</p>
 <div class="highlight"><pre><span></span><code>xcode-select<span class="w"> </span>--install
 </code></pre></div>
 <p>Now run either:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># To install the *prerelease* version from the main branch</span>
 cargo<span class="w"> </span>install<span class="w"> </span>--git<span class="w"> </span>https://github.com/jj-vcs/jj.git<span class="w"> </span><span class="se">\</span>
-<span class="w">     </span>--features<span class="w"> </span>vendored-openssl<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
-</code></pre></div>
-<p>or:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># To install the latest release</span>
-cargo<span class="w"> </span>install<span class="w"> </span>--features<span class="w"> </span>vendored-openssl<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
-</code></pre></div>
-<h4 id="from-source-homebrew-openssl">From Source, Homebrew OpenSSL<a class="headerlink" href="#from-source-homebrew-openssl" title="Permanent link">&para;</a></h4>
-<p>First make sure that you have a Rust version &gt;= 1.84. You will also need
-<a href="https://brew.sh/">Homebrew</a> installed. You may then need to run some or all of
-these:</p>
-<div class="highlight"><pre><span></span><code>xcode-select<span class="w"> </span>--install
-brew<span class="w"> </span>install<span class="w"> </span>openssl
-brew<span class="w"> </span>install<span class="w"> </span>pkg-config
-<span class="nb">export</span><span class="w"> </span><span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="k">)</span><span class="s2">/opt/openssl@3/lib/pkgconfig&quot;</span>
-</code></pre></div>
-<p>Now run either:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># To install the *prerelease* version from the main branch</span>
-cargo<span class="w"> </span>install<span class="w"> </span>--git<span class="w"> </span>https://github.com/jj-vcs/jj.git<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
+<span class="w">     </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
 </code></pre></div>
 <p>or:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># To install the latest release</span>
@@ -2320,11 +2284,11 @@ sudo<span class="w"> </span>port<span class="w"> </span>install<span class="w"> 
 <h3 id="windows">Windows<a class="headerlink" href="#windows" title="Permanent link">&para;</a></h3>
 <p>First make sure that you have a Rust version &gt;= 1.84. Now run either:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># To install the *prerelease* version from the main branch</span>
-cargo<span class="w"> </span>install<span class="w"> </span>--git<span class="w"> </span>https://github.com/jj-vcs/jj.git<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli<span class="w"> </span>--features<span class="w"> </span>vendored-openssl
+cargo<span class="w"> </span>install<span class="w"> </span>--git<span class="w"> </span>https://github.com/jj-vcs/jj.git<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
 </code></pre></div>
 <p>or:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># To install the latest release</span>
-cargo<span class="w"> </span>install<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli<span class="w"> </span>--features<span class="w"> </span>vendored-openssl
+cargo<span class="w"> </span>install<span class="w"> </span>--locked<span class="w"> </span>--bin<span class="w"> </span>jj<span class="w"> </span>jj-cli
 </code></pre></div>
 <h2 id="initial-configuration">Initial configuration<a class="headerlink" href="#initial-configuration" title="Permanent link">&para;</a></h2>
 <p>You may want to configure your name and email so commits are made in your name.</p>
